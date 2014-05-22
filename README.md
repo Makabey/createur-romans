@@ -15,6 +15,7 @@ Projet:
 Cette application as pour but d'être primairement un outils pour l'écriture de romans, avec la gestion des diverses parties de celui-ci tel que: notes, résumé/synopsis, personnages, lieux, chapitres, sections, nom de l'oeuvre, fiche de l'auteur, etc. L'outil pourra aussi être utilisé pour d'autres types tel que prise de notes avec liens entre elles, mémoire (pour autant que je sache, c'est comme un roman mais sans personnages, en terme de chapitre/sections); pour les types de documents autres que roman, un personnage "moi" et un lieu "ici" pourraient être créés si l'application ne peux fonctionner sans cela.
 
 =Partie #3 (incomplet)
+-L'application utilisera une base de données et des fichiers locaux à l'ordinateur de l'usager, il nécessitera l'installation d'un serveur Apache ou IIS tel que WAMP. L'application sera donc à toutes fin pratique "offline" pour protèger la propriété intellectuelle de l'auteur. Le principe est difficile à accepter en 2014 mais certains pourraient l'apprécier. De plus, l'application sera livrée avec des instructions et s'installera semi-automatiquement, l'installation du serveur Apache/IIS et la copie de l'archive décompressée dans le bon répertoire sera la responsabilité de l'usager. Toutes sauvegarde de sécurité, autre qu'un éventuel mécanisme de suivi de changement/version sera lui-aussi à la charge de l'usager. L'application pourra s'initialiser en créant la base de données, l'usager et les tables nécessaire.
 -bibliothèque scindée en: liens (ouvre le fureteur système), moodboard, images, extraits/citations, etc. L'idée de la bibliothèque est d'avoir des ressources qui ne font pas partie d'un quelconque projet/document. Des sources d'inspiration.
 -gestionnaire (ajout/modification/suppression) de personnages, de lieux, de notes, de document/projet (roman, mémoire), chapitres (autant les nommer que pouvoir les réordonner).
 -Le projet NUL sera créé par défaut dès qu'on initialise l'application durant son installation ou qu'on la lance pour la première fois, servira aussi pour tests avant d'avoir tout les outils de gestion des projets.
@@ -40,6 +41,11 @@ Nouveau Lieu
  
 =Partie #5 (incomplet)
 L'application web sera partagée entre une BD MySQL pour accélérer certaines parties (comme les liens entre les blocs de données; un bloc défini comme personnage, note, texte) et la gestion de fichiers XML qui contiendront principalement les blocs de texte plus long que 64 caractères.
+
+À l'installation, scénario plausible : 
+-l'usager arrive sur un "index.php" lequel pose quelques questions comme le nom par lequel il veux être adressé par l'application, la type de projet par défaut, le thème d'affichage (CSS, couleurs, etc) par défaut pour un nouveau projet, la façon de proposer l'ouverture d'un projet existant tel que par le menu ou des tuiles (qui seront remplacées par l'interface après le chargement), mot de passe 'root' de MySQL (si changé), etc.
+-à l'envois, un second fichier initialise toutes les parties BD/XML/Config, les défauts tels que le projet 'NUL' et une oeuvre exemple, et quand tout vas et fini, il écrase le "index.php" pour ensuite renommer "index.prod.php" (préexistant) en "index.php" et le redirige là.
+-L'application est installée et prête à travailler.
 
 Classe cNote qui contient un membre privé pour son texte, un membre privé pour son ID, un membre "array of integers" pour retenir ses liens dont l'index 0 est l'id de son précédent (ou 0 s'il est le premier du projet), l'index 1 est l'id de son suivant (ou 0 s'il est le dernier du projet) et le reste sont les ids vers lesquels il pointe tel que d'autres cNote qui selon l'usager, auront une pertinence comme je le fait dans "O5".
 
