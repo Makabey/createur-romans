@@ -1,9 +1,30 @@
-createur-romans
-===============
+#Assistant créateur de romans
+==============================
 
-Outils web local de création de romans, nouvelle, mémoire ou autre demandant une organisation assez simple des informations et des liens entre elles.
+##Le nom est poche!
+Oui, il faut trouver autre chose...
 
-Projet:
+##Qu'est-ce que c'est?
+Le but primaire de cette application est d'être un outils pour l'écriture de romans (ou autre document demandant une organisation assez simple des informations et des liens entre elles); avec la gestion des diverses parties de celui-ci tel que: nom de l'oeuvre, fiche de l'auteur, résumé/synopsis, notes, personnages, lieux, chapitres, sections, etc.
+
+L'outil pourrais probablement être aussi utilisé pour d'autres types de documents tel que prise de notes avec liens entre elles, mémoires, scénario de métrages ou pièce de théâtre.
+
+
+##Quelle forme prendra l'outils?
+Ce sera une application web (utilisant un serveur Apache local, tel que [sous Windows] WAMP ou EasyPHP). Pourquoi local?
+
+1. Simplement parce qu'avec le "**Cloud**" il y as possibilité que le serveur soit compromis ou disparaisse;
+2. Avec un contenu publique (fonctionnalitée à venir et dont l'utilisation/l'activation sera optionnelle pour l'usager, *si et quand* un module de support "**Cloud**" serais ajouté), si vous avez une bonne idée d'histoire, vous risquez de vous faire plagier;
+3. Par paranoia et volontée de contrôler totalement vos données;
+
+Il n'est pas impossible qu'une fonctionnalitée de sauvegarde ("*backup*") vers le "**Cloud**" soit ajoutée beaucoup plus tard, et encore plus tard une fonctionnalitée de publication sur le site hébergeant l'application (mais il serait en fait préférable d'utiliser la fonctionnalitée de publication "*ePub*" à la place).
+
+-------------------------
+
+(pour autant que je sache, c'est comme un roman mais sans personnages, en terme de chapitre/sections); pour les types de documents autres que roman, un personnage "moi" et un lieu "ici" pourraient être créés si l'application ne peux fonctionner sans cela.
+
+Ce sera un outils  de création de romans, nouvelle, mémoire ou autre 
+###Projet:
 
 1. Faire un plan (cette section);
 2. Élaborer le but de l'application dans les grandes lignes;
@@ -12,7 +33,6 @@ Projet:
 5. Scinder les idées en concepts/pseudo-code;
 
 =Partie #2 (incomplet)
-Cette application as pour but d'être primairement un outils pour l'écriture de romans, avec la gestion des diverses parties de celui-ci tel que: notes, résumé/synopsis, personnages, lieux, chapitres, sections, nom de l'oeuvre, fiche de l'auteur, etc. L'outil pourra aussi être utilisé pour d'autres types tel que prise de notes avec liens entre elles, mémoire (pour autant que je sache, c'est comme un roman mais sans personnages, en terme de chapitre/sections); pour les types de documents autres que roman, un personnage "moi" et un lieu "ici" pourraient être créés si l'application ne peux fonctionner sans cela.
 
 =Partie #3 (incomplet)
 -L'application utilisera une base de données et des fichiers locaux à l'ordinateur de l'usager, il nécessitera l'installation d'un serveur Apache ou IIS tel que WAMP. L'application sera donc à toutes fin pratique "offline" pour protèger la propriété intellectuelle de l'auteur. Le principe est difficile à accepter en 2014 mais certains pourraient l'apprécier. De plus, l'application sera livrée avec des instructions et s'installera semi-automatiquement, l'installation du serveur Apache/IIS et la copie de l'archive décompressée dans le bon répertoire sera la responsabilité de l'usager. Toutes sauvegarde de sécurité, autre qu'un éventuel mécanisme de suivi de changement/version sera lui-aussi à la charge de l'usager. L'application pourra s'initialiser en créant la base de données, l'usager et les tables nécessaire.
