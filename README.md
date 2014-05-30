@@ -19,7 +19,7 @@ Il n'est pas impossible qu'une fonctionnalitée de sauvegarde ("*backup*") vers 
 
 ##Quelles seront les fonctionnalitées?
 
-##L'application supportera la création d'entitées telles que :
+###L'application supportera la création d'entitées telles que :
 
 1. Notes
 2. Personnages
@@ -29,13 +29,13 @@ Il n'est pas impossible qu'une fonctionnalitée de sauvegarde ("*backup*") vers 
 6. Oeuvres(roman, nouvelle, mémoire)
 
 
-##Gabarit des entitées :
+###Gabarit des entitées :
 1. Des gabarits pour chaque type d'entitées seront fournis;
 2. Ceux-ci seront modifiables pour refléter les besoins de l'auteur, tel qu'un besoin chez l'un de spécifier l'origine ethnique de chaques personnages au travers d'un choix (plutôt que dans la description générale) ou chez un autre auteur la préférence de mode de vie alimentaire (omnivore, végétaRien, végétaLien, etc);
 3. Il sera possible de modifier les gabarits par défaut de l'application;
 4. Il sera aussi possible de créer des gabarits spécifiques au projet chargé (à neuf ou à partir de ceux de l'application);
 
-##Liaison entre les entitées (notes, personnages, etc) :
+###Liaison entre les entitées (notes, personnages, etc) :
 Les entitées pourront êtres liées entre elles (automatiquement par l'application ou manuellement), surtout les notes qui pourraient se référencer l'une-l'autre et/ou référencer un personnage et/ou un lieu (et/ou toute autre entitées);
 
 Par exemple, une note nomme 1 lieu, 2 personnages et fait référence (pour rappel à l'auteur) à 4 autres notes qui iraient, dans l'ordre chronologique de lecture de l'oeuvre et selon ces notes elles-même, autant en aval qu'en amont de la présente note (ou transversalement pour les personnages et lieux). L'ordre des entitées-notes sera dictée par le lien direct (par opposition à discret, c'est à dire la mécanique de référencement) entre elles et non par leur ordre numérologique ou de création. Ex: les notes #23, 493 et 129 sont en ordre pour raconter l'histoire mais elles ont été créée dans l'ordre chronologique de 23, 129 et 493 (avec tout les numéros entre) puis réordonnées. Des notes pourront être liées à un chapitre ou un paragraphe afin de permettre à l'auteur de se rappeller les notes qui ont été réellement utilisées et à quel moment du récit.
