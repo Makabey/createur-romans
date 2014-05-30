@@ -14,6 +14,15 @@ Ce sera un outils  de création de romans, nouvelle, mémoire ou autre
 =Partie #2 (incomplet)
 
 =Partie #3 (incomplet)
+chaque note/personnage/lieu nommés auraient son propre lien HTML dans le texte de la note(/personnage/lieu) vers l'entitée elle-même.
+
+J'aimerai ajouter un "moodboard", une bibliothèque (commune à tout les projets sur un même ordinateur) pouvant contenir des liens, des images, des bribes de texte/citation, donc des inspirations.
+
+Les technologies prévues tournent autour du web : HTML5, JS, Ajax, SQL, etc.
+
+Les données seront toutes initialements dans une BD MySQL parce qu'il se pourrais que le début du projet soit fait comme un travail de fin d'étude en collaboration et donc en besoin de petites simplification technologique. Si la chose est bien fait, il ne sera pas trop difficile de réécrire certaines parties pour utiliser du XML et du CSV dans le but de pouvoir tout recréer (la structure des oeuvres) sans trop de tracas en advenant une corruption de la BD ou un désir de recopier dans un autre projet/logiciel le contenu généré.
+
+
 -L'application utilisera une base de données et des fichiers locaux à l'ordinateur de l'usager, il nécessitera l'installation d'un serveur Apache ou IIS tel que WAMP. L'application sera donc à toutes fin pratique "offline" pour protèger la propriété intellectuelle de l'auteur. Le principe est difficile à accepter en 2014 mais certains pourraient l'apprécier. De plus, l'application sera livrée avec des instructions et s'installera semi-automatiquement, l'installation du serveur Apache/IIS et la copie de l'archive décompressée dans le bon répertoire sera la responsabilité de l'usager. Toutes sauvegarde de sécurité, autre qu'un éventuel mécanisme de suivi de changement/version sera lui-aussi à la charge de l'usager. L'application pourra s'initialiser en créant la base de données, l'usager et les tables nécessaire.
 -bibliothèque scindée en: liens (ouvre le fureteur système), moodboard, images, extraits/citations, etc. L'idée de la bibliothèque est d'avoir des ressources qui ne font pas partie d'un quelconque projet/document. Des sources d'inspiration.
 -gestionnaire (ajout/modification/suppression) de personnages, de lieux, de notes, de document/projet (roman, mémoire), chapitres (autant les nommer que pouvoir les réordonner).
