@@ -44,7 +44,7 @@ Les entitées pourront êtres liées entre elles (automatiquement par l'applicat
 
 Par exemple, une note nomme 1 lieu, 2 personnages et fait référence (pour rappel à l'auteur) à 4 autres notes qui iraient, dans l'ordre chronologique de lecture de l'oeuvre et selon ces notes elles-même, autant en aval qu'en amont de la présente note (ou transversalement pour les personnages et lieux). L'ordre des entitées-notes sera dictée par le lien direct (par opposition à discret, c'est à dire la mécanique de référencement) entre elles et non par leur ordre numérologique ou de création. Ex: les notes #23, 493 et 129 sont en ordre pour raconter l'histoire mais elles ont été créée dans l'ordre chronologique de 23, 129 et 493 (avec tout les numéros entre) puis réordonnées. Des notes pourront être liées à un chapitre ou un paragraphe afin de permettre à l'auteur de se rappeller les notes qui ont été réellement utilisées et à quel moment du récit.
 
-##Autres fonctionnalitées :
+###Autres fonctionnalitées :
 * Un mécanisme de suivi des changements 
 * Une "bibliothèque" pouvant contenir des liens (ouvre le fureteur système), images, extraits/citations, etc. L'idée de la bibliothèque est d'avoir des ressources qui ne font pas partie d'un quelconque projet/document. Des sources d'inspiration.
 * Chaque projets aura une forme de "*moodboard*" dont les sources devront obligatoirement faire partie de la "bibliothèque", c'est à dire qu'une source ajoutée au "*moodboard*" en cours sera ajoutée à la "bibliothèque" puis liée au "*moodboard*" concerné, tout comme le "*moodboard*" en cours pourra être rempli à la carte avec le contenu de la "bibliothèque"
@@ -53,6 +53,12 @@ Par exemple, une note nomme 1 lieu, 2 personnages et fait référence (pour rapp
 * Assistant de création ePub(?)
 * Les entitées pourront être référencée par leur numéro unique ou leur "nom", ex: #283 ou 'bob'
 * Une fonction de recherche qui passe au travers du projet en cours et de la bibliothèque.
+
+
+###Quelles fonctionnalitées ne seront pas présentes (au moins initialement) :
+- Édition sur le site de l'Application (Module "**Cloud**")
+- Copie de sauvegarde vers le site hébergeant l'application  (Module "**Cloud**")
+- Copie de sauvegarde locale automatique et intégrale, c'est à dire sans le module "**Cloud**" et tel que décrit plus haut
 
 
 
@@ -64,11 +70,6 @@ L'application utilisera une base de données et des fichiers locaux à l'ordinat
 
 ##Les données seront-t'elles encryptées?
 Non, sauf si le Module "**Cloud**" est mis en place, ce qui se déclinera en compte, contenu/oeuvres et sécurité sur le site hébergeant l'application.
-
-###Quelles fonctionnalitées ne seront pas présentes (au moins initialement) :
-- Édition sur le site de l'Application (Module "**Cloud**")
-- Copie de sauvegarde vers le site hébergeant l'application  (Module "**Cloud**")
-- Copie de sauvegarde locale automatique et intégrale, c'est à dire sans le module "**Cloud**" et tel que décrit plus haut
 
 
 (...)
