@@ -15,9 +15,6 @@ Ce sera un outils  de création de romans, nouvelle, mémoire ou autre
 =Partie #2 (incomplet)
 
 =Partie #3 (incomplet)
-chaque note/personnage/lieu nommés auraient son propre lien HTML dans le texte de la note(/personnage/lieu) vers l'entitée elle-même.
-
-J'aimerai ajouter un "moodboard", une bibliothèque (commune à tout les projets sur un même ordinateur) pouvant contenir des liens, des images, des bribes de texte/citation, donc des inspirations.
 
 Les technologies prévues tournent autour du web : HTML5, JS, Ajax, SQL, etc.
 
