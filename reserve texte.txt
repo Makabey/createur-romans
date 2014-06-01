@@ -3,6 +3,7 @@
 (pour autant que je sache, c'est comme un roman mais sans personnages, en terme de chapitre/sections); pour les types de documents autres que roman, un personnage "moi" et un lieu "ici" pourraient être créés si l'application ne peux fonctionner sans cela.
 
 Ce sera un outils  de création de romans, nouvelle, mémoire ou autre 
+
 ###Projet:
 
 1. Faire un plan (cette section);
@@ -23,16 +24,20 @@ Les technologies prévues tournent autour du web : HTML5, JS, Ajax, SQL, etc.
 Les données seront toutes initialements dans une BD MySQL parce qu'il se pourrais que le début du projet soit fait comme un travail de fin d'étude en collaboration et donc en besoin de petites simplification technologique. Si la chose est bien fait, il ne sera pas trop difficile de réécrire certaines parties pour utiliser du XML et du CSV dans le but de pouvoir tout recréer (la structure des oeuvres) sans trop de tracas en advenant une corruption de la BD ou un désir de recopier dans un autre projet/logiciel le contenu généré.
 
 
--L'application utilisera une base de données et des fichiers locaux à l'ordinateur de l'usager, il nécessitera l'installation d'un serveur Apache ou IIS tel que WAMP. L'application sera donc à toutes fin pratique "offline" pour protèger la propriété intellectuelle de l'auteur. Le principe est difficile à accepter en 2014 mais certains pourraient l'apprécier. De plus, l'application sera livrée avec des instructions et s'installera semi-automatiquement, l'installation du serveur Apache/IIS et la copie de l'archive décompressée dans le bon répertoire sera la responsabilité de l'usager. Toutes sauvegarde de sécurité, autre qu'un éventuel mécanisme de suivi de changement/version sera lui-aussi à la charge de l'usager. L'application pourra s'initialiser en créant la base de données, l'usager et les tables nécessaire.
--bibliothèque scindée en: liens (ouvre le fureteur système), moodboard, images, extraits/citations, etc. L'idée de la bibliothèque est d'avoir des ressources qui ne font pas partie d'un quelconque projet/document. Des sources d'inspiration.
--gestionnaire (ajout/modification/suppression) de personnages, de lieux, de notes, de document/projet (roman, mémoire), chapitres (autant les nommer que pouvoir les réordonner).
+-De plus, l'application sera livrée avec des instructions et s'installera semi-automatiquement,
+
+-l'installation du serveur Apache/IIS et la copie de l'archive décompressée dans le bon répertoire sera la responsabilité de l'usager.
+
+-Toutes sauvegarde de sécurité, sera lui-aussi à la charge de l'usager.
+
+-L'application pourra s'initialiser en créant la base de données, l'usager et les tables nécessaire.
+
 -Le projet NUL sera créé par défaut dès qu'on initialise l'application durant son installation ou qu'on la lance pour la première fois, servira aussi pour tests avant d'avoir tout les outils de gestion des projets.
+
 -Au début du développement, quand on crée une entitée (lieu/personnage/note) elle fait partie du projet NUL, plus tard (dans le développement) toute nouvelle entité sera attaché au projet présentement ouvert OU si on as pas encore ouvert de projets, attachée au projet NUL. C'est à dire que j'aurai absolument besoin d'un projet auquel rattacher une entitée.
--Assistant de création ePub?
+
 -J'aimerai avoir des panneaux pour les types/entitées créées, s'il n'y as pas au moins un élément d'un type, le panneau de ce type n'apparaît pas : personnages, lieux, notes; ils sont placés à droite de l'interface et s'étendent vers la gauche quand on clique leur titre en poussant ceux qui le précèdent (ex: ordre est "perso, lieux, notes" et on clique "lieux" alors en grandissant, "lieux" pousse "personnages") et en révélant leur contenu qui devient disponible/cliquable. 
--que ce soit dans une note, une fiche personnage, un lieu ou le document lui même, si le logiciel trouve un nom de personnage/lieu connu ou un numéro de note, il insère un lien vers la fiche (note, lieu, personnage) correspondante.
--les notes auront par défaut un numéro que l'on pourra référencer par "#0000" dans le texte et qui insèrera (comme ci-dessus) un lien, il pourrait aussi être possible de les nommer par étiquette.
--fonction de recherche qui passe au travers du projet en cours et de la bibliothèque.
+
 -ici un "lien" est une balise "A" pour les liens internes; si c'est un lien externe, il aurais une classe CSS pour le souligner et nécessite que l'insertion soit faite par les outils de l'application. 
  
 =Partie #4 (à écrire)
