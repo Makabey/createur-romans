@@ -69,7 +69,7 @@ L'application utilisera une base de données et des fichiers locaux à l'ordinat
 * XML pour les gabarits, chapitres, structure du document (ordre des chapitres, etc), les entitées (note, personnage, etc)
 
 ##Les données seront-t'elles encryptées?
-Non, sauf si le Module "**Cloud**" est mis en place, ce qui se déclinera en compte, contenu/oeuvres et sécurité sur le site hébergeant l'application.
+Non, sauf si le Module "**Cloud**" est mis en place, ce sous-entend l'inclusion de systèmes de comptes, contenu/oeuvres et sécurité sur le site hébergeant l'application.
 
 
 (...)
