@@ -1,22 +1,20 @@
--------------------------
+To Do :: écrire un autre fichier qui décrira d'abord l'interface, puis les menus et enfin le fonctionnement interne (JS, PHP/Classes, MySQL, etc). Voler d'ici (et copier du Readme) le max de renseignement pour composer ce document
+
+
+###Projet:
+
+3. Lister les fonctionnalités, les possibilitées, les outils;
+4. Écrire un manuel, comment créer un projet, quels types de projets il est possible de gérer, comment créer chaque type d'idées (personnages, lieux, note, etc), comment lier les divers items ensemble, etc, etc...
+5. Scinder les idées en concepts/pseudo-code;
+
 
 (pour autant que je sache, c'est comme un roman mais sans personnages, en terme de chapitre/sections); pour les types de documents autres que roman, un personnage "moi" et un lieu "ici" pourraient être créés si l'application ne peux fonctionner sans cela.
 
 Ce sera un outils  de création de romans, nouvelle, mémoire ou autre 
 
-###Projet:
-
-1. Faire un plan (cette section);
-2. Élaborer le but de l'application dans les grandes lignes;
-3. Lister les fonctionnalités, les possibilitées, les outils;
-4. Écrire un manuel, comment créer un projet, quels types de projets il est possible de gérer, comment créer chaque type d'idées (personnages, lieux, note, etc), comment lier les divers items ensemble, etc, etc...
-5. Scinder les idées en concepts/pseudo-code;
-
-=Partie #2 (incomplet)
 
 =Partie #3 (incomplet)
 
-Les technologies prévues tournent autour du web : HTML5, JS, Ajax, SQL, etc.
 
 Les données seront toutes initialements dans une BD MySQL parce qu'il se pourrais que le début du projet soit fait comme un travail de fin d'étude en collaboration et donc en besoin de petites simplification technologique. Si la chose est bien fait, il ne sera pas trop difficile de réécrire certaines parties pour utiliser du XML et du CSV dans le but de pouvoir tout recréer (la structure des oeuvres) sans trop de tracas en advenant une corruption de la BD ou un désir de recopier dans un autre projet/logiciel le contenu généré.
 
@@ -34,6 +32,14 @@ Les données seront toutes initialements dans une BD MySQL parce qu'il se pourra
 -Au début du développement, quand on crée une entitée (lieu/personnage/note) elle fait partie du projet NUL, plus tard (dans le développement) toute nouvelle entité sera attaché au projet présentement ouvert OU si on as pas encore ouvert de projets, attachée au projet NUL. C'est à dire que j'aurai absolument besoin d'un projet auquel rattacher une entitée.
 
 -J'aimerai avoir des panneaux pour les types/entitées créées, s'il n'y as pas au moins un élément d'un type, le panneau de ce type n'apparaît pas : personnages, lieux, notes; ils sont placés à droite de l'interface et s'étendent vers la gauche quand on clique leur titre en poussant ceux qui le précèdent (ex: ordre est "perso, lieux, notes" et on clique "lieux" alors en grandissant, "lieux" pousse "personnages") et en révélant leur contenu qui devient disponible/cliquable. 
+
+-pour éviter trop d'onglets, il faudrait en limiter le nombre (4-5?).
+
+-pour ce qui est de l'endroit d'accès aux gabarits quand un projet/oeuvre est chargé, il faudrait choisir entre
+A. Les gabarits pour le projet en cours sont tous listés sous un menu "gabarits" et/ou sous-listés dans des catégories, ex: Gabarits->Personnages->"Marionnettes";
+B. Quand on crée un onglet (jusqu'à concurrence de la limite) on peux y attacher autant de gabarits que l'ont veux et ces gabarits ne sont disponibles que sur cet onglet
+
+-Un onglet peux être nommé comme on l'entend mais à l'interne le nom est constant tel que "onglet0, onglet5, etc"
 
 -ici un "lien" est une balise "A" pour les liens internes; si c'est un lien externe, il aurais une classe CSS pour le souligner et nécessite que l'insertion soit faite par les outils de l'application. 
  
