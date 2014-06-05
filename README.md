@@ -19,13 +19,14 @@ Ce sera une application web locale (utilisant un serveur Apache local, tel que [
 Il n'est pas impossible qu'une fonctionnalitée de sauvegarde ("*backup*") vers le "**Cloud**" soit ajoutée beaucoup plus tard, et encore plus tard une fonctionnalitée de publication sur le site hébergeant l'application (mais il serait en fait préférable d'utiliser la fonctionnalitée de publication "*ePub*" à la place).
 
 ###Pourquoi est-ce une application web?
-En partie pour la portabilitée entre les *Systèmes d'Exploitations* et les Navigateurs~~, en partie pour la transportabilitée entre location/ordinateur (surtout si un support "**Cloud**" complet est ajouté)~~, en partie par volontée que le projet soit "*Open Source*", pour ainsi dire.
+En partie pour la portabilitée entre les *Systèmes d'Exploitations* et les Navigateurs, ~~en partie pour la transportabilitée entre location/ordinateur (surtout si un support "**Cloud**" complet est ajouté),~~ en partie par volontée que le projet soit "*Open Source*", pour ainsi dire.
+
 
 ##Quelles en seront les fonctionnalitées?
 
 ###L'application supportera la création d'entitées telles que :
 
-* Oeuvres(roman, nouvelle, mémoire)
+* Oeuvres(roman, nouvelle, mémoire, etc)
 * Chapitres
 * Notes
 * Personnages
@@ -53,20 +54,44 @@ Par exemple, une note nomme 1 lieu, 2 personnages et fait référence (pour rapp
 * Assistant de création ePub(?)
 * Les entitées pourront être référencées par leur numéro unique ou leur "nom", ex: #283 ou 'bob'
 * Une fonction de recherche qui passe au travers du projet en cours et de la bibliothèque.
+* Il sera possible de définir des gabarits de projets, lesquels porteront un nom, une description et un ensemble de gabarits pour les entitées pouvant faire logiquement partie dudit projet; etc : un pièce de théâtre pourra voir des gabarit pour les costumes, les actes, les décors, etc...
 
 ###Quelles fonctionnalitées ne seront pas présentes (au moins initialement) :
 - Création et édition directement sur le site de l'application (Module "**Cloud**")
 - Copie de sauvegarde vers le site hébergeant l'application  (Module "**Cloud**")
 - Copie de sauvegarde locale automatique et intégrale, c'est à dire sans le module "**Cloud**" et tel que décrit plus haut
 
-##Comment seront sauvegardé les données?
+
+##À propos des données
+
+###Comment seront sauvegardé les données?
 L'application utilisera une base de données et des fichiers locaux à l'ordinateur de l'usager, séparés comme suit (et sujet à changement sans préavi quant au contenu exact de chaque fichier) :
 * MySQL pour une partie des liens entre les entitées et les bribes d'information sous 64 caractères
 * INI (format Ascii Texte de Microsoft) pour certaines configurations et préférences
 * XML pour les gabarits, chapitres, structure du document (ordre des chapitres, etc), les entitées (note, personnage, etc)
 
-##Les données seront-t'elles encryptées?
+###Les données seront-t'elles encryptées?
 Non, sauf si le Module "**Cloud**" est mis en place, ce qui sous-entend l'inclusion de systèmes de comptes, contenu/oeuvres et sécurité sur le site hébergeant l'application.
 
+###Qu'arrivera t'il si la base de donnée ou l'application elle-même plante?
+Il est prévu que la plupart des ressources seront (ultimement) manipulées à l'extérieur de la BD MySQL, et donc lisible par n'importe quel éditeur de texte tel que Notepad++, LibreOffice ou MS-Word. Certains format seront mieux lu par Calc(LibreOffice) ou Excel (MS-Office)
+
+
+##Tailles et limites
+
+###Y as-t'il une limite de nombre et/ou de taille de projets?
+Non
+
+###Y as-t'il une limite de nombre d'entitées et/ou de gabarits?
+Pas pour le moment
+
+###Sous quelle licence est-ce que mon oeuvre existe ou peut/doit être distribuée et/ou publiée?
+Sous celle que vous voulez. Des limite pourront être mise sur la redistribution et l'attribution du contenu fournit et créé par l'application, incluant particulièrement les fichiers la composant ainsi que sur les gabarits (même ceux que vous avez créés) mais tout le contenu d'une fiche créée et lisible à partir d'un gabarit ou du document principal vous appartiennent en tout de façon irrémédiable. Autrement dit, tout gabarit créé à l'aide de l'application ne vous appartient pas; tout contenu tapé pour renseigner les champs d'un gabarit, incluant le document principal, sont à vous.
+
+###Puis-je redistribuer l'application?
+Oui mais sans l'héberger ni la modifier autrement que de partager les gabarits de projet et/ou d'entitées que vous avez créés
+
+###(L'application) Sera t'elle disponible dans d'autres langues?
+Non, pour le moment.
 
 (...)
