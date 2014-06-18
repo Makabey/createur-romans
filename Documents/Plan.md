@@ -11,7 +11,15 @@ To Do ::  décrire d'abord l'interface, puis les menus et enfin le fonctionnemen
  * finir les mockups finaux
  * cahier des charges (URGENT!!!)
  * ménage dans ce qui reste pour réduire le nombre de fichier, la quantitée d'informtion et avoir un plan simple et clair
-* proofreading : jamais pour tout texte qui ne pourra jamais se retrouver dans le cahier de charges ou remis sous une autre forme (ex: manuel, FAQ et articles sur la page index/accueil), donc pas pour les notes à moins que ce soit écrit hyper dislexique.
+ * proofreading : jamais pour tout texte qui ne pourra jamais se retrouver dans le cahier de charges ou remis sous une autre forme (ex: manuel, FAQ et articles sur la page index/accueil), donc pas pour les notes à moins que ce soit écrit hyper dislexique.
+  * lire les APIs de G+ et F pour le login
+  * footer : liens MailTo et GitHub + autres contacts
+  * s'enregistrer demande pseudo, nom, email, mot de passe, theme ?
  
+ future features:
+ * faire des suites/sequel
+ * plus de thmes
+  * plus de genre littéraires
+  * supporter la différentiation et undelete
  
 == EOF ==
