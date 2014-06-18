@@ -41,6 +41,9 @@
 ##Comment faire pour voir plus d'entitées à la fois?
 - Cliquez la flèche en haut à gauche de la section, un premier clique affichera deux colonnes, un second trois.
 
+##Puis-je voir à la fois un personnage et un lieu?
+- Oui, il suffit de cliquer l'icône à cet effet sur chacun puis d'ouvrir l'onglet "Consultation"
+
 ##Mon texte est obscurci par la section "entitées"!
 - Pour le moment, il n'est pas prévu de pouvoir éditer dans la fenêtre principale si la section entitées est déroulée.
 
@@ -62,7 +65,7 @@
 ##Éditer une entitée
 - Cliquez la catégorie de l'entitée désirée;
 - Amenez l'entitée en visibillitée (scroll la fenêtre)
-- Cliquez le crayon en haut  à gauche de sa fenêtre
+- Cliquez le crayon en haut à gauche de sa fenêtre
 
 ~~##Créer un chapitre ou un Index
 - Toute ligne commençant par "#" sera le Titre, inutile de dire que vous n'avez droit qu'à un seul
@@ -75,14 +78,14 @@
 ##Les menus :
 ###Menu Fichier
 * Nouveau projet... (retourne à Index::création)
-* Ouvrir  (retourne à Index::ouverture)
+* Ouvrir (retourne à Index::ouverture)
 * Enregistrer
 * Enregistrer sous... (??? euh...)
 * Exporter
-    - PDF
+ - PDF
 	- ePub (j'ai vu des librairies avec une recherche rapide, dont en Java)
 	- ASCII/TXT
-* {Pousser sur le cloud}  (servirais pour envoyer un backup, garder pour la fin ou retirer maintenant <-- OH! Ou alors c'est un mode "offline" qui se sert du "web storage" ! Bon le problème est de gèrer le truc, donc encore une fois, pousser à la fin)
+* {Pousser sur le cloud} (servirais pour envoyer un backup, garder pour la fin ou retirer maintenant <-- OH! Ou alors c'est un mode "offline" qui se sert du "web storage" ! Bon le problème est de gèrer le truc, donc encore une fois, pousser à la fin)
 * {Tirer du cloud} (servirais pour prendrer un backup, garder pour la fin ou retirer maintenant)
 
 ~~##Menu Navigation
@@ -90,14 +93,14 @@
 * Voir l'Index
 * Sauter au chapitre > [sous-menu :: liste des chapitres]~~
 
-##Menu Identitée
+~~##Menu Identitée
 * Changer le synopsis
-* Changer la page de garde (titre, copyright, année d'édition, peut-être plus pour les versions exportées PDF/ePub)
+* Changer la page de garde (titre, copyright, année d'édition, peut-être plus pour les versions exportées PDF/ePub)~~
 
-##Menu Profil
+~~##Menu Profil
 * Changer son mot de passe
 * Changer son pseudonyme/nom
-* Changer le thème CSS
+* Changer le thème CSS~~
 
 ###Menu Aide
 * Manuel
