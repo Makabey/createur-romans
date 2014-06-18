@@ -2,11 +2,11 @@ To Do ::  décrire d'abord l'interface, puis les menus et enfin le fonctionnemen
 
 à faire:
 - créer les interfaces sur https://www.draw.io , les dessins sont sur Google Drive
-- nommer les menus et les reprendre dans le manuel
+- ~~nommer les menus et les reprendre dans le manuel~~
 - pour le fonctionnement interne, voir aussi "concepts et pseudo-code.md"
 
  * refaire ce plan
- * réécrire stucture des répertoires pour simplifier (MySQL et JSON)
+ * ~~réécrire structure des répertoires pour simplifier (MySQL et JSON)~~
  * finir le manuel
  * finir les mockups finaux
  * cahier des charges (URGENT!!!)

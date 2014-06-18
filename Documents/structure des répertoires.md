@@ -3,28 +3,22 @@
 - racine:
   * .htaccess
   * index.php
-  * !lisezMoi.txt -> ce qu'est l'application, comment l'installer et la lancer
-  * install.bat, init_db.sql, config.ini
-  * pages (répertoires)
+  * pages (répertoire)
     - les fichiers pages autre que index.php
-  * js (répertoires)
+  * js (répertoire)
     - le javascript
-    - JSON (répertoire), les fichiers données, probablement plus facile à utiliser que le XML
-  * css (répertoires)
+    - JSON (sous-répertoire), les fichiers de données
+  * css (répertoire)
     - les feuilles CSS
   * inc (répertoires)
     - les fichiers PHP qui sont des "includes"
-  * media (répertoires)
-    - Audio/Video nécessaire
-  * images (répertoires)
+  * media (répertoire)
+    - Audio/Video, si nécessaire
+  * images (répertoire)
+    - logos (sous-répertoire)
   * xhr
-    - les fichiers PHP appellés par JS/AJAX et le fichier JS contenant les fonctions liées
-  * xml
-    - les fichiers par défaut fournit avec l'application
+    - les fichiers PHP appellés par JS/AJAX et le fichier JS contenant les fonctions liées ("xhrFunctions.js" du projet PHP)
   * usagers (répertoire)
-    - &lt;Usager&gt; (répertoire) L'usager, même s'il n'y en as qu'un seul
-      * &lt;projet&gt; (répertoire)
-        - xml  (répertoire) les fichiers de l'usager (contenu, entitées, etc) avec des noms probablement comme &lt;NomEntitée_dateTime&gt;
-        - json idem que xml, la raison de la nécessité est au cas où je décide d'utiliser JSON en remplacement de XML, c'est vraiment pour le moment une question de prévoir le coup.
+    - &lt;Usager&gt; (répertoire) L'usager, même s'il n'y en as qu'un seul, devrais contenir les documents puisque jugés trop gros pour mettre dans la BD
 
 == EOF ==

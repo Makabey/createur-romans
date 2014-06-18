@@ -64,13 +64,13 @@
 - Amenez l'entitée en visibillitée (scroll la fenêtre)
 - Cliquez le crayon en haut  à gauche de sa fenêtre
 
-##Créer un chapitre ou un Index
+~~##Créer un chapitre ou un Index
 - Toute ligne commençant par "#" sera le Titre, inutile de dire que vous n'avez droit qu'à un seul
 - Toute ligne commençant par "##" est un chapitre, si la ligne contient aussi "[!]" tel que "##Jour [!]" alors '[!]' sera interprèté comme un compteur, vous n'avez droit qu'à un seul compteur
 - L'index est créé au fil des lignes identifiées comme "chapitre"
 
 ##Je peux formater mon document?
-- Très peu, voir "Créer un chapitre ou un Index"
+- Très peu, voir "Créer un chapitre ou un Index"~~
 
 ##Les menus :
 ###Menu Fichier
@@ -80,19 +80,19 @@
 * Enregistrer sous... (??? euh...)
 * Exporter
     - PDF
-	- ePub
+	- ePub (j'ai vu des librairies avec une recherche rapide, dont en Java)
 	- ASCII/TXT
-* {Pousser sur le cloud}  (servirais pour envoyer un backup, garder pour la fin ou retirer maintenant)
+* {Pousser sur le cloud}  (servirais pour envoyer un backup, garder pour la fin ou retirer maintenant <-- OH! Ou alors c'est un mode "offline" qui se sert du "web storage" ! Bon le problème est de gèrer le truc, donc encore une fois, pousser à la fin)
 * {Tirer du cloud} (servirais pour prendrer un backup, garder pour la fin ou retirer maintenant)
 
-##Menu Navigation
-* Sauter au TItre/Début
+~~##Menu Navigation
+* Sauter au Titre/Début (inutile?)
 * Voir l'Index
-* Sauter au chapitre > [liste des chapitres]
+* Sauter au chapitre > [sous-menu :: liste des chapitres]~~
 
 ##Menu Identitée
 * Changer le synopsis
-* Changer la page de garde (titre, copyright, année d'édition)
+* Changer la page de garde (titre, copyright, année d'édition, peut-être plus pour les versions exportées PDF/ePub)
 
 ##Menu Profil
 * Changer son mot de passe
