@@ -1,5 +1,22 @@
 #Concepts et pseudo-code
 
+mettre ici une copie du manuel mais avec ce qui se passe derrière et fonctionnellement? ex: usager veux changer de projet/roman : 1. tout saved? non-> proposer save / oui -> 2. header(location:index mode ouverture), etc...
+
+
+XSS
+SQL injection...
+mdp encryptés?
+corps du document dans fichier texte séparé au lieu de MySQL? <-- pê exagéré pour la démo
+corps des "notes" aussi ds fichier séparés (format JSON, noms genre <auteur_projet_ID>.json)
+charger les "notes"  à la demande (XHR) s'il y en as pour plus que 2mo (total, pas chaque) <-- donc mécanisme inutile pour la démo
+
+tables :
+usagers:ID, pseudo, nom, mdp, prefCss
+personnages:ID personnage(parmis tout les romans), ID roman, ID_Prev/Next (si on permet de les réordonner, sinon 0 pour les deux), liste ID autres entitées référencées sous la forme [lettre][chiffres] où [lettre] est le type tel que [p]ersonnage/[n]ote/etc, nom, sexe, role (protagoniste primaire, secondaire, antagoniste, rempllssage,...), taille, description
+lieux
+notes : ID note(parmis tout les romans), ID roman, ID_Prev/Next (si Prev ou Next=0 alors en tête/pied de liste), liste ID autres entitées référencées
+autres (ex:bateaux, avion, coffre d'outils, le Tardis,...): ID autres, ID roman, ID_Prev/Next (si on permet de les réordonner, sinon 0 pour les deux), identifiant/nom, description
+
 
 5. Scinder les idées en concepts/pseudo-code;
 
@@ -31,4 +48,4 @@ utilisation de JSON :
     - ids_liees[] (defaut) : les IDs d'autres entitees liees a celle-ci, plus pour les notes qui font references à d'autres notes mais n'exclu pas un personnage qui pointe un autre personnage comme un ami ou un membre de famille
     - nom, prenom, sexe : champs que l'utilisateur peux modifier, renommer, ajouter ou supprimer (structure de ce type d'entitée) mais surtout renseigner (ce qui fait partie de l'identitée de l'entitée, le texte qui intéresse réellement l'usager); ils font partie de l'identitée de l'entitée, que ce soit un personnage, un lieu ou une note
 
-
+== EOF ==

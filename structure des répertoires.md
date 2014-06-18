@@ -26,3 +26,5 @@
       * &lt;projet&gt; (répertoire)
         - xml  (répertoire) les fichiers de l'usager (contenu, entitées, etc) avec des noms probablement comme &lt;NomEntitée_dateTime&gt;
         - json idem que xml, la raison de la nécessité est au cas où je décide d'utiliser JSON en remplacement de XML, c'est vraiment pour le moment une question de prévoir le coup.
+
+== EOF ==

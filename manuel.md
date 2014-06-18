@@ -1,49 +1,69 @@
 #Manuel
 
 
-##Installation
-- Installer WAMP
+##Installation (hébergeur, équipe de développement)
 - Copier les fichiers dans le répertoire www
-- Exécuter l'upload de la base MySQL (ou alors l'application le fait au premier lancement)
+- Exécuter l'upload de la base MySQL
+- Tester l'application
 
-##Initialisation
-- Vous devez entrer votre nom afin que l'application vous identifie comme auteur;
-- Choississez maintenant le type de votre projet (roman, nouvelle, mémoire);
-- Quel est le nom de votre projet?;
-- Sélectionnez un thème d'affichage (CSS, couleurs, etc);
-- Entrez une courte description du projet puis cliquez sur [créer].
-- Prochaine etape, creer votre chef-d'oeuvre au fil de vos mots!
-- Bienvenue dans votre projet!;
+====
 
-##Ouverture de l'application:
-- Sélectionnez votre nom / identifiez-vous
+##Inscription
+- Vous devez entrer un pseudonyme/nom d'auteur sous forme alphanumérique sans accents. Vous pouvez utiliser votre vrai nom, sans espace, avec les mêmes restrictions;
+ - Entrez votre nom, sans caractères spécial (!"#$...)
+ - [Choississez un thème (CSS), vous pourrez en changer plus tard dans votre page profil]
+ - Entrez un mot de passe de 8 à 16 caractères
 
 ##Créer un nouvel auteur:
-- Sous le menu Entitées, sélectionnez "Nouvel Auteur"
+- Créez un nouveau compte
+
+## Rapattrier du contenu d'un compte à un autre
+- Impossible pour le moment
 
 ##Ouvrir un projet existant:
 - Cliquez sur la tuile comportant le nom de votre projet
 
 ##Création d'un nouveau projet:
-- Sous le menu Fichier, sélectionnez Nouveau projet.;
-- Sélectionnez l'auteur. Pour attribuer un nouvel auteur, voyez la section Entitees ou cliquez [+], sinon sélectionnez l'un des auteurs dans le select.;
-- Choississez maintenant le type de votre projet (roman, nouvelle, mémoire);
+- Identifiez-vous sous l'auteur/compte à qui doit appartenir le roman
+- Cliquez la dernière tuile qui indique "Nouveau Projet ( + )"
+- Sélectionnez "Page Blanche" pour sauter l'assistant sinon choississez un genre (policier, sci-fi,...)
+###Avec l'assistant:
+-Répondez aux diverses questions pour vous inspirer, vous aiguiller, vous permettre de créer rapidement un squelette de votre roman
+###Avec et sans l'assistant:
 - Quel est le nom de votre projet?;
-- Sélectionnez un thème d'affichage (CSS, couleurs, etc);
+- (optionnel [pour l'usager de remplir ce champs]) Entrez une courte description, un synopsis (l'assistant devrais en proposer un si vous l'avez utilisé)
 - Bienvenue dans votre projet!;
 
+##Ajout d'une nouvelle entitée ou note:
+- Cliquez la catégorie de l'entitée désirée;
+- Cliquez le ( + ) en haut à droite de la catégorie
+
+##Détruire une entitée:
+- Cliquez la catégorie de l'entitée désirée;
+- Amenez l'entitée en visibillitée (scroll la fenêtre)
+- Cliquez son ( X ) et confirmez
+
+##Réordonner les entitées
+- {Mécanisme usager à déterminer, drag-drop par le titre? panneau (des entitées) -doit- être "étendu"?}
+
+##Éditer une entiée
+- Cliquez la catégorie de l'entitée désirée;
+- Amenez l'entitée en visibillitée (scroll la fenêtre)
+- Cliquez le crayon en haut  à gauche de sa fenêtre
+
+
+##Les menus :
 ###Menu Fichier
-* Nouveau projet...
-* Ouvrir
+* Nouveau projet... (retourne à Index::création)
+* Ouvrir  (retourne à Index::ouverture)
 * Enregistrer
-* Enregistrer sous...
-* [Pousser sur le cloud]
-* [Tirer du cloud]
+* Enregistrer sous... (??? euh....)
+* Exporter
+    - PDF
+	- ePub
+	- ASCII/TXT
+* [Pousser sur le cloud]  (servirais pour envoyer un backup, garder pour la fin ou retirer maintenant)
+* [Tirer du cloud] (servirais pour prendrer un backup, garder pour la fin ou retirer maintenant)
 
-###Menu Entitees
-* Gèrer une entitée (dialogue :: modifier, effacer)
-* Nouveau gabarit (dialogue ::  sélectionner le nom, les champs et leurs type, sous-entend leur nombre)
-* Nouveau [Note]
-* Nouveau [Personnage]
-* Nouveau [Lieu]
 
+== EOF ==

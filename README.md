@@ -95,3 +95,5 @@ Oui mais sans l'héberger ni la modifier autrement que de partager les gabarits 
 Non, pour le moment.
 
 (...)
+
+== EOF ==
