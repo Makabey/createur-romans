@@ -1,6 +1,18 @@
 #Concepts et pseudo-code
 
-mettre ici une copie du manuel mais avec ce qui se passe derrière et fonctionnellement? ex: usager veux changer de projet/roman : 1. tout saved? non-> proposer save / oui -> 2. header(location:index mode ouverture), etc...
+au premier login de l'usager, soit on luil donne un projet exemple, soit on le guide tout de suite dans la création de son premier projet.
+
+-pour éviter trop d'onglets (entitées), il faudrait en limiter le nombre (4-5?).
+
+
+
+Les données seront dans une BD MySQL. Si la chose est bien fait, il ne sera pas trop difficile de réécrire certaines parties pour utiliser du XML et du CSV dans le but de pouvoir tout recréer (la structure des oeuvres) sans trop de tracas en advenant une corruption de la BD ou un désir de recopier dans un autre projet/logiciel le contenu généré.
+
+
+-ici un "lien" est une balise "A" pour les liens internes; si c'est un lien externe, il aurais une classe CSS pour le souligner et nécessite que l'insertion soit faite par les outils de l'application. 
+
+
+mettre ici une copie du manuel mais avec ce qui se passe derrière et fonctionnellement? ex: usager veux changer de projet/roman : 1. tout saved? non-> proposer save / oui -> 2. header(location:index mode ouverture), etc... -décrire le fonctionnement interne (JS, PHP/Classes, MySQL, etc).
 
 ##Installation (hébergeur, équipe de développement)
 - Copier les fichiers dans le répertoire www

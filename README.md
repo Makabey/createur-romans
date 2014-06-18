@@ -1,11 +1,17 @@
-#Assistant créateur de romans
+#Assistant de création de romans (alias Projet #1 du CodeH alias "Ekrymoassa")
 
 ##Qu'est-ce que c'est?
 ~~Le but primaire de cette application est d'être un outils pour l'écriture de romans (ou autre document demandant une organisation assez simple des informations et des liens entre elles); avec la gestion des diverses parties de celui-ci tel que: nom de l'oeuvre, fiche de l'auteur, résumé/synopsis, notes, personnages, lieux, chapitres, sections, etc.~~
 
 ~~L'outil pourrais probablement être aussi utilisé pour d'autres types de documents tel que prise de notes avec liens entre elles, mémoires, scénario de métrages ou pièce de théâtre.~~
 
-L'application sert à créer son roman grâce à (ou sans, à vous de décider) l'aide d'un assistant d'inspiration, ce qui permet d'effacer le malaise de la page blanche et du même coup suggèrer une structure narrative à votre histoire. L'assistant vous guide, sans plus.
+~~L'application sert à créer son roman grâce à (ou sans, à vous de décider) l'aide d'un assistant d'inspiration, ce qui permet d'effacer le malaise de la page blanche et du même coup suggèrer une structure narrative à votre histoire. L'assistant vous guide, sans plus.~~
+
+Cet assistant as pour but primaire de vous aider à effacer le malaise de la page blanche et du même coup suggèrer une structure narrative à votre histoire. L'assistant vous guide, sans plus.
+
+Il offre aussi des outils de gestion des personnages, des lieux et des notes que  vous voudrez assurément prendre ou consulter en cours d'écriture.
+
+Une version mobile, un peu plus simple, est aussi disponible pour ces moments où vous êtes en transit.
 
 ~~##Quelle forme prendra l'outils?
 Ce sera une application web locale (utilisant un serveur Apache local, tel que [sous Windows] WAMP ou EasyPHP).~~
@@ -17,11 +23,11 @@ Ce sera une application web locale (utilisant un serveur Apache local, tel que [
 
 ~~Il n'est pas impossible qu'une fonctionnalitée de sauvegarde ("*backup*") vers le "**Cloud**" soit ajoutée beaucoup plus tard, et encore plus tard une fonctionnalitée de publication sur le site hébergeant l'application (mais il serait en fait préférable d'utiliser la fonctionnalitée de publication "*ePub*" à la place).~~
 
-###Pourquoi est-ce une application web?
-En partie pour la portabilitée entre les *Systèmes d'Exploitations* et les Navigateurs, ~~en partie pour la transportabilitée entre location/ordinateur (surtout si un support "**Cloud**" complet est ajouté),~~ en partie par volontée que le projet soit "*Open Source*", pour ainsi dire.
+~~###Pourquoi est-ce une application web?
+En partie pour la portabilitée entre les *Systèmes d'Exploitations* et les Navigateurs, ~ ~en partie pour la transportabilitée entre location/ordinateur (surtout si un support "**Cloud**" complet est ajouté),~ ~ en partie par volontée que le projet soit "*Open Source*", pour ainsi dire.~~
 
 
-##Quelles en seront les fonctionnalitées?
+##Quelles en sont les fonctionnalitées?
 
 ###L'application supportera la création d'entitées telles que :
 
