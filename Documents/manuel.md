@@ -82,8 +82,8 @@
     - PDF
 	- ePub
 	- ASCII/TXT
-* [Pousser sur le cloud]  (servirais pour envoyer un backup, garder pour la fin ou retirer maintenant)
-* [Tirer du cloud] (servirais pour prendrer un backup, garder pour la fin ou retirer maintenant)
+* {Pousser sur le cloud}  (servirais pour envoyer un backup, garder pour la fin ou retirer maintenant)
+* {Tirer du cloud} (servirais pour prendrer un backup, garder pour la fin ou retirer maintenant)
 
 ##Menu Navigation
 * Sauter au TItre/Début
