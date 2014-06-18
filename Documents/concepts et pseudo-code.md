@@ -1,41 +1,56 @@
-#Concepts et pseudo-code
+###Fichier d'Eric
+####Contient tâches, idées, concepts, questions et "ToDo"
 
-au premier login de l'usager, soit on luil donne un projet exemple, soit on le guide tout de suite dans la création de son premier projet.
+To Do:
+* penser questions/réponses/faits/etc pour le genre "policier"
+* structure des tables de BD ::
+  - usagers:
+    * ID_usager : Unique, clé primaire, uInt
+	* pseudo : varchar(20)
+	* nom : varchar(50)
+	* motdepasse : varchar(25)
+    * courriel : varchar(30)
+	* dateInscription : datetime
+	
+  - personnages:
+    * ID_personnage : unique, clé primaire
+	* ID_roman : uInt
+	* ID_prev : uInt, index du personnage à afficher -avant- ou 0 si premier
+	* ID_next : uInt, index du personnage à afficher -après- ou 0 si dernier
+	* IDs_references, varchar(200), liste des IDs des autres entitées référencées sous la forme "[lettre][chiffres]" séparés par point-virgule où [lettre] est le type tel que [p]ersonnage/ [n]ote / [l]ieux/ [a]utres
+	* nom : varchar(50)
+	* sexe : boolean
+	* role_fonction : enum [protagoniste, antagoniste, figurant, intérêt amoureux, ...]
+	* role_poid: enum [primaire, secondaire, tertiaire, ...]
+	* taille_cm : uInt
+	* poids_kg : uInt
+	* description : varchar(500), tout les autres détails, dont background
+	
+  - lieux
+  - notes : ID note(parmis tout les romans), ID roman, ID_Prev/Next (si Prev ou Next=0 alors en tête/pied de liste), liste ID autres entitées référencées
+  - autres (ex:bateaux, avion, coffre d'outils, le Tardis,...): ID autres, ID roman, ID_Prev/Next (si on permet de les réordonner, sinon 0 pour les deux), identifiant/nom, description
+  - roman: id,id usager
 
--pour éviter trop d'onglets (entitées), il faudrait en limiter le nombre (4-5?).
-
-
-
-Les données seront dans une BD MySQL. Si la chose est bien fait, il ne sera pas trop difficile de réécrire certaines parties pour utiliser du XML et du CSV dans le but de pouvoir tout recréer (la structure des oeuvres) sans trop de tracas en advenant une corruption de la BD ou un désir de recopier dans un autre projet/logiciel le contenu généré.
-
-
--ici un "lien" est une balise "A" pour les liens internes; si c'est un lien externe, il aurais une classe CSS pour le souligner et nécessite que l'insertion soit faite par les outils de l'application. 
-
+Les données dans une BD MySQL. 
+Liens entre les entitées sont des "A"
 
 mettre ici une copie du manuel mais avec ce qui se passe derrière et fonctionnellement? ex: usager veux changer de projet/roman : 1. tout saved? non-> proposer save / oui -> 2. header(location:index mode ouverture), etc... -décrire le fonctionnement interne (JS, PHP/Classes, MySQL, etc).
 
-##Installation (hébergeur, équipe de développement)
-- Copier les fichiers dans le répertoire www
-- Exécuter l'upload de la base MySQL
-- Tester l'application
-
-création d'un roman à partir d'un autre: si on faisait quelque chose d'ultra efficace, dans la table "roman" on nommerait par ID les personnages, lieux et autres sous le roman lui-même, ce qui permettrait de mettre une référence dans le nouveau roman (pour économiser de l'espace de base de données) et à chaque sauvegarde d'une entitée autre qu'une note (qui elles fonctionnent à l'inverse, c'est à dire que ce sont elles qui dictent à qui elle appartiennent) serait modifiée, on vérifierait si elle appartient à un autre roman et c'est seulement à ce moment qu'on clonerait si la réponse est positive. Dans les faits on clone direct et c'est tout.
-
+création d'un roman à partir d'un autre:  on clone direct les entitées et c'est tout.
 
 XSS
+
 SQL injection...
+
 mdp encryptés?
+
 corps du document dans fichier texte séparé au lieu de MySQL? <-- pê exagéré pour la démo
+
 corps des "notes" aussi ds fichier séparés (format JSON, noms genre <auteur_projet_ID>.json)
-charger les "notes"  à la demande (XHR) s'il y en as pour plus que 2mo (total, pas chaque) <-- donc mécanisme inutile pour la démo
 
-tables :
-usagers:ID, pseudo, nom, mdp, prefCss
-personnages:ID personnage(parmis tout les romans), ID roman, ID_Prev/Next (si on permet de les réordonner, sinon 0 pour les deux), liste ID autres entitées référencées sous la forme [lettre][chiffres] où [lettre] est le type tel que [p]ersonnage/[n]ote/etc, nom, sexe, role (protagoniste primaire, secondaire, antagoniste, rempllssage,...), taille, description
-lieux
-notes : ID note(parmis tout les romans), ID roman, ID_Prev/Next (si Prev ou Next=0 alors en tête/pied de liste), liste ID autres entitées référencées
-autres (ex:bateaux, avion, coffre d'outils, le Tardis,...): ID autres, ID roman, ID_Prev/Next (si on permet de les réordonner, sinon 0 pour les deux), identifiant/nom, description
+charger les "notes" à la demande (XHR) s'il y en as pour plus que 2mo (total, pas chaque) <-- donc mécanisme inutile pour la démo
 
+* lire les APIs de G+ et F pour le login
 
 5. Scinder les idées en concepts/pseudo-code;
 
@@ -61,10 +76,10 @@ utilisation de JSON :
 - Niveau 2 : type d'entitée (ex donnees['personnage'])
 - Niveau 3 : ID (donnees['personnage'][0])
 - Niveau 4 : données de l'entitée (ex: donnees['personnage'][0][id_precedent/id_suivant/ids_lies[]/nom/prenom/sexe)
-  * Explication du niveau 4 :
-    - id_precedent (défaut, c'est à dire que cet index fait partie de -toutes- les entitées, peu importe ce qu'elle sont) : le ID de l'entitée crée et/ou classée avant celle-ci, sert principalement pour des entitées de type "notes"
-    - id_suivant (défaut) : idem que precedent mais suivant
-    - ids_liees[] (defaut) : les IDs d'autres entitees liees a celle-ci, plus pour les notes qui font references à d'autres notes mais n'exclu pas un personnage qui pointe un autre personnage comme un ami ou un membre de famille
-    - nom, prenom, sexe : champs que l'utilisateur peux modifier, renommer, ajouter ou supprimer (structure de ce type d'entitée) mais surtout renseigner (ce qui fait partie de l'identitée de l'entitée, le texte qui intéresse réellement l'usager); ils font partie de l'identitée de l'entitée, que ce soit un personnage, un lieu ou une note
+ * Explication du niveau 4 :
+ - id_precedent (défaut, c'est à dire que cet index fait partie de -toutes- les entitées, peu importe ce qu'elle sont) : le ID de l'entitée crée et/ou classée avant celle-ci, sert principalement pour des entitées de type "notes"
+ - id_suivant (défaut) : idem que precedent mais suivant
+ - ids_liees[] (defaut) : les IDs d'autres entitees liees a celle-ci, plus pour les notes qui font references à d'autres notes mais n'exclu pas un personnage qui pointe un autre personnage comme un ami ou un membre de famille
+ - nom, prenom, sexe : champs que l'utilisateur peux modifier, renommer, ajouter ou supprimer (structure de ce type d'entitée) mais surtout renseigner (ce qui fait partie de l'identitée de l'entitée, le texte qui intéresse réellement l'usager); ils font partie de l'identitée de l'entitée, que ce soit un personnage, un lieu ou une note
 
 == EOF ==
