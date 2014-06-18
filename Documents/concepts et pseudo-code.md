@@ -2,6 +2,13 @@
 
 mettre ici une copie du manuel mais avec ce qui se passe derrière et fonctionnellement? ex: usager veux changer de projet/roman : 1. tout saved? non-> proposer save / oui -> 2. header(location:index mode ouverture), etc...
 
+##Installation (hébergeur, équipe de développement)
+- Copier les fichiers dans le répertoire www
+- Exécuter l'upload de la base MySQL
+- Tester l'application
+
+création d'un roman à partir d'un autre: si on faisait quelque chose d'ultra efficace, dans la table "roman" on nommerait par ID les personnages, lieux et autres sous le roman lui-même, ce qui permettrait de mettre une référence dans le nouveau roman (pour économiser de l'espace de base de données) et à chaque sauvegarde d'une entitée autre qu'une note (qui elles fonctionnent à l'inverse, c'est à dire que ce sont elles qui dictent à qui elle appartiennent) serait modifiée, on vérifierait si elle appartient à un autre roman et c'est seulement à ce moment qu'on clonerait si la réponse est positive. Dans les faits on clone direct et c'est tout.
+
 
 XSS
 SQL injection...
