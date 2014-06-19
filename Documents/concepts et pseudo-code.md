@@ -3,21 +3,21 @@
 
 To Do:
 
-====
+=====
 
-	représentation des questions/réponses pour l'assistant dans la BD :
-		ID_genre,
-		nro_question,
-		texte,
-		type_input (text, select, ...),
-		valeurs_defaut
-			(pour "text":chaine et si elle comporte un ";" alors tout ce qui le suit est un 'placeholder',
-			pour "select":liste séparée par des ";" (la valeur est la position dans la liste, plutôt que de mettre une valeur dans ce champs, et au moment d'afficher, on reprend le texte(?)), ...),
-		bouton_fonction
-				(si "nul" alors pas de bouton, sinon ex: "tirer_nom(4, 20, 2);générer" (ici je pense : min lng, max lng, nombre de mots) et après le ";" c'est le texte qui doit apparaitre) 
-				// le bouton "(question) suivant" est toujours ajouté par le code pour toutes les questions et la dernière (question) dicte qu'on doit mettre "fin" à la place pour ensuite compiler les réponses en synopsis.
+représentation des questions/réponses pour l'assistant dans la BD :
+- ID_genre,
+- nro_question,
+- texte,
+- type_input (text, select, ...),
+- valeurs_defaut
+  * (pour "text":chaine et si elle comporte un ";" alors tout ce qui le suit est un 'placeholder',
+  * pour "select":liste séparée par des ";" (la valeur est la position dans la liste, plutôt que de mettre une valeur dans ce champs, et au moment d'afficher, on reprend le texte(?)), ...),
+- bouton_fonction
+  * (si "nul" alors pas de bouton, sinon ex: "tirer_nom(4, 20, 2);générer" (ici je pense : min lng, max lng, nombre de mots) et après le ";" c'est le texte qui doit apparaitre) 
+  * // le bouton "(question) suivant" est toujours ajouté par le code pour toutes les questions et la dernière (question) dicte qu'on doit mettre "fin" à la place pour ensuite compiler les réponses en synopsis.
 
-* structure des tables de BD ::
+structure des tables de BD ::
   - usagers:
     * ID_usager : Unique, clé primaire, uInt
 	* pseudo : varchar(20)
@@ -47,7 +47,7 @@ To Do:
   - autres (ex:bateaux, avion, coffre d'outils, le Tardis,...): ID autres, ID roman, ID_Prev/Next (si on permet de les réordonner, sinon 0 pour les deux), identifiant/nom, description, sticky o/n, deleted o/n
   - roman: ID_roman, ID_usager, titre, synopsis, date_creation, date_dnrEdition, deleted o/n, ID_genre (si 0 alors "page blanche", si cloné/sequel alors même que "parent", si plus qu'un, séparés par ";")
 
- =====
+=====
   
 Les données dans une BD MySQL. 
 
@@ -69,7 +69,7 @@ corps des "notes" aussi ds fichier séparés? (format JSON, noms genre <auteur_p
 
 charger les "notes" à la demande (XHR) s'il y en as pour plus que 2mo (total, pas chaque) <-- donc mécanisme inutile pour la démo
 
-* lire les APIs de G+ et F pour le login
+lire les APIs de G+ et F pour le login
 
 Classe cNote qui contient un membre privé pour son texte, un membre privé pour son ID, un membre "array of integers" pour retenir ses liens dont l'index 0 est l'id de son précédent (ou valeur = 0 s'il est le premier du projet), l'index 1 est l'id de son suivant (ou 0 s'il est le dernier du projet) et le reste sont les ids vers lesquels il pointe tel que d'autres cNote qui selon l'usager, auront une pertinence comme je le fait dans "O5".
 
