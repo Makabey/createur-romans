@@ -80,10 +80,10 @@
 * {Pousser sur le cloud} (servirais pour envoyer un backup, garder pour la fin ou retirer maintenant <-- OH! Ou alors c'est un mode "offline" qui se sert du "web storage" ! Bon le problème est de gèrer le truc, donc encore une fois, pousser à la fin)
 * {Tirer du cloud} (servirais pour prendrer un backup, garder pour la fin ou retirer maintenant)
 
-~~###Menu Profil
+###Menu Profil
 * Changer son mot de passe
 * Changer son pseudonyme/nom
-* Changer le thème CSS~~
+* Changer le thème CSS
 
 ####Menu Aide
 * Manuel
