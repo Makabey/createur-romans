@@ -16,9 +16,10 @@
  * Audio/Video --> tutoriel vidéo du fonctionnement de notre application
  * acheter nom de domaine? 
   
- future features:
- * faire des suites/sequel
+ future features (fonctionnalitées promises et sous-entendues à la présentation) :
+ * pouvoir faire des suites/sequels (clone les personnages, lieux et "autres" en plus du synopsis, à partir du projet sélectionné -après- avoir choisi cette option)
  * plus de genre littéraires
+ * possibilitée de sélectionner plus d'un genre pour le même projet, ex: western/sci-fi comme "[Cowboys & Aliens (2011)]"(http://www.imdb.com/title/tt0409847/?ref_=nm_flmg_act_10)
  * supporter la différentiation (voir la différence entre deux enregistrements d'une même entitée ou du document, comme GH fait pour les fichiers) et "undelete" (simple, juste mettre un flag dans la BD)
  
  QUESTIONS:
