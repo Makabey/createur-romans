@@ -3,67 +3,137 @@
 
 To Do:
 
+Page index (au moins) ::
 - [ ] créer la structure logique des tables
 - [ ] créer des scénarios avec données fictives pour voir si types des champs sont erronés ou si champs manquant
 - [ ] créer les tables et exporter un .SQL vers GH
-- [ ] créer une page pour "créer" les genres littéraire ds la BD?
-- [ ] Page admin avec stats, #auteurs, #romans, etc???
-- [ ] lire et prévoir XSS
-- [ ] lire et prévoir SQL injection...
-- [ ] lire et implémenter mdp encryptés?
-- [ ] décider si mettre corps du document (roman) dans fichier texte séparé au lieu de MySQL? <-- [ ] pê exagéré pour la démo??
-- [ ] décider si mettre corps des "notes" aussi ds fichier séparés? (format JSON, noms genre <auteur_projet_ID>.json)
-- [ ] charger les "notes" à la demande (XHR) s'il y en as pour plus que 2mo (total, pas chaque) <-- donc mécanisme inutile pour la démo
+- [ ] lire à propos de et prévoir XSS
+- [ ] lire à propos de et prévoir SQL injection
+- [ ] lire à propos de et implémenter mdp encryptés?
 - [ ] lire les APIs de G+ et F pour le login
+- [ ] fichier XHR + code JS pour query de validité usager (usr+pwd)
+- [ ] fichier XHR + code JS pour query de disponiblité nom usager, à moins de fusionner avec "validité" et d'utiliser les codes de retour ex: 0=usager inexistant (usager libre ou nom mal tapé), 1=usager existant (usager indisponible ou nom bien tapé), 2=mot de passe invalide, 3=mot de passe OK (-doit- sous-entendre usager existant) ; suppose que le champs PWD peux être vide et si c'est le cas la validation du PWD n'est pas faite donc pas de code 2 erroné
+
+Page selectionProjet ::
+- [ ] fonction qui retourne les projets existants de l'usager en notation JSON (parce que plus efficace que ma façon de "parser" du TP de HTML5 et avant!!)
+
+Page creationProjet ::
+- [ ] est-ce qu'on veux qu'il soit possible de suspendre l'assistant et reprendre au même endroit?
+- [ ] créer une page pour "créer" les genres littéraire ds la BD?
+- [ ] page admin pour pouvoir ajouter personnages.role_fonction, personnages.role_poid, lieux.type_environnement, lieux.type_acces ??
+- [ ] fonction qui ne retourne -que- les noms/ID des genres
+- [ ] déterminer si pour la lecture des données du genre choisi, une seule fonction retourne tout ou si on as une fonction qui initialise(avec retour de la première question et du nombre total de questions) et une qui demande la suite pour répondre FALSE s'il n'y as rien d'autres ?
+- [ ] fonction avec jQuery pour créer les balises nécessaire pour afficher les questions
+- [ ] fonction qui enregistre tout
+
+Page editionProjet
+- [ ] décider si mettre "roman.contenu" dans fichier texte séparé au lieu de MySQL? <-- pê exagéré pour la démo??
+- [ ] décider si mettre "notes.contenu" aussi ds fichiers séparés? (format JSON pour retenir états sticky, deleted, etc... noms genre <{nom_auteur}_{ID_projet}_{ID_note}>.json)
+- [ ] charger les "notes" à la demande (XHR) s'il y en as pour plus que 2mo (total, pas chaque) <-- mécanisme inutile pour la démo ?
 - [ ] gestion des balises (Liens entre les entitées sont des "A") à l'intérieur des "entitées" et du "document", c'est à dire trouver moyen simple de supporter et implémenter l'idée tout en évitant d'enregistrer les balises comme partie intégrante des blocs (de texte)
+- [ ] Page admin avec stats, #auteurs, #romans, etc???
+- [ ] fonction XHR pour enregister les changements aux entitées (contenu, deleted, sticky)
+- [ ] fonction XHR pour enregistrer le document
+- [ ] lire plus sur le mécanisme de drag&drop pour savoir comment aborder le réordonnement des entitées --> http://www.html5rocks.com/en/tutorials/dnd/basics/ --> Modernizr --> pas compliqué juste 30-40 lignes de JS
+- [ ] permettre de dragger une "note" sur le document et ça fait copy-paste?
+- [ ] permettre de dragger un personnage, un lieu ou un "autres" sur le document et ça copie le nom + lien?
 
 =====
 
-représentation des questions/réponses pour l'assistant dans la BD :
-- ID_genre,
-- nro_question,
-- texte,
-- type_input (text, select, ...),
-- valeurs_defaut
-  * (pour type "text":chaine et si elle comporte un ";" alors tout ce qui le suit est un 'placeholder',
-  * pour "select":liste séparée par des ";" (la valeur est la position dans la liste, plutôt que de mettre une valeur dans ce champs, et au moment d'afficher, on reprend le texte(?)), ...),
-- bouton_fonction
-  * (si "nul" alors pas de bouton, sinon ex: "tirer_nom(4, 20, 2);générer" (ici je pense : min lng, max lng, nombre de mots) et après le ";" c'est le texte qui doit apparaitre) 
-  * // le bouton "(question) suivant" est toujours ajouté par le code pour toutes les questions et la dernière (question) dicte qu'on doit mettre "fin" à la place pour ensuite compiler les réponses en synopsis.
+char / varchar :: max 255
+blob (case sensitive Text) / text :: max 2^8 (note: les espaces en début et fin ne sont pas trimmés)
+voir :: http://dev.mysql.com/doc/refman/5.5/en/storage-requirements.html
+et :: http://dev.mysql.com/doc/refman/5.5/en/data-types.html
 
 structure des tables de BD ::
-  - usagers:
-    * ID_usager : Unique, clé primaire, uInt
-	* pseudo : varchar(20)
-	* nom : varchar(50)
-	* motdepasse : varchar(25)
-    * courriel : varchar(30)
-	* dateInscription : datetime
-	
-  - personnages:
-    * ID_personnage : unique, clé primaire
-	* ID_roman : uInt
-	* ID_prev : uInt, index du personnage à afficher -avant- ou 0 si premier
-	* ID_next : uInt, index du personnage à afficher -après- ou 0 si dernier
-	* IDs_references, varchar(200), liste des IDs des autres entitées référencées sous la forme "[lettre][chiffres]" séparés par point-virgule où [lettre] est le type tel que [p]ersonnage/ [n]ote / [l]ieux/ [a]utres
-	* nom : varchar(50)
-	* sexe : boolean
-	* role_fonction : enum [protagoniste, antagoniste, figurant, intérêt amoureux, ...]
-	* role_poid: enum [primaire, secondaire, tertiaire, ...]
-	* taille_cm : uInt
-	* poids_kg : uInt
-	* description : varchar(500), tout les autres détails, dont "background"
-	* sticky : boolean, si malgré la position calculée, doit apparaitre parmis les premiers (ou sur l'onglet "stickied" si c'est ce qu'on fait)
-	* deleted : boolean
-	
-  - lieux: ID_lieu, ID_roman, type_environnement enum[intérieur, extérieur, sous-terrain, sous-matin, sous vide (espace)], nom, taille_approx_m3, type_acces enum[privé, publique], description, sticky o/n, deleted o/n
-  - notes : ID_note(parmis tout les romans), ID_roman, ID_Prev/Next (si Prev ou Next=0 alors en tête/pied de liste), liste ID autres entitées référencées, sticky o/n, deleted o/n
-  - autres (ex:bateaux, avion, coffre d'outils, le Tardis,...): ID_autres, ID_roman, ID_Prev/Next (si on permet de les réordonner, sinon 0 pour les deux), identifiant/nom, description, sticky o/n, deleted o/n
-  - roman: ID_roman, ID_usager, titre, synopsis, date_creation, date_dnrEdition, deleted o/n, ID_genre (si 0 alors "page blanche", si cloné/sequel alors même que "parent", si plus qu'un, séparés par ";")
+
+représentation des questions/réponses pour l'assistant dans la BD :
+- genres_litteraires
+  * ID_genre : Unique, clé primaire, uTinyInt
+  * nom : varchar(50)
+  * nro_question : uTinyInt
+  * texte : varchar(255)
+  * type_input (text, select, ...) : varchar(20)
+  * valeurs_defaut : Text
+    - pour input="text" : chaine et si elle comporte un "¤" alors tout ce qui le suit est un 'placeholder', s'il y as encore un "¤" alors on suppose que ce qui suit sont des valeurs pour un datalist, ex: "jaune¤couleur du pantalon¤rouge¤vert¤noir "
+    - pour select : liste séparée par des "¤" (la valeur sera la position numérique dans la liste d'options, au moment d'afficher on reprend le texte(?))
+  * bouton_fonction : varchar(40);
+    - si valeur = NUL alors pas de bouton, sinon nom de la fonction liée et après le "¤" c'est le texte qui doit apparaitre ex: "tirer_nom(4, 20, 2)¤Générer" (ici je pense : min lng, max lng, nombre de mots)
+    - le bouton "(question) Suivant" est toujours ajouté par le code pour toutes les questions et la dernière (question) dicte qu'on doit mettre "Fin" à la place pour ensuite compiler les réponses en synopsis.
+
+- usagers:
+  * ID_usager : Unique, clé primaire, uMediumInt
+  * pseudo : varchar(30)
+  * nom : varchar(50)
+  * motdepasse : varchar(20)
+  * courriel : varchar(40)
+  * dateInscription : datetime
+
+- roman:
+  * ID_roman : Unique, clé primaire, uInt
+  * ID_usager : uMediumInt
+  * ID_genre : bit(8) (si 0 alors "page blanche", si cloné/sequel alors même que "parent", si plus qu'un c'est le total mais la limite est que genres_litteraires.ID_genre ne peux pas dépasser 127)
+  * titre : varchar(50)
+  * synopsis : Text
+  * contenu : mediumText
+  * date_creation : datetime
+  * date_dnrEdition : datetime
+  * choix_assistant : Text, les choix fait lors de la création séparés par "¤" si on as utilisé l'assistant, sinon NUL
+  * deleted : bit (1)
+
+- personnages:
+  * ID_personnage : Unique, clé primaire, uInt
+  * ID_roman : uInt
+  * ID_prev : uInt, index du personnage à afficher -avant- ou 0 si premier
+  * ID_next : uInt, index du personnage à afficher -après- ou 0 si dernier
+  * ~~IDs_references : Text, liste des IDs des autres entitées référencées sous la forme "[lettre][chiffres]" séparés par "¤" où [lettre] est le type tel que [p]ersonnage/ [n]ote / [l]ieux/ [a]utres suivi du ID_[perso/lieu/note/autres], donne ~5039 références max @~11 char+1séparateur/référence vs varchar(255) qui donnait ~18 ~~
+  * nom : varchar(50)
+  * sexe : enum[femme, homme]
+  * role_fonction : enum [protagoniste, antagoniste, figurant, intérêt amoureux, ...]
+  * role_poid: enum [primaire, secondaire, tertiaire, ...]
+  * taille_cm : uSmallInt
+  * poids_kg : uSmallInt
+  * description : Text, tout les autres détails, dont "background"
+  * sticky : bit (1), si TRUE alors (discuter laquelle des trois options prendre)  soit l'entitée apparait en tête de sa liste, soit elle apparait dans un onglet dédié (stickied), soit les deux
+  * deleted : bit (1)
+
+- lieux:
+  * ID_lieu : Unique, clé primaire, uInt
+  * ID_roman : uInt
+  * ID_prev : uInt, index du lieu à afficher -avant- ou 0 si premier
+  * ID_next : uInt, index du lieu à afficher -après- ou 0 si dernier
+  * ~~IDs_references : Text, liste des IDs des autres entitées référencées sous la forme "[lettre][chiffres]" séparés par "¤" où [lettre] est le type tel que [p]ersonnage/ [n]ote / [l]ieux/ [a]utres suivi du ID_[perso/lieu/note/autres], donne ~5039 références max @~11 char+1séparateur/référence vs varchar(255) qui donnait ~18 ~~
+  * type_environnement enum[intérieur, extérieur, sous-terrain, sous-marin, sous vide (espace)]
+  * type_acces enum[privé, publique, sur invitation]
+  * nom : varchar(50)
+  * taille_approx_m3 : uMediumInt (mesure en mètres cubes)
+  * description : Text, tout les autres détails, dont "background"
+  * sticky : bit (1), si TRUE alors (discuter laquelle des trois options prendre)  soit l'entitée apparait en tête de sa liste, soit elle apparait dans un onglet dédié (stickied), soit les deux
+  * deleted : bit (1)
+
+- notes :
+  * ID_note : Unique, clé primaire, uInt
+  * ID_roman : uInt
+  * ID_prev : uInt, index de note à afficher -avant- ou 0 si premier
+  * ID_next : uInt, index de note à afficher -après- ou 0 si dernier
+  * ~~IDs_references : Text, liste des IDs des autres entitées référencées sous la forme "[lettre][chiffres]" séparés par "¤" où [lettre] est le type tel que [p]ersonnage/ [n]ote / [l]ieux/ [a]utres suivi du ID_[perso/lieu/note/autres], donne ~5039 références max @~11 char+1séparateur/référence vs varchar(255) qui donnait ~18 ~~
+  * contenu : Text
+  * sticky : bit (1), si TRUE alors (discuter laquelle des trois options prendre)  soit l'entitée apparait en tête de sa liste, soit elle apparait dans un onglet dédié (stickied), soit les deux
+  * deleted : bit (1)
+
+- autres (ex:bateaux, avion, coffre d'outils, le Tardis,...):
+  * ID_autres : Unique, clé primaire, uInt
+  * ID_roman : uInt
+  * ID_prev : uInt, index de "autres" à afficher -avant- ou 0 si premier
+  * ID_next : uInt, index de "autres" à afficher -après- ou 0 si dernier
+  * ~~IDs_references : Text, liste des IDs des autres entitées référencées sous la forme "[lettre][chiffres]" séparés par "¤" où [lettre] est le type tel que [p]ersonnage/ [n]ote / [l]ieux/ [a]utres suivi du ID_[perso/lieu/note/autres], donne ~5039 références max @~11 char+1séparateur/référence vs varchar(255) qui donnait ~18 ~~
+  *	nom : varchar(50)
+  * description : Text
+  * sticky : bit (1), si TRUE alors (discuter laquelle des trois options prendre)  soit l'entitée apparait en tête de sa liste, soit elle apparait dans un onglet dédié (stickied), soit les deux
+  * deleted : bit (1)
+
 
 =====
-  
-Les données dans une BD MySQL. 
 
 mettre ici une copie du manuel mais avec ce qui se passe derrière et fonctionnellement? ex: usager veux changer de projet/roman : 1. tout saved? non-> proposer save / oui -> 2. header(location:index mode ouverture), etc... -décrire le fonctionnement interne (JS, PHP/Classes, MySQL, etc).
 
@@ -71,7 +141,7 @@ création d'un roman à partir d'un autre:  on clone direct les entitées et c'e
 
 Classe cNote qui contient un membre privé pour son texte, un membre privé pour son ID, un membre "array of integers" pour retenir ses liens dont l'index 0 est l'id de son précédent (ou valeur = 0 s'il est le premier du projet), l'index 1 est l'id de son suivant (ou 0 s'il est le dernier du projet) et le reste sont les ids vers lesquels il pointe tel que d'autres cNote qui selon l'usager, auront une pertinence comme je le fait dans "O5".
 
-Classe cPersonnage enfant de cNote, traite son membre texte comme une suite de renseignements séparés par un ';' ou autre de telle facon à garder les renseignements voulu par l'utilisateur, ex:un usager mettrais l'éducation et un autre les talents. À l'installation de l'application, un nouveau cPersonnage aura une série de défauts plausibles tel que nom, âge et sexe mais en laissant le choix de les effacer ou en ajouter autant pour l'instance en cours, le projet en cours que vers un (nouveau) cPersonnage modèle (remplace celui créé par l'installation).
+Classe cPersonnage enfant de cNote, traite son membre texte comme une suite de renseignements séparés par un '¤' ou autre de telle facon à garder les renseignements voulu par l'utilisateur, ex:un usager mettrais l'éducation et un autre les talents. À l'installation de l'application, un nouveau cPersonnage aura une série de défauts plausibles tel que nom, âge et sexe mais en laissant le choix de les effacer ou en ajouter autant pour l'instance en cours, le projet en cours que vers un (nouveau) cPersonnage modèle (remplace celui créé par l'installation).
 
 Classe cLieu enfant de cNote, avec des possibilités semblables à cPersonnage en terme de fiche défaut pour l'application, fiche défaut pour le projet et fiche sur mesure pour une instance
 
