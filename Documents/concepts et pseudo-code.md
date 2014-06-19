@@ -2,8 +2,12 @@
 ####Contient tâches, idées, concepts, questions et "ToDo"
 
 To Do:
+- [ ] page de test pour formulaire + table pour le supporter
 
-Page index (au moins) ::
+====
+
+####Page index (au moins) ::
+- [ ] rendre plus gracieux la manipulation des erreurs MySQL, surtout pour le bénéfice de XHR
 - [ ] créer la structure logique des tables
 - [ ] créer des scénarios avec données fictives pour voir si types des champs sont erronés ou si champs manquant
 - [ ] créer les tables et exporter un .SQL vers GH
@@ -14,10 +18,10 @@ Page index (au moins) ::
 - [ ] fichier XHR + code JS pour query de validité usager (usr+pwd)
 - [ ] fichier XHR + code JS pour query de disponiblité nom usager, à moins de fusionner avec "validité" et d'utiliser les codes de retour ex: 0=usager inexistant (usager libre ou nom mal tapé), 1=usager existant (usager indisponible ou nom bien tapé), 2=mot de passe invalide, 3=mot de passe OK (-doit- sous-entendre usager existant) ; suppose que le champs PWD peux être vide et si c'est le cas la validation du PWD n'est pas faite donc pas de code 2 erroné
 
-Page selectionProjet ::
+####Page selectionProjet ::
 - [ ] fonction qui retourne les projets existants de l'usager en notation JSON (parce que plus efficace que ma façon de "parser" du TP de HTML5 et avant!!)
 
-Page creationProjet ::
+####Page creationProjet ::
 - [ ] est-ce qu'on veux qu'il soit possible de suspendre l'assistant et reprendre au même endroit?
 - [ ] créer une page pour "créer" les genres littéraire ds la BD?
 - [ ] page admin pour pouvoir ajouter personnages.role_fonction, personnages.role_poid, lieux.type_environnement, lieux.type_acces ??
@@ -26,7 +30,7 @@ Page creationProjet ::
 - [ ] fonction avec jQuery pour créer les balises nécessaire pour afficher les questions
 - [ ] fonction qui enregistre tout
 
-Page editionProjet
+####Page editionProjet
 - [ ] décider si mettre "roman.contenu" dans fichier texte séparé au lieu de MySQL? <-- pê exagéré pour la démo??
 - [ ] décider si mettre "notes.contenu" aussi ds fichiers séparés? (format JSON pour retenir états sticky, deleted, etc... noms genre <{nom_auteur}_{ID_projet}_{ID_note}>.json)
 - [ ] charger les "notes" à la demande (XHR) s'il y en as pour plus que 2mo (total, pas chaque) <-- mécanisme inutile pour la démo ?
@@ -90,7 +94,7 @@ représentation des questions/réponses pour l'assistant dans la BD :
   * nom : varchar(50)
   * sexe : enum[femme, homme]
   * role_fonction : enum [protagoniste, antagoniste, figurant, intérêt amoureux, ...]
-  * role_poid: enum [primaire, secondaire, tertiaire, ...]
+  * ~~role_poid: enum [primaire, secondaire, tertiaire, ...]~~
   * taille_cm : uSmallInt
   * poids_kg : uSmallInt
   * description : Text, tout les autres détails, dont "background"
@@ -103,8 +107,8 @@ représentation des questions/réponses pour l'assistant dans la BD :
   * ID_prev : uInt, index du lieu à afficher -avant- ou 0 si premier
   * ID_next : uInt, index du lieu à afficher -après- ou 0 si dernier
   * ~~IDs_references : Text, liste des IDs des autres entitées référencées sous la forme "[lettre][chiffres]" séparés par "¤" où [lettre] est le type tel que [p]ersonnage/ [n]ote / [l]ieux/ [a]utres suivi du ID_[perso/lieu/note/autres], donne ~5039 références max @~11 char+1séparateur/référence vs varchar(255) qui donnait ~18 ~~
-  * type_environnement enum[intérieur, extérieur, sous-terrain, sous-marin, sous vide (espace)]
-  * type_acces enum[privé, publique, sur invitation]
+  * ~~type_environnement enum[intérieur, extérieur, sous-terrain, sous-marin, sous vide (espace)]~~
+  * ~~type_acces enum[privé, publique, sur invitation]~~
   * nom : varchar(50)
   * taille_approx_m3 : uMediumInt (mesure en mètres cubes)
   * description : Text, tout les autres détails, dont "background"
