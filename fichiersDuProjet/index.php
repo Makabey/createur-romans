@@ -19,7 +19,7 @@ include "assets/inc/db_access.inc.php";
 				etapeAssistant++;
 				afficherQuestion();
 			}else{
-				alert("[button_nextQuestion.click] Erreur d'exécution!");
+				console.log("[button_nextQuestion.click] Erreur d'exécution!");
 			}
 		});
 	
@@ -60,7 +60,7 @@ include "assets/inc/db_access.inc.php";
 		
 		function afficherQuestion(){
 			if(etapeAssistant == donneesQuestions.length){
-				alert("C'était la dernière question!");
+				console.log("C'était la dernière question!");
 			}else{
 				hideAll();
 				if(donneesQuestions[etapeAssistant-1]['type_input'] == "text"){
@@ -100,7 +100,7 @@ include "assets/inc/db_access.inc.php";
 					- pour select : liste séparée par des "¤" (la valeur sera la position numérique dans la liste d'options, au moment d'afficher on reprend le texte(?))
 					*/
 				}else{
-					alert("[afficherQuestion] Erreur d'affichage!");
+					console.log("[afficherQuestion] Erreur d'affichage!");
 				}
 			}
 		}

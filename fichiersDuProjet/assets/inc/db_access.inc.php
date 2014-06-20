@@ -11,6 +11,9 @@ function db_connect(){
 		die("Failed to connect to MySQL: (" . $db->connect_errno . ") " . $db->connect_error);
 	}
 
+
+	$db->set_charset("utf8");
+
 	return $db;
 }
 
