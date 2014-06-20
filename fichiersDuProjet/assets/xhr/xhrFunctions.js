@@ -2,23 +2,28 @@
 	Référence :: http://siddh.developpez.com/articles/ajax/
 */
 
-function execXHR_Request(urlAuthentify, queryString, fct_callBack){
-		var xhr = getXhr();
-		var xhrAnswer;
+function execXHR_Request(urlAuthentify, queryString, fct_callBack, fct_callError){
+	var xhr = getXhr();
+	var xhrAnswer;
 
+	if(false !== xhr){
+		/*
+			if (xhr && xhr.readyState != 0) {
+				xhr.abort(); // On annule la requête en cours !
+			}
+		*/
+	
 		// On défini ce qu'on va faire quand on aura la réponse
 		xhr.onreadystatechange = function(){
 			// On ne fait quelque chose que si on a tout reçu et que le serveur est ok
 			if(xhr.readyState == 4 && xhr.status == 200){
-				xhrAnswer = xhr.responseText;
-				//console.log(xhrAnswer);
-
-				xhrAnswer = JSON.parse(xhrAnswer); // contraire :: JSON.stringify(array);
-
-				if(false === xhrAnswer){
-					console.log("Une erreur est arrivée, traiter plus sérieusement plus tard...");
+				xhrAnswer = xhr.responseText.split('¬');
+				var retour = (xhrAnswer.length > 1)?xhrAnswer[1]:xhrAnswer[0];
+				
+				if(xhrAnswer[0] == false ){
+					fct_callError(retour);
 				}else{
-					fct_callBack(xhrAnswer);
+					fct_callBack(retour);
 				}
 			}
 		}
@@ -26,9 +31,9 @@ function execXHR_Request(urlAuthentify, queryString, fct_callBack){
 		xhr.open("POST", urlAuthentify, true);
 		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 		xhr.send(queryString);
-
-		return false;
 	}
+	return false;
+}
 
 
 function getXhr(){

@@ -8,7 +8,8 @@ function db_connect(){
 	$db = @new mysqli('localhost', 'team_codeH', '^gtCNl06', 'createurromans');
 
 	if ($db->connect_errno) {
-		die("Failed to connect to MySQL: (" . $db->connect_errno . ") " . $db->connect_error);
+		#die("Failed to connect to MySQL: (" . $db->connect_errno . ") " . $db->connect_error);
+		return "Failed to connect to MySQL: (" . $db->connect_errno . ") " . $db->connect_error;
 	}
 
 	$db->set_charset("utf8");

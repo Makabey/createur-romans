@@ -8,20 +8,25 @@ TODO:
 */
 
 #require_once "../inc/tools.inc.php";
+#include "../inc/db_access.inc.php";
 include "../inc/db_access.inc.php";
 #include "/assets/inc/db_access.inc.php";
 
 $arrChamps_genres_litteraires = array('nom', 'nro_question', 'texte', 'type_input', 'valeurs_defaut', 'bouton_fonction');
 
 if(!isset($_POST['etape'])){
-	return false;
+	echo '0¬$_POST["etape"] was required';
 	exit();
 }
 
 $db = db_connect();
 
-if(false == $db){
-	return false;
+#var_dump($db);
+
+#if(false === $db){
+if(!is_object($db)){
+	// On suppose que $db contient une erreur texte et non un objet
+	echo "0¬" . $db;
 	exit();
 }
 
@@ -39,6 +44,11 @@ if($_POST['etape'] == 'lireGenres'){
 }
 
 if($_POST['etape'] == 'lireQuestions'){
+	if(!isset($_POST['genre'])){
+		echo '0¬$_POST["genre"] was required';
+		exit();
+	}
+
 	$query = "SELECT " . implode(', ', $arrChamps_genres_litteraires) . " FROM genres_litteraires WHERE nom='" . $_POST['genre'] . "';";
 
 	$result = $db->query ($query);
@@ -81,6 +91,6 @@ function barfJSONerror($error){
 	 echo PHP_EOL;
 }
 
-echo $resultat; /* résultat final retourné à XHR */
+echo "1¬" . $resultat; /* résultat final retourné à XHR */
 
 /* == EOF == */

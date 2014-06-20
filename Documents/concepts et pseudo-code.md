@@ -2,7 +2,7 @@
 ####Contient tâches, idées, concepts, questions et "ToDo"
 
 To Do:
-- [ ] page de test pour formulaire + table pour le supporter
+- [x] page de test pour formulaire + table pour le supporter
 
 ====
 
