@@ -1,15 +1,15 @@
 "use strict";
 
 $(function(){
-	function lireListeStylesLitteraires()
+ 	function execXHR_Request(urlAuthentify, queryString, fct_callBack){
 		/*
 			On doit attrapper l'évènement SUBMIT directement sur le FORM parce que si on agit sur le
 			CLICK d'un bouton et que le FORM n'est pas valide selon le BROWSER, la fonction du
 			bouton est appellée malgré tout.
 		*/
 		var xhr = getXhr();
-		var urlAuthentify="assets/xhr/creationProjet.xhr.php";
-		var queryString;
+		//var urlAuthentify="assets/xhr/creationProjet.xhr.php";
+		//var queryString;
 		var xhrAnswer;
 
 		// On défini ce qu'on va faire quand on aura la réponse
@@ -20,24 +20,26 @@ $(function(){
 				/*xhrAnswer = xhrAnswer.split("\r\n");
 				xhrAnswer = parseInt(xhrAnswer[0]);*/
 				
-				parseJSON...
+				//xhrAnswer = JSON.parse(xhrAnswer); // contraire :: JSON.stringify(array);
+				
+				console.log(xhrAnswer);
 
 				if(xhrAnswer == true){
-					afficherGenres(xhrAnswer);
+					fct_callBack(xhrAnswer);
 				}else{
 					console.log("Une erreur est arrivée, traiter plus sérieusement plus tard...");
 				}
 			}
 		}
 
-		queryString = "etape=lireStyles";
+		//queryString = "etape=lireStyles";
 
 		xhr.open("POST", urlAuthentify, true);
 		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 		xhr.send(queryString);
 
 		return false;
-	});
+	}
 });
 
 /* == EOF == */

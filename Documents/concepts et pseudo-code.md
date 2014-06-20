@@ -8,7 +8,7 @@ To Do:
 
 ####Page index (au moins) ::
 - [ ] rendre plus gracieux la manipulation des erreurs MySQL, surtout pour le bénéfice de XHR
-- [ ] créer la structure logique des tables
+- [ x] créer la structure logique des tables
 - [ ] créer des scénarios avec données fictives pour voir si types des champs sont erronés ou si champs manquant
 - [ ] créer les tables et exporter un .SQL vers GH
 - [ ] lire à propos de et prévoir XSS
@@ -17,6 +17,7 @@ To Do:
 - [ ] lire les APIs de G+ et F pour le login
 - [ ] fichier XHR + code JS pour query de validité usager (usr+pwd)
 - [ ] fichier XHR + code JS pour query de disponiblité nom usager, à moins de fusionner avec "validité" et d'utiliser les codes de retour ex: 0=usager inexistant (usager libre ou nom mal tapé), 1=usager existant (usager indisponible ou nom bien tapé), 2=mot de passe invalide, 3=mot de passe OK (-doit- sous-entendre usager existant) ; suppose que le champs PWD peux être vide et si c'est le cas la validation du PWD n'est pas faite donc pas de code 2 erroné
+- [ ] reprendre assets/inc/header.inc.php et corriger la description et les keywords, autant faire ça correctement pour le SEO ;)
 
 ####Page selectionProjet ::
 - [ ] fonction qui retourne les projets existants de l'usager en notation JSON (parce que plus efficace que ma façon de "parser" du TP de HTML5 et avant!!)
@@ -53,7 +54,8 @@ structure des tables de BD ::
 
 représentation des questions/réponses pour l'assistant dans la BD :
 - genres_litteraires
-  * ID_genre : Unique, clé primaire, uTinyInt
+  * ID_ligne_genre: Unique, clé primaire, uTinyInt
+  * ID_genre : uSmallInt
   * nom : varchar(50)
   * nro_question : uTinyInt
   * texte : varchar(255)
