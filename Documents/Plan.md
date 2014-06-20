@@ -9,7 +9,7 @@
  * ~~finir le manuel~~
  * ~~finir les mockups finaux~~
  * ~~cahier des charges (URGENT!!!)~~
- * ménage dans ce qui reste pour réduire le nombre de fichier, la quantitée d'information et avoir un plan simple et clair
+ * ~~ménage dans ce qui reste pour réduire le nombre de fichier, la quantitée d'information et avoir un plan simple et clair~~
  * proofreading : jamais pour tout texte qui ne pourra jamais se retrouver dans le cahier de charges ou remis sous une autre forme (ex: manuel, FAQ et articles sur la page index/accueil), donc pas pour les notes à moins que ce soit écrit hyper dislexique.
  
  * footer : liens MailTo et GitHub + autres contacts
@@ -21,6 +21,7 @@
  * plus de genre littéraires
  * possibilitée de sélectionner plus d'un genre pour le même projet, ex: western/sci-fi comme " [Cowboys & Aliens (2011)](http://www.imdb.com/title/tt0409847/?ref_=nm_flmg_act_10) "
  * supporter la différentiation (voir la différence entre deux enregistrements d'une même entitée ou du document, comme GH fait pour les fichiers) et "undelete" (simple, juste mettre un flag dans la BD)
+ * assistant avec branches possible aux questions (càd: que pour une question donnée, le choix de la question suivante est basée sur la réponse présente)
  
  QUESTIONS:
  * s'enregistrer demande pseudo, nom, email, mot de passe, theme ?
