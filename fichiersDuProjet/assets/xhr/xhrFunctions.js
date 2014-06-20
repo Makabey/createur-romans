@@ -3,14 +3,7 @@
 */
 
 function execXHR_Request(urlAuthentify, queryString, fct_callBack){
-		/*
-			On doit attrapper l'évènement SUBMIT directement sur le FORM parce que si on agit sur le
-			CLICK d'un bouton et que le FORM n'est pas valide selon le BROWSER, la fonction du
-			bouton est appellée malgré tout.
-		*/
 		var xhr = getXhr();
-		//var urlAuthentify="assets/xhr/creationProjet.xhr.php";
-		//var queryString;
 		var xhrAnswer;
 
 		// On défini ce qu'on va faire quand on aura la réponse
@@ -18,9 +11,7 @@ function execXHR_Request(urlAuthentify, queryString, fct_callBack){
 			// On ne fait quelque chose que si on a tout reçu et que le serveur est ok
 			if(xhr.readyState == 4 && xhr.status == 200){
 				xhrAnswer = xhr.responseText;
-				console.log(xhrAnswer);
-				/*xhrAnswer = xhrAnswer.split("\r\n");
-				xhrAnswer = parseInt(xhrAnswer[0]);*/
+				//console.log(xhrAnswer);
 
 				xhrAnswer = JSON.parse(xhrAnswer); // contraire :: JSON.stringify(array);
 
@@ -31,8 +22,6 @@ function execXHR_Request(urlAuthentify, queryString, fct_callBack){
 				}
 			}
 		}
-
-		//queryString = "etape=lireStyles";
 
 		xhr.open("POST", urlAuthentify, true);
 		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");

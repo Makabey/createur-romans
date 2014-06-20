@@ -14,7 +14,6 @@
  
  * footer : liens MailTo et GitHub + autres contacts
  * Audio/Video --> tutoriel vidéo du fonctionnement de notre application
- * acheter nom de domaine? 
   
  future features (fonctionnalitées promises et sous-entendues à la présentation) :
  * pouvoir faire des suites/sequels (clone les personnages, lieux et "autres" en plus du synopsis, à partir du projet sélectionné -après- avoir choisi cette option)
@@ -24,6 +23,7 @@
  * assistant avec branches possible aux questions (càd: que pour une question donnée, le choix de la question suivante est basée sur la réponse présente)
  
  QUESTIONS:
+ * acheter nom de domaine? 
  * s'enregistrer demande pseudo, nom, email, mot de passe, theme ?
  * au premier login de l'usager, soit on lui donne un projet exemple, soit on le guide tout de suite dans la création de son premier projet.
  * pour éviter trop d'onglets (entitées), il faudrait en limiter le nombre (4-5?). donc les nommer maintenant et leur contenu

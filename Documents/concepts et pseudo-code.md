@@ -8,7 +8,7 @@ To Do:
 
 ####Page index (au moins) ::
 - [ ] rendre plus gracieux la manipulation des erreurs MySQL, surtout pour le bénéfice de XHR
-- [ x] créer la structure logique des tables
+- [x] créer la structure logique des tables
 - [ ] créer des scénarios avec données fictives pour voir si types des champs sont erronés ou si champs manquant
 - [ ] créer les tables et exporter un .SQL vers GH
 - [ ] lire à propos de et prévoir XSS

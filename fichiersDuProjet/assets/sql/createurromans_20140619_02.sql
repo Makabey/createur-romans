@@ -31,15 +31,15 @@ DROP TABLE IF EXISTS `genres_litteraires`;
 CREATE TABLE IF NOT EXISTS `genres_litteraires` (
   `ID_ligne_genre` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `ID_genre` smallint(5) unsigned NOT NULL,
-  `nom` varchar(50) COLLATE latin1_general_ci NOT NULL,
+  `nom` varchar(50) COLLATE utf8_general_ci NOT NULL,
   `nro_question` tinyint(3) unsigned NOT NULL,
-  `texte` varchar(255) COLLATE latin1_general_ci NOT NULL,
-  `type_input` enum('text','select') COLLATE latin1_general_ci NOT NULL,
-  `valeurs_defaut` text COLLATE latin1_general_ci,
-  `bouton_fonction` varchar(40) COLLATE latin1_general_ci DEFAULT NULL,
+  `texte` varchar(255) COLLATE utf8_general_ci NOT NULL,
+  `type_input` enum('text','select') COLLATE utf8_general_ci NOT NULL,
+  `valeurs_defaut` text COLLATE utf8_general_ci,
+  `bouton_fonction` varchar(40) COLLATE utf8_general_ci DEFAULT NULL,
   PRIMARY KEY (`ID_ligne_genre`),
   UNIQUE KEY `ID_genre` (`ID_ligne_genre`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `genres_litteraires`
