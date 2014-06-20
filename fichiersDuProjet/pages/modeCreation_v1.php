@@ -1,10 +1,10 @@
 <?php
 $sPageTitle = "Acceuil | ";
 
-include "assets/inc/header.inc.php";
-include "assets/inc/db_access.inc.php";
+include "../assets/inc/header.inc.php";
+include "../assets/inc/db_access.inc.php";
 ?>
-<script src="assets/xhr/xhrFunctions.js"></script>
+<script src="../assets/xhr/xhrFunctions.js"></script>
 <script>
 	$(function(){
 		var donneesQuestions = null;
@@ -38,6 +38,8 @@ include "assets/inc/db_access.inc.php";
 			*/
 			var iCmpt = 0;
 
+			donnees = JSON.parse(donnees); // contraire :: JSON.stringify(array);
+			
 			$("#select_question").html('');
 			var sSelections = '';
 			for(iCmpt=0;iCmpt<donnees.length;iCmpt++){
@@ -146,12 +148,12 @@ include "assets/inc/db_access.inc.php";
 		}
 
 		hideAll();
-		execXHR_Request("assets/xhr/creationProjet.xhr.php", "etape=lireGenres", afficherGenres);
+		execXHR_Request("../assets/xhr/creationProjet.xhr.php", "etape=lireGenres", afficherGenres);
 	});
 </script>
 
 <div id="reponses_questions"></div>
-<p>imaginer ici un truc qui tourne --&gt; <img src="assets/images/wait_circle2.png" alt="Attendez..." /> &lt;-- en attendant que XHR revienne avec les "genre littéraires" et ensuite sa disparait pour laisser le premier select apparaitre</p>
+<p>imaginer ici un truc qui tourne --&gt; <img src="../assets/images/wait_circle2.png" alt="Attendez..." /> &lt;-- en attendant que XHR revienne avec les "genre littéraires" et ensuite sa disparait pour laisser le premier select apparaitre</p>
 <form>
 <!-- <label id="label_choixGenre">Choississez le style du roman : <select id="choixGenre"></select> -->
 <label id="label_question"></label><input id="input_question" type="text" list="datalist_question" value="" placeholder="" /><select id="select_question"></select><span id="compte_question"></span>
@@ -159,5 +161,5 @@ include "assets/inc/db_access.inc.php";
 <datalist id="datalist_question"></datalist>
 </form>
 <?php
-include "assets/inc/footer.inc.php"
+include "../assets/inc/footer.inc.php"
 ?>

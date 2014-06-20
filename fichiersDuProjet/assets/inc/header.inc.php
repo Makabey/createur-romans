@@ -13,7 +13,7 @@ $sNomDeCettePage = substr($sNomDeCettePage, 0, (strpos($sNomDeCettePage,'.')));
 		<meta name="author" content="Thomas A. Séguin, Olivier Berthier, Eric Robert</p>" />
 		<meta name="description" content="A REMPLIR" />
 		<meta name="keywords" content="A REMPLIR" />
-		<link rel="stylesheet" href="assets/css/styles.css" media="only screen" />
+		<link rel="stylesheet" href="../assets/css/styles.css" media="only screen" />
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 		<!--<script src="assets/js/functions.js"></script>-->
 		<script>
@@ -31,8 +31,8 @@ $sNomDeCettePage = substr($sNomDeCettePage, 0, (strpos($sNomDeCettePage,'.')));
 		</script>
 		<!-- Fichier JS spécifique à la page -->
 		<?php
-			if(file_exists('assets/js/'.$sNomDeCettePage.'.js')){
-				echo '<script src="assets/js/',$sNomDeCettePage,'.js"></script>',PHP_EOL;
+			if(file_exists('../assets/js/'.$sNomDeCettePage.'.js')){
+				echo '<script src="../assets/js/',$sNomDeCettePage,'.js"></script>',PHP_EOL;
 			}
 			/*if(($sNomDeCettePage == 'authentify') ||
 				($sNomDeCettePage == 'apropos')){
