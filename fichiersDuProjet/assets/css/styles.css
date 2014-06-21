@@ -5,3 +5,39 @@ Fichier "Placeholder"
 Remplacer tout le contenu.
 
 */
+
+.waitCircle{
+	-o-animation: eternalRotation 1.5s infinite linear;
+	-ms-animation: eternalRotation 1.5s infinite linear;
+	-moz-animation: eternalRotation 1.5s infinite linear;
+	-webkit-animation: eternalRotation 1.5s infinite linear;
+    animation: eternalRotation 1.5s infinite linear;
+}
+
+@-o-keyframes eternalRotation {
+    from {-moz-transform:rotate(0deg);}
+    to {-moz-transform:rotate(360deg);}
+} 
+
+@-ms-keyframes eternalRotation {
+    from {-moz-transform:rotate(0deg);}
+    to {-moz-transform:rotate(360deg);}
+} 
+
+@-moz-keyframes eternalRotation {
+    from {-moz-transform:rotate(0deg);}
+    to {-moz-transform:rotate(360deg);}
+} 
+
+@-webkit-keyframes eternalRotation {
+    from {webkit-transform:rotate(0deg);}
+    to {webkit-transform:rotate(360deg);}
+}
+
+/* Standard syntax */
+@keyframes eternalRotation {
+    from {transform:rotate(0deg);}
+    to {transform:rotate(360deg);}
+} 
+
+/* == EOF == */

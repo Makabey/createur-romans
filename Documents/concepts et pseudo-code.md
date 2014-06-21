@@ -16,33 +16,41 @@ To Do:
 - [ ] lire à propos de et implémenter mdp encryptés?
 - [ ] lire les APIs de G+ et F pour le login
 - [ ] fichier XHR + code JS pour query de validité usager (usr+pwd)
-- [ ] fichier XHR + code JS pour query de disponiblité nom usager, à moins de fusionner avec "validité" et d'utiliser les codes de retour ex: 0=usager inexistant (usager libre ou nom mal tapé), 1=usager existant (usager indisponible ou nom bien tapé), 2=mot de passe invalide, 3=mot de passe OK (-doit- sous-entendre usager existant) ; suppose que le champs PWD peux être vide et si c'est le cas la validation du PWD n'est pas faite donc pas de code 2 erroné
+- [ ] fichier XHR + code JS pour query de disponiblité nom usager, à moins de fusionner avec "validité" et d'utiliser les codes de retour ex:
+    * 0=usager inexistant (usager libre ou nom mal tapé),
+    * 1=usager existant (usager indisponible ou nom bien tapé),
+	* 2=mot de passe invalide,
+	* 3=mot de passe OK (-doit- sous-entendre usager existant) ; suppose que le champs PWD peux être vide et si c'est le cas la validation du PWD n'est pas faite donc pas de code 2 erroné
 - [ ] reprendre assets/inc/header.inc.php et corriger la description et les keywords, autant faire ça correctement pour le SEO ;)
 
 ####Page selectionProjet ::
 - [ ] fonction qui retourne les projets existants de l'usager en notation JSON (parce que plus efficace que ma façon de "parser" du TP de HTML5 et avant!!)
 
 ####Page creationProjet ::
-- [ ] est-ce qu'on veux qu'il soit possible de suspendre l'assistant et reprendre au même endroit?
+- [x] est-ce qu'on veux qu'il soit possible de suspendre l'assistant et reprendre au même endroit?
 - [ ] créer une page pour "créer" les genres littéraire ds la BD?
-- [ ] page admin pour pouvoir ajouter personnages.role_fonction, personnages.role_poid, lieux.type_environnement, lieux.type_acces ??
-- [ ] fonction qui ne retourne -que- les noms/ID des genres
-- [ ] déterminer si pour la lecture des données du genre choisi, une seule fonction retourne tout ou si on as une fonction qui initialise(avec retour de la première question et du nombre total de questions) et une qui demande la suite pour répondre FALSE s'il n'y as rien d'autres ?
+- [x] page admin pour pouvoir ajouter personnages.role_fonction, personnages.role_poid, lieux.type_environnement, lieux.type_acces ??
+- [x] fonction qui ne retourne -que- les noms/ID des genres
+- [x] déterminer si pour la lecture des données du genre choisi, une seule fonction retourne tout ou si on as une fonction qui initialise(avec retour de la première question et du nombre total de questions) et une qui demande la suite pour répondre FALSE s'il n'y as rien d'autres ?
 - [ ] fonction avec jQuery pour créer les balises nécessaire pour afficher les questions
 - [ ] fonction qui enregistre tout
 
 ####Page editionProjet
-- [ ] décider si mettre "roman.contenu" dans fichier texte séparé au lieu de MySQL? <-- pê exagéré pour la démo??
-- [ ] décider si mettre "notes.contenu" aussi ds fichiers séparés? (format JSON pour retenir états sticky, deleted, etc... noms genre <{nom_auteur}_{ID_projet}_{ID_note}>.json)
-- [ ] charger les "notes" à la demande (XHR) s'il y en as pour plus que 2mo (total, pas chaque) <-- mécanisme inutile pour la démo ?
-- [ ] gestion des balises (Liens entre les entitées sont des "A") à l'intérieur des "entitées" et du "document", c'est à dire trouver moyen simple de supporter et implémenter l'idée tout en évitant d'enregistrer les balises comme partie intégrante des blocs (de texte)
+- [x] décider si mettre "roman.contenu" dans fichier texte séparé au lieu de MySQL? <-- pê exagéré pour la démo??
+    * Dans la BD
+- [x] décider si mettre "notes.contenu" aussi ds fichiers séparés? (format JSON pour retenir états sticky, deleted, etc... noms genre <{nom_auteur}_{ID_projet}_{ID_note}>.json)
+    * Dans la BD
+- [x] charger les "notes" à la demande (XHR) s'il y en as pour plus que 2mo (total, pas chaque) <-- mécanisme inutile pour la démo ?
+- [x] gestion des balises (Liens entre les entitées sont des "A") à l'intérieur des "entitées" et du "document", c'est à dire trouver moyen simple de supporter et implémenter l'idée tout en évitant d'enregistrer les balises comme partie intégrante des blocs (de texte)
+    * retiré
 - [ ] Page admin avec stats, #auteurs, #romans, etc???
 - [ ] fonction XHR pour enregister les changements aux entitées (contenu, deleted, sticky)
 - [ ] fonction XHR pour enregistrer le document
 - [ ] lire plus sur le mécanisme de drag&drop pour savoir comment aborder le réordonnement des entitées --> http://www.html5rocks.com/en/tutorials/dnd/basics/ --> Modernizr --> pas compliqué juste 30-40 lignes de JS
-- [ ] permettre de dragger une "note" sur le document et ça fait copy-paste?
-- [ ] permettre de dragger un personnage, un lieu ou un "autres" sur le document et ça copie le nom + lien?
-
+- [x] permettre de dragger une "note" sur le document et ça fait copy-paste?
+    * retiré
+- [x] permettre de dragger un personnage, un lieu ou un "autres" sur le document et ça copie le nom + lien?
+    * retiré
 =====
 
 char / varchar :: max 255
