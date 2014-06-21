@@ -15,23 +15,24 @@ include "../inc/db_access.inc.php";
 $arrChamps_genres_litteraires = array('nom', 'nro_question', 'texte', 'type_input', 'valeurs_defaut', 'bouton_fonction');
 
 if(!isset($_POST['etape'])){
+	// Pour JavaScript : 0/1 : false/true ¬ texte erreur
 	echo '0¬$_POST["etape"] was required';
 	exit();
 }
 
 $db = db_connect();
 
-#var_dump($db);
-
-#if(false === $db){
 if(!is_object($db)){
-	// On suppose que $db contient une erreur texte et non un objet
+	// On suppose ici que $db contient une erreur texte et non un objet
 	echo "0¬" . $db;
 	exit();
 }
 
 $resultat = false;
 if($_POST['etape'] == 'lireGenres'){
+/*
+	Extraire de la BD une copie de chaques noms Genres
+*/
 	$query = "SELECT DISTINCT nom FROM genres_litteraires;";
 
 	$result = $db->query ($query);
@@ -40,16 +41,24 @@ if($_POST['etape'] == 'lireGenres'){
 			$resultat[] = $row[0];
 		}
 		$resultat = json_encode($resultat);
+		if(json_last_error() !== 0){
+			$resultat = "0¬" . decodeJSON_Error(json_last_error());
+		}else{
+			$resultat = "1¬" .  $resultat;
+		}
 	}
 }
 
 if($_POST['etape'] == 'lireQuestions'){
+/*
+	En accord avec $_POST['genre'] , lire les questions et retourner tout en bloc
+*/
 	if(!isset($_POST['genre'])){
 		echo '0¬$_POST["genre"] was required';
 		exit();
 	}
 
-	$query = "SELECT " . implode(', ', $arrChamps_genres_litteraires) . " FROM genres_litteraires WHERE nom='" . $_POST['genre'] . "';";
+	$query = "SELECT " . implode(', ', $arrChamps_genres_litteraires) . " FROM genres_litteraires WHERE nom='" . $_POST['genre'] . "' ORDER BY nro_question;";
 
 	$result = $db->query ($query);
 	if(false !== $result){
@@ -58,39 +67,41 @@ if($_POST['etape'] == 'lireQuestions'){
 		}
 		$resultat = json_encode($tmp);
 		if(json_last_error() !== 0){
-			$resultat = json_last_error();
+			$resultat = "0¬" . decodeJSON_Error(json_last_error());
+		}else{
+			$resultat = "1¬" .  $resultat;
 		}
 	}
 }
 
-function barfJSONerror($error){
+function decodeJSON_Error($error){
 	switch ($error) {
 		case JSON_ERROR_NONE:
-			echo ' - No errors';
-		break;
+			$retour =  '[JSON] - No errors';
+			break;
 		case JSON_ERROR_DEPTH:
-			echo ' - Maximum stack depth exceeded';
-		break;
+			$retour =  '[JSON] - Maximum stack depth exceeded';
+			break;
 		case JSON_ERROR_STATE_MISMATCH:
-			echo ' - Underflow or the modes mismatch';
-		break;
+			$retour =  '[JSON] - Underflow or the modes mismatch';
+			break;
 		case JSON_ERROR_CTRL_CHAR:
-			echo ' - Unexpected control character found';
-		break;
+			$retour =  '[JSON] - Unexpected control character found';
+			break;
 		case JSON_ERROR_SYNTAX:
-			echo ' - Syntax error, malformed JSON';
-		break;
+			$retour =  '[JSON] - Syntax error, malformed JSON';
+			break;
 		case JSON_ERROR_UTF8:
-			echo ' - Malformed UTF-8 characters, possibly incorrectly encoded';
-		break;
+			$retour =  '[JSON] - Malformed UTF-8 characters, possibly incorrectly encoded';
+			break;
 		default:
-			echo ' - Unknown error';
-		break;
+			$retour =  '[JSON] - Unknown error';
+			break;
 	 }
 
-	 echo PHP_EOL;
+	 return $retour;
 }
 
-echo "1¬" . $resultat; /* résultat final retourné à XHR */
+echo $resultat; /* résultat final retourné à XHR */
 
 /* == EOF == */

@@ -24,12 +24,12 @@
  
  QUESTIONS:
  * acheter nom de domaine? 
- * s'enregistrer demande pseudo, nom, email, mot de passe, theme ?
- * au premier login de l'usager, soit on lui donne un projet exemple, soit on le guide tout de suite dans la création de son premier projet.
- * pour éviter trop d'onglets (entitées), il faudrait en limiter le nombre (4-5?). donc les nommer maintenant et leur contenu
- * idée des "sticky", c'est à dire la possibilité dans un onglet de retrouver 1 personnage et/ou 1 lieu et/ou 1 note ensemble en consultation seulement
- * Passer au travers des mockups et décrire TOUT ce que fait chaque partie, ex: page "édition" / onglet personnages / personnage : la barre en haut est son nom et contient des icone d'édition, effacement, "sticky" et collapse
- * Idem mais les "future features" y compris "plus de genre littéraire"
+ * ~~s'enregistrer demande pseudo, nom, email, mot de passe, theme ?~~
+ * ~~au premier login de l'usager, soit on lui donne un projet exemple, soit on le guide tout de suite dans la création de son premier projet.~~
+ * ~~pour éviter trop d'onglets (entitées), il faudrait en limiter le nombre (4-5?). donc les nommer maintenant et leur contenu~~
+ * ~~idée des "sticky", c'est à dire la possibilité dans un onglet de retrouver 1 personnage et/ou 1 lieu et/ou 1 note ensemble en consultation seulement~~
+ * ~~Passer au travers des mockups et décrire TOUT ce que fait chaque partie, ex: page "édition" / onglet personnages / personnage : la barre en haut est son nom et contient des icone d'édition, effacement, "sticky" et collapse~~
+ * ~~Idem mais les "future features" y compris "plus de genre littéraire"~~
   
 ##Installation (hébergeur, équipe de développement)
 - Copier les fichiers dans le répertoire www
