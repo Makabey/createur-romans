@@ -28,7 +28,8 @@ To Do:
 
 ####Page creationProjet ::
 - [x] est-ce qu'on veux qu'il soit possible de suspendre l'assistant et reprendre au même endroit?
-- [ ] créer une page pour "créer" les genres littéraire ds la BD?
+- [x] créer une page pour "créer" les genres littéraire ds la BD?
+	* retiré
 - [x] page admin pour pouvoir ajouter personnages.role_fonction, personnages.role_poid, lieux.type_environnement, lieux.type_acces ??
 - [x] fonction qui ne retourne -que- les noms/ID des genres
 - [x] déterminer si pour la lecture des données du genre choisi, une seule fonction retourne tout ou si on as une fonction qui initialise(avec retour de la première question et du nombre total de questions) et une qui demande la suite pour répondre FALSE s'il n'y as rien d'autres ?
