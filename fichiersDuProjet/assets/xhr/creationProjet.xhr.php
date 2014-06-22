@@ -31,7 +31,7 @@ if(!is_object($db)){
 $resultat = false;
 if($_POST['etape'] == 'lireGenres'){
 /*
-	Extraire de la BD une copie de chaques noms Genres
+	Extraire de la BD une copie de chaques noms "Genre LIttéraire"
 */
 	$query = "SELECT DISTINCT nom FROM genres_litteraires;";
 
@@ -44,7 +44,7 @@ if($_POST['etape'] == 'lireGenres'){
 		if(json_last_error() !== 0){
 			$resultat = "0¬" . decodeJSON_Error(json_last_error());
 		}else{
-			$resultat = "1¬" .  $resultat;
+			$resultat = "1¬" . $resultat;
 		}
 	}
 }
@@ -69,33 +69,35 @@ if($_POST['etape'] == 'lireQuestions'){
 		if(json_last_error() !== 0){
 			$resultat = "0¬" . decodeJSON_Error(json_last_error());
 		}else{
-			$resultat = "1¬" .  $resultat;
+			$resultat = "1¬" . $resultat;
 		}
+	}else{
+		$resultat = "0¬An error occured during the operation";
 	}
 }
 
 function decodeJSON_Error($error){
 	switch ($error) {
 		case JSON_ERROR_NONE:
-			$retour =  '[JSON] - No errors';
+			$retour = '[JSON] - No errors';
 			break;
 		case JSON_ERROR_DEPTH:
-			$retour =  '[JSON] - Maximum stack depth exceeded';
+			$retour = '[JSON] - Maximum stack depth exceeded';
 			break;
 		case JSON_ERROR_STATE_MISMATCH:
-			$retour =  '[JSON] - Underflow or the modes mismatch';
+			$retour = '[JSON] - Underflow or the modes mismatch';
 			break;
 		case JSON_ERROR_CTRL_CHAR:
-			$retour =  '[JSON] - Unexpected control character found';
+			$retour = '[JSON] - Unexpected control character found';
 			break;
 		case JSON_ERROR_SYNTAX:
-			$retour =  '[JSON] - Syntax error, malformed JSON';
+			$retour = '[JSON] - Syntax error, malformed JSON';
 			break;
 		case JSON_ERROR_UTF8:
-			$retour =  '[JSON] - Malformed UTF-8 characters, possibly incorrectly encoded';
+			$retour = '[JSON] - Malformed UTF-8 characters, possibly incorrectly encoded';
 			break;
 		default:
-			$retour =  '[JSON] - Unknown error';
+			$retour = '[JSON] - Unknown error';
 			break;
 	 }
 

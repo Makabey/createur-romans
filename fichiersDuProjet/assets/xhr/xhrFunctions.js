@@ -17,16 +17,24 @@ function execXHR_Request(urlAuthentify, queryString, fct_callBack, fct_callError
 		xhr.onreadystatechange = function(){
 			// On ne fait quelque chose que si on a tout reçu et que le serveur est ok
 			if(xhr.readyState == 4 && xhr.status == 200){
+				/*
+					On s'attend à toujours avoir un retour de forme
+					"0¬MessageErreur" ou "1¬Donnees" où 0==false
+				*/
 				//console.log(xhr.responseText);
 				xhrAnswer = xhr.responseText.split('¬');
 				//console.log(xhrAnswer);
 				var retour = (xhrAnswer.length > 1)?xhrAnswer[1]:xhrAnswer[0];
 				//console.log(retour);
 				if(xhrAnswer[0] == false ){
-					fct_callError(retour);
+					if(typeof fct_callError === 'function') {
+						fct_callError(retour);
+					}
 					//console.log('execXHR_Request = false');
 				}else{
-					fct_callBack(retour);
+					if(typeof fct_callBack === 'function') {
+						fct_callBack(retour);
+					}
 					//console.log('execXHR_Request = true');
 				}
 			}
