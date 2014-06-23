@@ -4,33 +4,26 @@
 TODO:
 	1. Créer un premier bloc (qui fini avec un commentaire / * ================ * / ) qui valide rapidement les incontournables comme oper, typeEntite, idRoman
 	2. Réécrire le gros "if(oper = ceci){}" pour devenir un switch qui appelle des fonctions
-	3. Les fonctions ne doivent plus valider si un param $_POST est disponible ou non, le switch le fait avant de les appeller (il doit chercher les params appropriés, ex: entre le Texte Principal et les Entitées, les besoins varient un peu, l'un peut vouloir un 'target', l'autre un 'idEntite' ou autre, à vérifier)
-	4. voir s'il y as du code qu'il est possible d'éviter de fusionner
-
+	3. Les fonctions ne doivent plus valider si un param $_POST est disponible ou non, le switch le fait avant de les appeller (il doit chercher les params appropriés, ex: entre le Texte Principal et les Entitées, les besoins varient un peu, l'un peux vouloir un 'target', l'autre un 'idEntite' ou autre, à vérifier)
+	4. voir s'il y as du code qu'il est possible d'éviter de dupliquer
+	5. réécrire les contenus de demo_mode_edition et modecreationv2 pour pousser le max de JS en dehors (fichi ext) et p-ê créer des fonctions wrapper (qui ne feraient que lister les params requis ou alors auraient aussi un petit peu de validation pour s'assurer qu'un params qui doit être un chiffre ne peux pas être une chaine (ex: si on évalue avec parseInt, on as un chiffre > 0))
+	6. validation du contenu du texte principal et des entitées pour transformer ou rejetter les balises avant d'envoyer dans la BD
 */
 
-#require_once "../inc/tools.inc.php";
-#include "../inc/db_access.inc.php";
-include "../inc/db_access.inc.php";
-#include "/assets/inc/db_access.inc.php";
 
-#$arrChamps_genres_litteraires = array('nom', 'nro_question', 'texte', 'type_input', 'valeurs_defaut', 'bouton_fonction');
-$arrChamps_entites = array('ID_prev', 'ID_next', 'titre', 'contenu', 'note');
+
+require_once "../inc/db_access.inc.php";
+require_once "../inc/library01.inc.php";
 
 if(!isset($_POST['oper']) || !isset($_POST['typeEntite']) || !isset($_POST['idRoman'])){
 	// Pour JavaScript : 0/1 : false/true ¬ texte erreur
-	echo '0¬A required $_POST parameter is missing';
+	echo '0¬A required parameter (either "oper", "typeEntite" or "idRoman"), is missing';
 	exit();
 }
 
-/*if($_POST['oper'] != 'lire' && $_POST['oper'] != 'ecrire'){
-	echo '0¬Invalid value for $_POST["oper"]';
-	exit();
-}*/
-
 $_POST['idRoman'] += 0;
 if($_POST['idRoman'] <= 0){
-	echo '0¬Invalid value for $_POST["idRoman"]';
+	echo '0¬Invalid value for "idRoman"';
 	exit();
 }
 
@@ -42,64 +35,100 @@ if(!is_object($db)){
 	exit();
 }
 
-$resultat = false;
-//$mode=1;
+/* =================================================== */
 
-if($_POST['oper'] == 'lire'){
+$resultat = false;
+switch($_POST['oper']){
+	case 'lire' :
+		/* On as besoin d'un ID pour la balise qui recevra tout le contenu, en principe, ne devrais pas être passé mais bon, on peux corriger plus tard */
+		if(('textePrincipal' != $_POST['typeEntite']) && !isset($_POST['target'])){
+			$resultat =  '0¬Parameter "target" is required';
+			#exit();
+		}else{
+			$resultat = lireDonneesEntite();
+		}
+		break;
+	
+	case 'ecrire':
+		if(isset($_POST['target']) || isset($_POST['contenu']) || isset($_POST['prev'])){
+			$resultat = miseAJourDonneesEntite();
+		}else{
+			$resultat = "0¬Either of 'target', 'contenu' or 'prev' is missing.";
+		}
+||
+($_POST['oper'] == 'effacer' && isset($_POST['delete']))
+
+	
+	default: $resultat = '0¬"' . $_POST["oper"] . '" unknown value for parameter "oper"';
+}
+
+/* =================================================== */
+
 /*
-	Lire de la BD, selon la valeur de $_POST['typeEntite'], les donnes soit du Texte lui-même soit de l'une des sectiosn d'entitées
+	FONCTIONS
 */
+function lireDonneesEntite(){
+	/*
+		Lire de la BD, selon la valeur de $_POST['typeEntite'], les donnes soit du Texte lui-même soit de l'une des sectiosn d'entitées
+	*/
+	#$arrChamps_genres_litteraires = array('nom', 'nro_question', 'texte', 'type_input', 'valeurs_defaut', 'bouton_fonction');
+	$arrChamps_entites = array('ID_prev', 'ID_next', 'titre', 'contenu', 'note');
+	$resultat = false;
+	
 	switch($_POST['typeEntite']){
 		case 'quoi' :
 		case 'ou' :
 		case 'comment' :
 		case 'pourquoi' :
 		case 'qui' :
-			#$resultat = '0¬Invalid value for $_POST["typeEntite"]';
-			$query = 'SELECT ID_entite, ' . implode(', ', $arrChamps_entites) . ' FROM entites WHERE ID_roman = ' . $_POST['idRoman'] . ' AND typeEntite = "' . $_POST['typeEntite'] . '" AND deleted = 0 ORDER BY ID_prev;';
+			$query = 'SELECT ID_entite, ' . implode(', ', $arrChamps_entites) . ' FROM entites WHERE ID_roman = ' . $_POST['idRoman'] . ' AND typeEntite = "' . $_POST['typeEntite'] . '" AND deleted = 0 ORDER BY ID_prev ASC;';
 			$mode=2;
 			break;
-		case 'textePrincipal' : $query = "SELECT contenu FROM roman_texte WHERE ID_roman=".$_POST['idRoman'].";"; $mode=1; break;
-		default: echo '0¬Invalid value for $_POST["typeEntite"]'; exit();
+		case 'textePrincipal' :
+			$query = "SELECT contenu FROM roman_texte WHERE ID_roman=".$_POST['idRoman'].";";
+			$mode=1;
+			break;
+		default:
+			$resultat = '0¬Invalid value for "typeEntite"';
+			//exit();
 	}
 
-	$result = $db->query ($query);
-	if(false !== $result){
-		if($mode == 1){
-			/* On veux le texte ? Faire une simple lecture */
-			$row = $result->fetch_row();
-			$resultat = $row[0];
-		}elseif($mode == 2){
-			/* On as besoin d'un ID pour la balise qui recevra tout le contenu, en principe, ne devrais pas être passé mais bon, on peux corriger plus tard */
-			if(!isset($_POST['target'])){
-				echo '0¬Invalid value for $_POST["target"]';
-				exit();
-			}
-			$resultat[0]['typeEntite'] = $_POST['typeEntite'];
-			$resultat[0]['target'] = $_POST['target'];
-			$resultat[0]['first'] = null;
+	if($resultat === false){
+		$result = $db->query ($query);
+		if(false !== $result){
+			if($mode == 1){
+				/* On veux le texte ? Faire une simple lecture */
+				$row = $result->fetch_row();
+				$resultat = $row[0];
+			}elseif($mode == 2){
+				$resultat[0]['typeEntite'] = $_POST['typeEntite'];
+				$resultat[0]['target'] = $_POST['target'];
+				$resultat[0]['first'] = null;
 
-			while ($row = $result->fetch_row()) {
-				$ID_entite = array_shift($row);
-				if($resultat[0]['first'] === null){
-					$resultat[0]['first'] = $ID_entite;
+				while ($row = $result->fetch_row()){
+					$ID_entite = array_shift($row);
+					if($resultat[0]['first'] === null){
+						$resultat[0]['first'] = $ID_entite;
+					}
+					$resultat[$ID_entite] = array_combine($arrChamps_entites, $row);
 				}
-				$resultat[$ID_entite] = array_combine($arrChamps_entites, $row);
 			}
 
-		}
-
-		/* Convertir en JSON */
-		$resultat = json_encode($resultat);
-		if(json_last_error() !== 0){
-			$resultat = "0¬" . decodeJSON_Error(json_last_error());
+			/* Convertir en JSON */
+			$resultat = json_encode($resultat);
+			if(json_last_error() !== 0){
+				$resultat = "0¬" . decodeJSON_Error(json_last_error());
+			}else{
+				$resultat = "1¬" . $resultat;
+			}
 		}else{
-			$resultat = "1¬" . $resultat;
+			$resultat = "0¬An error occured during a SELECT operation. (query = '$query')";
 		}
-	}else{
-		$resultat = "0¬An error occured during a SELECT operation. (query = '$query')";
 	}
-}else if(
+}
+
+
+if(
 ($_POST['oper'] == 'ecrire' && (isset($_POST['target']) || isset($_POST['contenu']) || isset($_POST['prev'])))
 ||
 ($_POST['oper'] == 'effacer' && isset($_POST['delete']))
@@ -117,8 +146,6 @@ pour les autres, à l'index #0 on as le target, càd le ID de la balise qui doit
 
 ---Pour oper=ecrire et effacer...
 */
-
-
 
 	switch($_POST['typeEntite']){
 		case 'quoi' :
@@ -149,7 +176,7 @@ pour les autres, à l'index #0 on as le target, càd le ID de la balise qui doit
 			#$mode=1;
 			$query = 'UPDATE roman_texte SET contenu = "' . $_POST['donnees'] . '" WHERE ID_roman=' . $_POST['idRoman'] . ';';
 			break;
-		default: echo '0¬Invalid value for $_POST["typeEntite"]'; exit();
+		default: echo '0¬Invalid value for "typeEntite"'; exit();
 	}
 
 	$result = $db->query ($query);
@@ -160,7 +187,9 @@ pour les autres, à l'index #0 on as le target, càd le ID de la balise qui doit
 	}
 #}else if($_POST['oper'] == 'effacer'){ // mettre flag deleted = true
 #	$resultat = "0¬Valid but unimplemented operation '" . $_POST['oper'] . "'";
-}else if($_POST['oper'] == 'inserer'){ // pour le moment ne s'appliquerais qu'aux entitées
+}
+
+if($_POST['oper'] == 'inserer'){ // pour le moment ne s'appliquerais qu'aux entitées
 /*echo "0¬rendu a inserer";
 exit();*/
 
@@ -169,12 +198,12 @@ exit();*/
 	}else{
 /*echo "0¬apres verification touts champs la";
 exit();*/
-	
+
 		/*
 			1. noter selon roman et typeEntite, le ID_entite de celui qui as next=0
 			2. ecrire la nouvelle entite avec prev = ID_entite trouvé en etape 1 (et son next=0! :) )
 			3. lire le nouvel ID_entite ($mysqli->insert_id) et copier dans celui en etape 1
-			
+
 			tests :
 			- 1er d'un type
 			- [x] Xeme d'un type
@@ -221,33 +250,6 @@ exit();*/
 	$resultat = "0¬Unknown operation '" . $_POST['oper'] . "'";
 }
 
-function decodeJSON_Error($error){
-	switch ($error) {
-		case JSON_ERROR_NONE:
-			$retour = '[JSON] - No errors';
-			break;
-		case JSON_ERROR_DEPTH:
-			$retour = '[JSON] - Maximum stack depth exceeded';
-			break;
-		case JSON_ERROR_STATE_MISMATCH:
-			$retour = '[JSON] - Underflow or the modes mismatch';
-			break;
-		case JSON_ERROR_CTRL_CHAR:
-			$retour = '[JSON] - Unexpected control character found';
-			break;
-		case JSON_ERROR_SYNTAX:
-			$retour = '[JSON] - Syntax error, malformed JSON';
-			break;
-		case JSON_ERROR_UTF8:
-			$retour = '[JSON] - Malformed UTF-8 characters, possibly incorrectly encoded';
-			break;
-		default:
-			$retour = '[JSON] - Unknown error';
-			break;
-	 }
-
-	 return $retour;
-}
 
 echo $resultat; /* résultat final retourné à XHR */
 
