@@ -1,4 +1,4 @@
-#Structure et emplacement suggéré des fichiers
+#structure et emplacement suggéré des fichiers
 
 - racine:
   * .htaccess
