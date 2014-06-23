@@ -8,7 +8,7 @@ function execXHR_Request(urlAuthentify, queryString, fct_callBack, fct_callError
 
 	if(false !== xhr){
 		/*
-			if (xhr && xhr.readyState != 0) {
+			if (xhr && xhr.readyState != 0){
 				xhr.abort(); // On annule la requête en cours !
 			}
 		*/
@@ -19,23 +19,29 @@ function execXHR_Request(urlAuthentify, queryString, fct_callBack, fct_callError
 			if(xhr.readyState == 4 && xhr.status == 200){
 				/*
 					On s'attend à toujours avoir un retour de forme
-					"0¬MessageErreur" ou "1¬Donnees" où 0==false
+					"0¬MessageErreur" ou "1¬Donnees" et donc 0==false
 				*/
 				//console.log(xhr.responseText);
 				xhrAnswer = xhr.responseText.split('¬');
 				//console.log(xhrAnswer);
 				var retour = (xhrAnswer.length > 1)?xhrAnswer[1]:xhrAnswer[0];
 				//console.log(retour);
-				if(xhrAnswer[0] == false ){
-					if(typeof fct_callError === 'function') {
-						fct_callError(retour);
-					}
-					//console.log('execXHR_Request = false');
-				}else{
-					if(typeof fct_callBack === 'function') {
+				if(xhrAnswer[0][0] == "1" ){ // TRUE, pas d'erreur
+					if(typeof fct_callBack === 'function'){
 						fct_callBack(retour);
+					}else{
+						console.log("execXHR_Request = TRUE, mais l'objet de traitement passée n'est pas une fonction.");
 					}
-					//console.log('execXHR_Request = true');
+				}else{
+					if(typeof fct_callError === 'function'){
+						if(xhrAnswer[0][0] == "0" ){ // FALSE, erreur controlee
+							fct_callError(retour);
+						}else{ // autre, erreur que PHP crache... et oui, c'est possible que mon code chie un peu :p
+							fct_callError(xhrAnswer[0]);
+						}
+					}else{
+						console.log("execXHR_Request = FALSE, mais l'objet de traitement passée n'est pas une fonction.");
+					}
 				}
 			}
 		}

@@ -52,4 +52,37 @@ function encode($Chaine){
 	return htmlentities($Chaine, ENT_COMPAT, 'ISO-8859-1');
 }
 
+
+##############
+#
+# Retourne une chaine représentant l'erreur JSON passée
+#
+function decodeJSON_Error($error){
+	switch ($error) {
+		case JSON_ERROR_NONE:
+			$retour = '[JSON] - No errors';
+			break;
+		case JSON_ERROR_DEPTH:
+			$retour = '[JSON] - Maximum stack depth exceeded';
+			break;
+		case JSON_ERROR_STATE_MISMATCH:
+			$retour = '[JSON] - Underflow or the modes mismatch';
+			break;
+		case JSON_ERROR_CTRL_CHAR:
+			$retour = '[JSON] - Unexpected control character found';
+			break;
+		case JSON_ERROR_SYNTAX:
+			$retour = '[JSON] - Syntax error, malformed JSON';
+			break;
+		case JSON_ERROR_UTF8:
+			$retour = '[JSON] - Malformed UTF-8 characters, possibly incorrectly encoded';
+			break;
+		default:
+			$retour = '[JSON] - Unknown error';
+			break;
+	 }
+
+	 return $retour;
+}
+
 /* == EOF == */

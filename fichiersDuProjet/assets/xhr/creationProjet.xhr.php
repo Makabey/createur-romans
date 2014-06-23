@@ -1,22 +1,10 @@
 <?php
-/*
+require_once "../inc/db_access.inc.php";
+require_once "../inc/library01.inc.php";
 
-TODO:
-1. validation des valeurs POST recues
-2. optimiser code pour ne pas répéter le bloc de lecture si possible
-
-*/
-
-#require_once "../inc/tools.inc.php";
-#include "../inc/db_access.inc.php";
-include "../inc/db_access.inc.php";
-#include "/assets/inc/db_access.inc.php";
-
-$arrChamps_genres_litteraires = array('nom', 'nro_question', 'texte', 'type_input', 'valeurs_defaut', 'bouton_fonction');
-
-if(!isset($_POST['etape'])){
+if(!isset($_POST['oper'])){
 	// Pour JavaScript : 0/1 : false/true ¬ texte erreur
-	echo '0¬$_POST["etape"] was required';
+	echo '0¬Parameter "oper" is required';
 	exit();
 }
 
@@ -24,20 +12,53 @@ $db = db_connect();
 
 if(!is_object($db)){
 	// On suppose ici que $db contient une erreur texte et non un objet
-	echo "0¬" . $db;
+	echo "0¬(DB pas un objet) " . $db;
 	exit();
 }
 
+/* =================================================== */
+
 $resultat = false;
-if($_POST['etape'] == 'lireGenres'){
+switch($_POST['oper']){
+	case 'lireGenres':
+		$resultat = lireGenreLitteraires();
+		break;
+
+	case 'lireQuestions':
+		if(!isset($_POST['genre'])){
+			$resultat = '0¬"genre" is required';
+		}else{
+			$genresValides = "policier,drame";
+			$pos = stripos($genresValides, $_POST['genre']);
+			if(false === $pos){
+				$resultat = '0¬"genre" unknown value "' . $_POST["genre"] . '"';
+			}else{
+				$resultat = lireQuestions($_POST['genre']);
+			}
+		}
+		break;
+
+	default: $resultat = '0¬"' . $_POST["oper"] . '" unknown value for parameter "oper"';
+}
+
+echo $resultat; /* résultat final retourné à XHR */
+exit();
+
+/* =================================================== */
+
 /*
-	Extraire de la BD une copie de chaques noms "Genre LIttéraire"
+	FONCTIONS
 */
+function lireGenreLitteraires(){
+	/*
+		Extraire de la BD une copie de chaques noms "Genre LIttéraire"
+	*/
+	global $db;
 	$query = "SELECT DISTINCT nom FROM genres_litteraires;";
 
 	$result = $db->query ($query);
 	if(false !== $result){
-		while ($row = $result->fetch_row()) {
+		while ($row = $result->fetch_row()){
 			$resultat[] = $row[0];
 		}
 		$resultat = json_encode($resultat);
@@ -46,23 +67,25 @@ if($_POST['etape'] == 'lireGenres'){
 		}else{
 			$resultat = "1¬" . $resultat;
 		}
+	}else{
+		$resultat = "0¬[" . __FUNCTION__ . "] " . $db->error . " ($query)";
 	}
+	return $resultat;
 }
 
-if($_POST['etape'] == 'lireQuestions'){
-/*
-	En accord avec $_POST['genre'] , lire les questions et retourner tout en bloc
-*/
-	if(!isset($_POST['genre'])){
-		echo '0¬$_POST["genre"] was required';
-		exit();
-	}
+function lireQuestions($genre){
+	/*
+		En accord avec $_POST['genre'] , lire les questions et retourner tout en bloc
+	*/
+	global $db;
+	#$arrChamps_genres_litteraires = array('nom', 'nro_question', 'texte', 'type_input', 'valeurs_defaut', 'bouton_fonction');
+	$arrChamps_genres_litteraires = array('nro_question', 'texte', 'type_input', 'valeurs_defaut', 'bouton_fonction'); // j'ai enlevé le champs 'nom' pour que ça fasse moins de données retournés
 
-	$query = "SELECT " . implode(', ', $arrChamps_genres_litteraires) . " FROM genres_litteraires WHERE nom='" . $_POST['genre'] . "' ORDER BY nro_question;";
+	$query = "SELECT " . implode(', ', $arrChamps_genres_litteraires) . " FROM genres_litteraires WHERE nom='$genre' ORDER BY nro_question;";
 
 	$result = $db->query ($query);
 	if(false !== $result){
-		while ($row = $result->fetch_row()) {
+		while ($row = $result->fetch_row()){
 			$tmp[] = array_combine($arrChamps_genres_litteraires, $row);
 		}
 		$resultat = json_encode($tmp);
@@ -72,38 +95,9 @@ if($_POST['etape'] == 'lireQuestions'){
 			$resultat = "1¬" . $resultat;
 		}
 	}else{
-		$resultat = "0¬An error occured during the operation";
+		$resultat = "0¬[" . __FUNCTION__ . "] " . $db->error . " ($query)";
 	}
+	return $resultat;
 }
-
-function decodeJSON_Error($error){
-	switch ($error) {
-		case JSON_ERROR_NONE:
-			$retour = '[JSON] - No errors';
-			break;
-		case JSON_ERROR_DEPTH:
-			$retour = '[JSON] - Maximum stack depth exceeded';
-			break;
-		case JSON_ERROR_STATE_MISMATCH:
-			$retour = '[JSON] - Underflow or the modes mismatch';
-			break;
-		case JSON_ERROR_CTRL_CHAR:
-			$retour = '[JSON] - Unexpected control character found';
-			break;
-		case JSON_ERROR_SYNTAX:
-			$retour = '[JSON] - Syntax error, malformed JSON';
-			break;
-		case JSON_ERROR_UTF8:
-			$retour = '[JSON] - Malformed UTF-8 characters, possibly incorrectly encoded';
-			break;
-		default:
-			$retour = '[JSON] - Unknown error';
-			break;
-	 }
-
-	 return $retour;
-}
-
-echo $resultat; /* résultat final retourné à XHR */
 
 /* == EOF == */
