@@ -1,10 +1,10 @@
 <?php
-$sPageTitle = "Acceuil | ";
+$sPageTitle = "(demo) mode Création | ";
 
 include "../assets/inc/header.inc.php";
 include "../assets/inc/db_access.inc.php";
 ?>
-<script src="../assets/xhr/xhrFunctions.js"></script>
+<!--<script src="../assets/xhr/xhrFunctions.js"></script>-->
 <script>
 /*
 ===Ci-dessous, ce que chaque champs DOIT contenir pour la table "genres_littéraires"
@@ -40,6 +40,11 @@ include "../assets/inc/db_access.inc.php";
 		var etapeAssistant = 0;
 
 		$("#button_nextQuestion").click(function(){
+			/*
+				etapeAssistant == 0 :: La page vient d'être chargée, par conséquent on voit le choix de Genre Littéraire et l'étape suivant est le chargement des questions
+				
+				etapeAssistant > 0 :: on vois les questions alors si on clique le même bouton, on est prèt pour l'étape suivante; originalement j'affichais les questions une à une, donc code à réécrire pour ce bouton.
+			*/
 			if(etapeAssistant == 0){
 				var XHR_Query = "etape=lireQuestions&genre=" + $("#select_question").val();
 				execXHR_Request("../assets/xhr/creationProjet.xhr.php", XHR_Query, afficherQuestions, traiterErreurs);
@@ -55,7 +60,9 @@ include "../assets/inc/db_access.inc.php";
 
 		$("#form_question").on("click", "button", function(){
 			/*
-			Cette fonction s'attache aux boutons créés dynamiquement durant la fonction "afficherQuestions"
+				Cette fonction s'attache aux boutons créés dynamiquement durant la fonction "afficherQuestions".
+				L'idée est de pouvoir attacher des fonctions/fonctionnalitées à une question si désiré mais s'applique
+				logiquement mieux aux questions nécessitant une balise input::text; ex: générer un nom de personnage
 			*/
 			var strFonction = $(this).data("fonction").split('(');
 			strFonction[1] = (strFonction[1].substring(0, strFonction[1].length-1)).split(',');
@@ -70,10 +77,19 @@ include "../assets/inc/db_access.inc.php";
 		$("#label_question").hide();
 		$("#select_question").hide();
 		$("#button_nextQuestion").hide();
+
 		execXHR_Request("../assets/xhr/creationProjet.xhr.php", "etape=lireGenres", afficherGenres, traiterErreurs);
 	});
 
 	function generer_nom(min_chars, max_chars, word_count){
+		/*
+			Tentative très timide de génération de noms
+			
+			Voir ::
+			http://www.fakenamegenerator.com/faq.php
+			http://www.roguebasin.com/index.php?title=Random_name_generation 
+			http://www.godpatterns.com/2005/09/name-generators-for-npcs-to-populate.html
+		*/
 		var nombre;
 		var nom_generer='';
 		var iCmpt_Mots;
@@ -114,7 +130,10 @@ include "../assets/inc/db_access.inc.php";
 	function afficherQuestions(donnees){
 		/*
 			Traite le retour de execXHR_Request("../assets/xhr/creationProjet.xhr.php", XHR_Query, afficherQuestions, traiterErreurs);
+			
 			Quand rencontre "text" crée une balise input::text et pour select, un select::option
+			
+			Fait principalement de la génération de balise et de la copie de contenu/propriétés à partir du tableau "donnees"
 		*/
 		var contenu = null;
 		var contenuDataList = '';

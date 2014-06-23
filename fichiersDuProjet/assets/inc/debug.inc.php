@@ -1,4 +1,13 @@
 <?php
+/*
+	But : accumuler les messages de débogguage pour les afficher à un endroit opportun du BODY et éviter de briser le flux de la page ou causer des erreurs phantômes.
+
+	Utilisation du module:
+		-Au début de la page appeller "clearDebugMsg" si nécessaire
+		-Pour chaque point où un message de débogguage est souhaité, appeller "addToDebugMsg" en lui passant le message et/ou contenu désiré
+		-Appeller "echoDebugMsg" là où l'affichage ne causera pas de problèmes
+*/
+
 $gblDebugReturnMessage=null;
 #define("GBL_DEBUG", FALSE); // Mettre en mode Debug?
 define("GBL_DEBUG", TRUE);
@@ -45,13 +54,4 @@ function echoDebugMsg(){
 	}
 }
 
-#############
-#
-# Idem que 'print/echo' mais affiche seulement quand la globale $gblDebugOn est TRUE.
-#
-function debug($Chaine){
-	echo "[Avertissement] Il faut maintenant utiliser 'echoDebugMsg'!\n";
-	echoDebugMsg();
-}
-// ? > // Parce qu'il n'y as que du PHP dans le fichier, on peux omettre le tag de fin
 /** == EOF == **/
