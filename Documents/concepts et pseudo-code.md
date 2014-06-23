@@ -17,11 +17,12 @@ To Do:
 - [ ] lire les APIs de G+ et F pour le login
 - [ ] fichier XHR + code JS pour query de validité usager (usr+pwd)
 - [ ] fichier XHR + code JS pour query de disponiblité nom usager, à moins de fusionner avec "validité" et d'utiliser les codes de retour ex:
-    * 0=usager inexistant (usager libre ou nom mal tapé),
-    * 1=usager existant (usager indisponible ou nom bien tapé),
-	* 2=mot de passe invalide,
-	* 3=mot de passe OK (-doit- sous-entendre usager existant) ; suppose que le champs PWD peux être vide et si c'est le cas la validation du PWD n'est pas faite donc pas de code 2 erroné
-- [ ] reprendre assets/inc/header.inc.php et corriger la description et les keywords, autant faire ça correctement pour le SEO ;)
+  * 0=usager inexistant (usager libre ou nom mal tapé),
+  * 1=usager existant (usager indisponible ou nom bien tapé),
+  * 2=mot de passe invalide,
+  * 3=mot de passe OK (-doit- sous-entendre usager existant) ; suppose que le champs PWD peux être vide et si c'est le cas la validation du PWD n'est pas faite donc pas de code 2 erroné
+- [x] reprendre assets/inc/header.inc.php et corriger la description et les keywords, autant faire ça correctement pour le SEO ;)
+- [ ] voir http://www.fakenamegenerator.com/faq.php :: http://www.roguebasin.com/index.php?title=Random_name_generation :: http://www.godpatterns.com/2005/09/name-generators-for-npcs-to-populate.html
 
 ####Page selectionProjet ::
 - [ ] fonction qui retourne les projets existants de l'usager en notation JSON (parce que plus efficace que ma façon de "parser" du TP de HTML5 et avant!!)
@@ -38,20 +39,20 @@ To Do:
 
 ####Page editionProjet
 - [x] décider si mettre "roman.contenu" dans fichier texte séparé au lieu de MySQL? <-- pê exagéré pour la démo??
-    * Dans la BD
+ * Dans la BD
 - [x] décider si mettre "notes.contenu" aussi ds fichiers séparés? (format JSON pour retenir états sticky, deleted, etc... noms genre <{nom_auteur}_{ID_projet}_{ID_note}>.json)
-    * Dans la BD
+ * Dans la BD
 - [x] charger les "notes" à la demande (XHR) s'il y en as pour plus que 2mo (total, pas chaque) <-- mécanisme inutile pour la démo ?
 - [x] gestion des balises (Liens entre les entitées sont des "A") à l'intérieur des "entitées" et du "document", c'est à dire trouver moyen simple de supporter et implémenter l'idée tout en évitant d'enregistrer les balises comme partie intégrante des blocs (de texte)
-    * retiré
+ * retiré
 - [ ] Page admin avec stats, #auteurs, #romans, etc???
 - [ ] fonction XHR pour enregister les changements aux entitées (contenu, deleted, sticky)
 - [ ] fonction XHR pour enregistrer le document
 - [ ] lire plus sur le mécanisme de drag&drop pour savoir comment aborder le réordonnement des entitées --> http://www.html5rocks.com/en/tutorials/dnd/basics/ --> Modernizr --> pas compliqué juste 30-40 lignes de JS
 - [x] permettre de dragger une "note" sur le document et ça fait copy-paste?
-    * retiré
+ * retiré
 - [x] permettre de dragger un personnage, un lieu ou un "autres" sur le document et ça copie le nom + lien?
-    * retiré
+ * retiré
 =====
 
 char / varchar :: max 255
@@ -109,7 +110,7 @@ représentation des questions/réponses pour l'assistant dans la BD :
   * taille_cm : uSmallInt
   * poids_kg : uSmallInt
   * description : Text, tout les autres détails, dont "background"
-  * sticky : bit (1), si TRUE alors (discuter laquelle des trois options prendre)  soit l'entitée apparait en tête de sa liste, soit elle apparait dans un onglet dédié (stickied), soit les deux
+  * sticky : bit (1), si TRUE alors (discuter laquelle des trois options prendre) soit l'entitée apparait en tête de sa liste, soit elle apparait dans un onglet dédié (stickied), soit les deux
   * deleted : bit (1)
 
 - lieux:
@@ -123,7 +124,7 @@ représentation des questions/réponses pour l'assistant dans la BD :
   * nom : varchar(50)
   * taille_approx_m3 : uMediumInt (mesure en mètres cubes)
   * description : Text, tout les autres détails, dont "background"
-  * sticky : bit (1), si TRUE alors (discuter laquelle des trois options prendre)  soit l'entitée apparait en tête de sa liste, soit elle apparait dans un onglet dédié (stickied), soit les deux
+  * sticky : bit (1), si TRUE alors (discuter laquelle des trois options prendre) soit l'entitée apparait en tête de sa liste, soit elle apparait dans un onglet dédié (stickied), soit les deux
   * deleted : bit (1)
 
 - notes :
@@ -133,7 +134,7 @@ représentation des questions/réponses pour l'assistant dans la BD :
   * ID_next : uInt, index de note à afficher -après- ou 0 si dernier
   * ~~IDs_references : Text, liste des IDs des autres entitées référencées sous la forme "[lettre][chiffres]" séparés par "¤" où [lettre] est le type tel que [p]ersonnage/ [n]ote / [l]ieux/ [a]utres suivi du ID_[perso/lieu/note/autres], donne ~5039 références max @~11 char+1séparateur/référence vs varchar(255) qui donnait ~18 ~~
   * contenu : Text
-  * sticky : bit (1), si TRUE alors (discuter laquelle des trois options prendre)  soit l'entitée apparait en tête de sa liste, soit elle apparait dans un onglet dédié (stickied), soit les deux
+  * sticky : bit (1), si TRUE alors (discuter laquelle des trois options prendre) soit l'entitée apparait en tête de sa liste, soit elle apparait dans un onglet dédié (stickied), soit les deux
   * deleted : bit (1)
 
 - autres (ex:bateaux, avion, coffre d'outils, le Tardis,...):
@@ -142,9 +143,9 @@ représentation des questions/réponses pour l'assistant dans la BD :
   * ID_prev : uInt, index de "autres" à afficher -avant- ou 0 si premier
   * ID_next : uInt, index de "autres" à afficher -après- ou 0 si dernier
   * ~~IDs_references : Text, liste des IDs des autres entitées référencées sous la forme "[lettre][chiffres]" séparés par "¤" où [lettre] est le type tel que [p]ersonnage/ [n]ote / [l]ieux/ [a]utres suivi du ID_[perso/lieu/note/autres], donne ~5039 références max @~11 char+1séparateur/référence vs varchar(255) qui donnait ~18 ~~
-  *	nom : varchar(50)
+  * nom : varchar(50)
   * description : Text
-  * sticky : bit (1), si TRUE alors (discuter laquelle des trois options prendre)  soit l'entitée apparait en tête de sa liste, soit elle apparait dans un onglet dédié (stickied), soit les deux
+  * sticky : bit (1), si TRUE alors (discuter laquelle des trois options prendre) soit l'entitée apparait en tête de sa liste, soit elle apparait dans un onglet dédié (stickied), soit les deux
   * deleted : bit (1)
 
 
@@ -152,7 +153,7 @@ représentation des questions/réponses pour l'assistant dans la BD :
 
 mettre ici une copie du manuel mais avec ce qui se passe derrière et fonctionnellement? ex: usager veux changer de projet/roman : 1. tout saved? non-> proposer save / oui -> 2. header(location:index mode ouverture), etc... -décrire le fonctionnement interne (JS, PHP/Classes, MySQL, etc).
 
-création d'un roman à partir d'un autre:  on clone direct les entitées et c'est tout.
+création d'un roman à partir d'un autre: on clone direct les entitées et c'est tout.
 
 Classe cNote qui contient un membre privé pour son texte, un membre privé pour son ID, un membre "array of integers" pour retenir ses liens dont l'index 0 est l'id de son précédent (ou valeur = 0 s'il est le premier du projet), l'index 1 est l'id de son suivant (ou 0 s'il est le dernier du projet) et le reste sont les ids vers lesquels il pointe tel que d'autres cNote qui selon l'usager, auront une pertinence comme je le fait dans "O5".
 

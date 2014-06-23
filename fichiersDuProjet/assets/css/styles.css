@@ -53,5 +53,10 @@ Remplacer tout le contenu.
 	margin:10px;
 }
 
-
+p[contenteditable="true"]{
+	background-color:#0d0;
+}
+#container_entites p:hover{
+	color:#0b0;
+}
 /* == EOF == */
