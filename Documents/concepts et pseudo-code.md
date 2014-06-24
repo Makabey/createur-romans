@@ -10,10 +10,10 @@ To Do:
 - [ ] rendre plus gracieux la manipulation des erreurs MySQL, surtout pour le bénéfice de XHR
 - [x] créer la structure logique des tables
 - [ ] créer des scénarios avec données fictives pour voir si types des champs sont erronés ou si champs manquant
-- [ ] créer les tables et exporter un .SQL vers GH
+- [x] créer les tables et exporter un .SQL vers GH
 - [ ] lire à propos de et prévoir XSS
 - [ ] lire à propos de et prévoir SQL injection
-- [ ] lire à propos de et implémenter mdp encryptés?
+- [ ] lire à propos de et implémenter mdp encryptés? voir http://glynrob.com/javascript/client-side-hashing-and-encryption/
 - [ ] lire les APIs de G+ et F pour le login
 - [ ] fichier XHR + code JS pour query de validité usager (usr+pwd)
 - [ ] fichier XHR + code JS pour query de disponiblité nom usager, à moins de fusionner avec "validité" et d'utiliser les codes de retour ex:
@@ -34,7 +34,7 @@ To Do:
 - [x] page admin pour pouvoir ajouter personnages.role_fonction, personnages.role_poid, lieux.type_environnement, lieux.type_acces ??
 - [x] fonction qui ne retourne -que- les noms/ID des genres
 - [x] déterminer si pour la lecture des données du genre choisi, une seule fonction retourne tout ou si on as une fonction qui initialise(avec retour de la première question et du nombre total de questions) et une qui demande la suite pour répondre FALSE s'il n'y as rien d'autres ?
-- [ ] fonction avec jQuery pour créer les balises nécessaire pour afficher les questions
+- [x] fonction avec jQuery pour créer les balises nécessaire pour afficher les questions
 - [ ] fonction qui enregistre tout
 
 ####Page editionProjet
@@ -46,8 +46,8 @@ To Do:
 - [x] gestion des balises (Liens entre les entitées sont des "A") à l'intérieur des "entitées" et du "document", c'est à dire trouver moyen simple de supporter et implémenter l'idée tout en évitant d'enregistrer les balises comme partie intégrante des blocs (de texte)
  * retiré
 - [ ] Page admin avec stats, #auteurs, #romans, etc???
-- [ ] fonction XHR pour enregister les changements aux entitées (contenu, deleted, sticky)
-- [ ] fonction XHR pour enregistrer le document
+- [x] fonction XHR pour enregister les changements aux entitées (contenu, deleted, sticky)
+- [x] fonction XHR pour enregistrer le document
 - [ ] lire plus sur le mécanisme de drag&drop pour savoir comment aborder le réordonnement des entitées --> http://www.html5rocks.com/en/tutorials/dnd/basics/ --> Modernizr --> pas compliqué juste 30-40 lignes de JS
 - [x] permettre de dragger une "note" sur le document et ça fait copy-paste?
  * retiré

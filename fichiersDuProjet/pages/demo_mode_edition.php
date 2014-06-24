@@ -11,6 +11,8 @@ include "../assets/inc/header.inc.php";
 <button type="button" id="btn_lireEntites" form="form_question">Lire Entitées</button>
 <button type="button" id="btn_saveEntite" form="form_question">INSERT Entitées</button>
 <button type="button" id="btn_updEntite" form="form_question">UPDATE Entitées</button>
+<button type="button" id="btn_moveEntite" form="form_question">DEPLACER Entitées</button>
+<button type="button" id="btn_deleteEntite" form="form_question">EFFACER Entitées</button>
 <div id="container_entites"></div>
 <?php
 include "../assets/inc/footer.inc.php"
