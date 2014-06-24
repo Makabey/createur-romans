@@ -29,27 +29,23 @@ code {
 }
 
 
-/* Custom page CSS
--------------------------------------------------- */
-/* Not required for template or sticky footer method. */
-
-
-/* Accueil */
+/* ACCUEIL */
 .container > .titre{
 	display: inline-block;
 	width: 50%;
 	min-width: 265px;
-	position: absolute;
-	left: 0;
-	top: 100px;
 }
-
-/* LOGIN FORM */
+/* NAV & HEADER */
+.navbar-header a > img{
+	max-width: 35px;
+}
+/* REGISTER FORM */
 .form-signin {
 	max-width: 330px;
 	padding: 15px;
 	position: absolute;
 	right: 50px;
+	top: 48px;
 	width: 300px;
 	vertical-align: top;
 }
@@ -72,15 +68,36 @@ code {
 .form-signin .form-control:focus {
   z-index: 2;
 }
-.form-signin input[type="email"] {
+.form-signin input:nth-of-type(2),
+.form-signin input:nth-of-type(3) {
+	border-radius: 0;
+	margin-bottom: -1px;
+}
+.form-signin input:first-of-type {
 	margin-bottom: -1px;
 	border-bottom-right-radius: 0;
 	border-bottom-left-radius: 0;
 }
-.form-signin input[type="password"] {
+.form-signin input:last-of-type {
 	margin-bottom: 10px;
 	border-top-left-radius: 0;
 	border-top-right-radius: 0;
+}
+/* ACCUEIL */
+@media (max-width: 678px) {
+.container > .titre{
+		width: 100%;
+		min-width: 265px;
+		display: block;
+		position: static;
+		margin-left: 20px;
+	}
+	.form-signin {
+		display: block;
+		position: static;
+		max-width: 100%;
+		width: 100%;
+	}
 }
 @media (min-width: 768px) {
 	  .container > .titre{
@@ -88,7 +105,7 @@ code {
 		min-width: 265px;
 	}
 
-	/* LOGIN FORM */
+	/* REGISTER FORM */
 	.form-signin {
 		max-width: 330px;
 		padding: 15px;
@@ -96,4 +113,92 @@ code {
 	}
 }
 
+/* USER_VIEW */
+/*
+ * Style tweaks
+ * --------------------------------------------------
+ */
+.user_view html,
+.user_view body {
+  overflow-x: hidden; /* Prevent scroll on narrow devices */
+}
+.user_view body {
+  padding-top: 70px;
+}
+.user_view footer {
+  padding: 30px 0;
+}
+.container > div > div{
+	width: 100%;
+}
+.container > div > div > div > div{
+	border: 1px solid #ccc;
+	cursor: pointer;
+	margin-left: -1px;
+	margin-bottom: -1px;
+	height: 220px;
+}
+.container > div > div > div > div:hover{
+	border: 1px solid #3276b1;
+	z-index: 1000;
+}
+.nouveau_img{
+	max-width: 70px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-top: -35px;
+	margin-left: -35px;
+	opacity: 0.3;
+}
+.last-cell h2{
+	opacity: 0.5;
+}
+.last-cell{
+	text-align: center;
+}
+/*
+ * Off Canvas
+ * --------------------------------------------------
+ */
+@media screen and (max-width: 767px) {
+  .row-offcanvas {
+    position: relative;
+    -webkit-transition: all .25s ease-out;
+       -moz-transition: all .25s ease-out;
+            transition: all .25s ease-out;
+  }
+
+  .row-offcanvas-right {
+    right: 0;
+  }
+
+  .row-offcanvas-left {
+    left: 0;
+  }
+
+  .row-offcanvas-right
+  .sidebar-offcanvas {
+    right: -50%; /* 6 columns */
+  }
+
+  .row-offcanvas-left
+  .sidebar-offcanvas {
+    left: -50%; /* 6 columns */
+  }
+
+  .row-offcanvas-right.active {
+    right: 50%; /* 6 columns */
+  }
+
+  .row-offcanvas-left.active {
+    left: 50%; /* 6 columns */
+  }
+
+  .sidebar-offcanvas {
+    position: absolute;
+    top: 0;
+    width: 50%; /* 6 columns */
+  }
+}
 
