@@ -1,6 +1,8 @@
 "use strict";
-
+/*
+En fait je corrige le XHR deja donc le finir avant
 RENDU ICI a corriger pour que mes fichiers soient standards
+*/
 
 /*
 	Le texte principal est lu au chargement de la page puis à chaque "iFrequenceSauvegarde_TextePrincipal"
@@ -104,7 +106,7 @@ $(function(){
 
 	$("#btn_updEntite").click(function(){
 		var typeEntite = "qui";
-		var idEntite = 12;
+		var idEntite = 11;
 		var titre = "updated2";
 		var contenu = 'whacka';
 		var note = "hum";
@@ -170,7 +172,7 @@ function sauvegarderTextePrincipal(id_balise){
 	$("#temoin_activite").css("background-color", ($("#temoin_activite").css("background-color") == "rgb(255, 255, 0)")?"blue":"yellow");
 
 	if($("#main_write").data("dirtyBit") === true){
-		execXHR_Request("../assets/xhr/editionProjet.xhr.php", "oper=ecrire&typeEntite=textePrincipal&idRoman="+nroRoman+"&donnees="+texte_encoder, lancerDelaiSauvegardeTextePrincipal, traiterErreurs);
+		execXHR_Request("../assets/xhr/editionProjet.xhr.php", "oper=ecrire&typeEntite=textePrincipal&idRoman="+nroRoman+"&contenu="+texte_encoder, lancerDelaiSauvegardeTextePrincipal, traiterErreurs);
 		console.log("sauvegarderTextePrincipal("+id_balise+") / DirtyBit :: True");
 	}else{
 		gbl_DelaiSauvegarde_TextePrincipal = setTimeout('sauvegarderTextePrincipal("main_write")', iFrequenceSauvegarde_TextePrincipal);
