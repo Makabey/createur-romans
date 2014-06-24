@@ -21,11 +21,11 @@ function execXHR_Request(urlAuthentify, queryString, fct_callBack, fct_callError
 					On s'attend à toujours avoir un retour de forme
 					"0¬MessageErreur" ou "1¬Donnees" et donc 0==false
 				*/
-				//console.log(xhr.responseText);
 				xhrAnswer = xhr.responseText.split('¬');
-				//console.log(xhrAnswer);
 				var retour = (xhrAnswer.length > 1)?xhrAnswer[1]:xhrAnswer[0];
-				//console.log(retour);
+				console.log("[xhrFunctions] " + xhr.responseText);
+				console.log("[xhrFunctions] " + xhrAnswer);
+				console.log("[xhrFunctions] " + retour);
 				if(xhrAnswer[0][0] == "1" ){ // TRUE, pas d'erreur
 					if(typeof fct_callBack === 'function'){
 						fct_callBack(retour);

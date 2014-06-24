@@ -21,7 +21,7 @@ if(!is_object($db)){
 $resultat = false;
 switch($_POST['oper']){
 	case 'lireGenres':
-		$resultat = lireGenreLitteraires();
+		$resultat = lireGenreLitteraires($db);
 		break;
 
 	case 'lireQuestions':
@@ -33,7 +33,7 @@ switch($_POST['oper']){
 			if(false === $pos){
 				$resultat = '0¬"genre" unknown value "' . $_POST["genre"] . '"';
 			}else{
-				$resultat = lireQuestions($_POST['genre']);
+				$resultat = lireQuestions($db, $_POST['genre']);
 			}
 		}
 		break;
@@ -49,11 +49,11 @@ exit();
 /*
 	FONCTIONS
 */
-function lireGenreLitteraires(){
+function lireGenreLitteraires($db){
 	/*
-		Extraire de la BD une copie de chaques noms "Genre LIttéraire"
+		Extraire de la BD une copie de chaques noms "Genre Littéraire"
 	*/
-	global $db;
+	#global $db;
 	$query = "SELECT DISTINCT nom FROM genres_litteraires;";
 
 	$result = $db->query ($query);
@@ -73,11 +73,11 @@ function lireGenreLitteraires(){
 	return $resultat;
 }
 
-function lireQuestions($genre){
+function lireQuestions($db, $genre){
 	/*
 		En accord avec $_POST['genre'] , lire les questions et retourner tout en bloc
 	*/
-	global $db;
+	#global $db;
 	#$arrChamps_genres_litteraires = array('nom', 'nro_question', 'texte', 'type_input', 'valeurs_defaut', 'bouton_fonction');
 	$arrChamps_genres_litteraires = array('nro_question', 'texte', 'type_input', 'valeurs_defaut', 'bouton_fonction'); // j'ai enlevé le champs 'nom' pour que ça fasse moins de données retournés
 
