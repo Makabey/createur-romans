@@ -19,12 +19,12 @@
 			'bouton_fonction => vide/NULL, ne sert pas pour les 'select'
 
 ===chronologie des fonctions:
-	-xhrFunctions.js::execXHR_Request ( genres Littéraire [creationProjet.xhr.php =>  db_access.php])
+	-xhrFunctions.js::execXHR_Request ( genres Littéraire [creationProjet.xhr.php => db_access.php])
 	-attente du retour XHR
 	-appel à "afficherGenres"
 	-attente de réponse de l'usager
 	-appel à '$("#button_nextQuestion").click'
-	-xhrFunctions.js::execXHR_Request ( questions selon GL sélectionné [creationProjet.xhr.php =>  db_access.php])
+	-xhrFunctions.js::execXHR_Request ( questions selon GL sélectionné [creationProjet.xhr.php => db_access.php])
 	-attente du retour XHR
 	-appel à "afficherQuestions"
 	-attente de réponse de l'usager
@@ -68,7 +68,7 @@ $(function(){
 		*/
 		var strFonction = $(this).data("fonction").split('(');
 		strFonction[1] = (strFonction[1].substring(0, strFonction[1].length-1)).split(','); // contient les paramètres passés
-		var fn  = window[strFonction[0]];
+		var fn = window[strFonction[0]];
 		if(typeof fn === 'function'){
 			fn.apply($(this), strFonction[1]);
 		}else{
@@ -224,7 +224,7 @@ function generer_nom(min_chars, max_chars, word_count){
 /*
 	WRAPPERS
 */
-function 	lireGenresLitteraires(fctTraitementPositif, fctTraitementNegatif){
+function lireGenresLitteraires(fctTraitementPositif, fctTraitementNegatif){
 	var XHR_Query = "oper=lireGenres";
 	execXHR_Request("../assets/xhr/creationProjet.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }

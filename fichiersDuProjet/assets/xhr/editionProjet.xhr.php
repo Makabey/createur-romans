@@ -2,20 +2,72 @@
 /*
 
 TODO:
-	1. Créer un premier bloc (qui fini avec un commentaire / * ================ * / ) qui valide rapidement les incontournables comme oper, typeEntite, idRoman
-	2. Réécrire le gros "if(oper = ceci){}" pour devenir un switch qui appelle des fonctions
-	3. Les fonctions ne doivent plus valider si un param $_POST est disponible ou non, le switch le fait avant de les appeller (il doit chercher les params appropriés, ex: entre le Texte Principal et les Entitées, les besoins varient un peu, l'un peux vouloir un 'target', l'autre un 'idEntite' ou autre, à vérifier)
-	4. voir s'il y as du code qu'il est possible d'éviter de dupliquer
-	5. réécrire les contenus de demo_mode_edition et modecreationv2 pour pousser le max de JS en dehors (fichi ext) et p-ê créer des fonctions wrapper (qui ne feraient que lister les params requis ou alors auraient aussi un petit peu de validation pour s'assurer qu'un params qui doit être un chiffre ne peux pas être une chaine (ex: si on évalue avec parseInt, on as un chiffre > 0))
+	5. faire un peu de validation de type dans les Wrapper JS ?
 	6. validation du contenu du texte principal et des entitées pour transformer ou rejetter les balises avant d'envoyer dans la BD
+	8. modifier les fonctions pour mettre un IF sur $_POST['typeEntite'] au lieu d'un SWITCH parce que j'ai ajouté une validation au début (qui s'occupe du "option invalide"), on peux donc avoir 'textePrincipal' et ELSE
+	9. retirer le besoin pour 'typeEntite' partout où c'est possible, surtout considérant que, tant qu'on parle des entitées, on peux faire presque tout seulement avec leur ID_entite pour les identifier de façon unique.
+	10. BUG :: si on change l'état DELETED, les entitées pointées par PREV/NEXT de l'entitée retirée ne sont -pas- corrigées ni au retrait, ni à la récupération, à corriger dès que possible
 */
+/*
+---Pour oper = lire
+entrées::
+typeEntite doit être l'un de : quoi, ou, comment, pourquoi, qui, textePrincipal
+ID_roman doit etre un chiffre
+target doit être le ID d'une balise qui recevra tout le contenu, p-ê trouver un moyen pour ne pas avoir à le passer ici, la nécessitée est née de mon obstination à ne pas vouloir laisser trainer une variable globale contenant la valeur ou le hardcoder dans la fonction de réception laquelle ne pourrais traiter alors qu'une seule valeur parmis "quoi, ou, comment, pourquoi, qui", la solution étant probablement 5 variations de la fonction et de la duplication inutile de code DONC une autre solution serait une fonction capable de savoir où elle en est et rappeller la fonction XHR pour passer d'un onglet (quoi, ou, comment, pourquoi, qui ) à l'autre....
 
+sorties::
+pour textePrincipal, seulement le texte
+pour les autres, à l'index #0 on as le target, càd le ID de la balise qui doit recevoir le code/l'affichage, le type de l'entite principalement pour différentier les ID des DIVs contenant la fiche de l'entite et "first" contenant le ID_entite de celle qui est la première parce que son ID_prev=0, le reste sont les données désirées et on peux donc partir de "first" pour suivre les fichers et les afficher dans l'ordre dicté.
 
+============================
+---Pour oper = ecrire
+entrées::
+idEntite le ID de l'Entite
+typeEntite doit être l'un de : quoi, ou, comment, pourquoi, qui, textePrincipal
+ID_roman doit etre un chiffre
+contenu, titre et note qui sont le contenu de la fiche
+=ou=
+contenu seul pour 'textePrincipal'
+
+sortie::
+résultat de l'opération
+
+============================
+---Pour oper = deplacer
+entrées::
+prev/next qui sont les nouvelles valeurs pour les champs correspondant et utile lorsqu'on déplace les entitées visuellement dans l'interface
+idEntite le ID de l'Entite
+typeEntite ne peux pas être 'textePrincipal'
+nvTypeEntite si specifié, change le type de l'entité, ne peux pas etre 'textePrincipal', servirais si on permet de déplacer entre les types
+
+sortie::
+résultat de l'opération
+
+============================
+---Pour oper = effacer
+entrées::
+etat si omis alors défaut à 1 sinon valeurs valides sont 1, 'true', 'vrai' pour effacer, toute autre valeur est considérée 'false'
+idEntite le ID de l'Entite
+typeEntite ne peux pas être 'textePrincipal'
+
+sorties::
+résultat de l'opération
+
+============================
+--Pour oper = inserer
+entrès::
+titre, contenu, note
+typeEntite tout sauf 'textePrincipal'
+
+sorties::
+résultat de l'opération
+
+*/
 
 require_once "../inc/db_access.inc.php";
 require_once "../inc/library01.inc.php";
 
-if(!isset($_POST['oper']) || !isset($_POST['typeEntite']) || !isset($_POST['idRoman'])){
+if(!isset($_POST['oper']) || !isset($_POST['idRoman'])){ // || !isset($_POST['typeEntite'])
 	// Pour JavaScript : 0/1 : false/true ¬ texte erreur
 	echo '0¬A required parameter (either "oper", "typeEntite" or "idRoman"), is missing';
 	exit();
@@ -24,6 +76,12 @@ if(!isset($_POST['oper']) || !isset($_POST['typeEntite']) || !isset($_POST['idRo
 $_POST['idRoman'] += 0;
 if($_POST['idRoman'] <= 0){
 	echo '0¬Invalid value for "idRoman"';
+	exit();
+}
+
+$arrValidEntities = array('quoi', 'ou', 'comment', 'pourquoi', 'qui', 'textePrincipal');
+if(!in_array($_POST['typeEntite'], $arrValidEntities)){
+	echo "0¬Invalid value for 'typeEntite'";
 	exit();
 }
 
@@ -49,171 +107,63 @@ switch($_POST['oper']){
 		break;
 
 	case 'ecrire':
-		if((isset($_POST['contenu']) && isset($_POST['titre']) && isset($_POST['note']) && $_POST['typeEntite'] != 'textePrincipal') xor
-			(isset($_POST['prev']) && isset($_POST['next']) && $_POST['typeEntite'] != 'textePrincipal') xor
-			(isset($_POST['contenu']) && isset($_POST['idRoman']) && $_POST['typeEntite'] == 'textePrincipal')
+		if(isset($_POST['contenu']) &&
+			(($_POST['typeEntite'] != 'textePrincipal' && isset($_POST['idEntite']) && isset($_POST['titre']) && isset($_POST['note'])) xor
+			($_POST['typeEntite'] == 'textePrincipal'))# && isset($_POST['idRoman'])))
 			){
 			$resultat = miseAJourDonneesEntite($db);
 		}else{
-			$resultat = "0¬Either all of 'contenu' and 'prev' are missing or one of their components are missing or you specified all three of them.";
+			$resultat = "0¬Specify either contenu, titre, note, idEntite and typeEntite != 'textePrincipal' -or- contenu, idRoman and typeEntite = 'textePrincipal' but not both branches.";
 		}
 		break;
 
+	case 'deplacer':
+		if(isset($_POST['idEntite']) && isset($_POST['prev']) && isset($_POST['next']) && $_POST['typeEntite'] != 'textePrincipal'){
+			if(isset($_POST['nvTypeEntite'])){
+				if($_POST['nvTypeEntite'] == 'textePrincipal'){
+					$resultat = "0¬Illegal value 'textePrincipal' for parameter 'nvTypeEntite'.";
+				}else if($_POST['nvTypeEntite'] == $_POST['typeEntite']){
+					unset($_POST['nvTypeEntite']);
+			#		$resultat = miseAJourDonneesEntite($db);
+			#	}else{
+			#		$resultat = miseAJourDonneesEntite($db);
+				}
+			}
+			#}else{
+			if(false === $resultat){
+				$resultat = miseAJourDonneesEntite($db);
+			}
+		}else{
+			$resultat = "0¬Missing either prev, next or idEntite -or- typeEntite = 'textePrincipal' when it shouldn't be.";
+		}
+		break;
 
-		ou j'en suis ::
-		-écrire + textePrincipal : ok
-		-érire + entitÉ : ok
-		-écrire + prev : à tester
-		-effacer + delete : à réécrire/implémenter
-		=autres : à réécrire/implémenter
-		
-		
-/*
----Pour oper = lire
-entrées::
-typeEntite doit être l'un de : quoi, ou, comment, pourquoi, qui, textePrincipal
-ID_roman doit etre un chiffre
-target doit être le ID d'une balise qui recevra tout le contenu, p-ê trouver un moyen pour ne pas avoir à le passer ici, la nécessitée est née de mon obstination à ne pas vouloir laisser trainer une variable globale contenant la valeur ou le hardcoder dans la fonction de réception laquelle ne pourrais traiter alors qu'une seule valeur parmis "quoi, ou, comment, pourquoi, qui", la solution étant probablement 5 variations de la fonction et de la duplication inutile de code DONC une autre solution serait une fonction capable de savoir où elle en est et rappeller la fonction XHR pour passer d'un onglet (quoi, ou, comment, pourquoi, qui ) à l'autre....
+	case 'effacer':
+		if(isset($_POST['idEntite']) && $_POST['typeEntite'] != 'textePrincipal'){
+			if(!isset($_POST['etat'])) { $_POST['etat'] = 1; }
+			if(is_numeric($_POST['etat'])){
+				$_POST['etat']+=0;
+				if($_POST['etat'] !=1) $_POST['etat']=0;
+			}else{
+				$_POST['etat'] = strtolower($_POST['etat']);
+				$_POST['etat'] = ($_POST['etat'] == "true" || $_POST['etat'] == "vrai")?1:0;
+			}
+			$resultat = miseAJourDonneesEntite($db);
+		}else{
+			$resultat = "0¬Missing either etat or idEntite -or- typeEntite = 'textePrincipal' when it shouldn't be.";
+		}
+		break;
 
-sorties::
-pour textePrincipal, seulement le texte
-pour les autres, à l'index #0 on as le target, càd le ID de la balise qui doit recevoir le code/l'affichage, le type de l'entite principalement pour différentier les ID des DIVs contenant la fiche de l'entite et "first" contenant le ID_entite de celle qui est la première parce que son ID_prev=0, le reste sont les données désirées et on peux donc partir de "first" pour suivre les fichers et les afficher dans l'ordre dicté.
-
----Pour oper=ecrire
-entrées::
-typeEntite doit être l'un de : quoi, ou, comment, pourquoi, qui, textePrincipal
-ID_roman doit etre un chiffre
-contenu, titre et note qui sont le contenu de la fiche
-=ou=
-contenu seul pour 'textePrincipal'
-=ou=
-pref/next qui sont les nouvelles valeurs pour les champs correspondant et utile lorsqu'on déplace les entitées visuellement dans l'interface
-
-
-
-et effacer...
-
-*/
-
-/*
-		rendu à faire le mode ercire puis effacer en validant que j'ai tout ce que j'ai besoin en post pour chacun
-||
-($_POST['oper'] == 'effacer' && isset($_POST['delete']))
-*/
+	case 'inserer':
+		if(isset($_POST['titre']) && isset($_POST['contenu']) && isset($_POST['note']) && $_POST['typeEntite'] != 'textePrincipal'){
+			$resultat = insererEntite($db);
+		}else{
+			$resultat = "0¬Missing either idRoman, typeEntite, titre, contenu or note -or- typeEntite = 'textePrincipal' when it shouldn't be.";
+		}
+		break;
 
 	default: $resultat = '0¬"' . $_POST["oper"] . '" unknown value for parameter "oper"';
 }
-
-/* =================================================== */
-
-function miseAJourDonneesEntite($db){
-/*if(
-($_POST['oper'] == 'effacer' && isset($_POST['delete']))
-){*/
-	$resultat = false;
-
-	switch($_POST['typeEntite']){
-		case 'quoi' :
-		case 'ou' :
-		case 'comment' :
-		case 'pourquoi' :
-		case 'qui' :
-			$query = 'UPDATE entites SET ';
-			if(isset($_POST['contenu'])){ // Mise à jour intégrale
-				/*
-					TODO: validation des valeurs de contenu, titre, note
-				*/
-				$query .= "titre = \"{$_POST['titre']}\", contenu = \"{$_POST['contenu']}\", note = \"{$_POST['note']}\"";
-			}else if(isset($_POST['prev'])){ // l'entite as été visuellement déplacée, la partie de manipulation des autres autour d'elle relève du code JS
-				$query .= 'ID_prev = ' . $_POST['prev'] . 'ID_next = ' . $_POST['next'];
-			}else if(isset($_POST['delete'])){ // ont veux "effacer" l'entitee
-				$query .= 'deleted = ' . (($_POST['delete'] == '1' || $_POST['delete'] == "true")?1:0);
-			}
-
-			$query .= ' WHERE ID_entite = ' . $_POST['idEntite'] . ';';
-			break;
-		case 'textePrincipal' :
-			/*
-				TODO: validation valeur de contenu, spécialement si les règles sont autres que pour les entités
-			*/
-			$query = 'UPDATE roman_texte SET contenu = "' . $_POST['contenu'] . '" WHERE ID_roman=' . $_POST['idRoman'] . ';';
-			break;
-		default:
-			$resultat = "0¬[" . __FUNCTION__ . "] Invalid value for 'typeEntite'";
-	}
-
-	if($resultat === false){
-		$result = $db->query ($query);
-		if(false !== $result){
-			$resultat = "1¬[" . __FUNCTION__ . "] UPDATE successful :: '$query'";
-		}else{
-			$resultat = "0¬[" . __FUNCTION__ . "] An error occured during an UPDATE operation. (query = '$query')";
-		}
-	}
-	return $resultat;
-}
-
-if($_POST['oper'] == 'inserer'){ // pour le moment ne s'appliquerais qu'aux entitées
-/*echo "0¬rendu a inserer";
-exit();*/
-
-	if(!isset($_POST['idRoman']) || !isset($_POST['typeEntite']) || !isset($_POST['titre']) || !isset($_POST['contenu']) || !isset($_POST['note'])){
-		$resultat = "0¬[" . __FUNCTION__ . "] Expected all of those : idRoman, typeEntite, titre, contenu, note";
-	}else{
-/*echo "0¬apres verification touts champs la";
-exit();*/
-
-		/*
-			1. noter selon roman et typeEntite, le ID_entite de celui qui as next=0
-			2. ecrire la nouvelle entite avec prev = ID_entite trouvé en etape 1 (et son next=0! :) )
-			3. lire le nouvel ID_entite ($mysqli->insert_id) et copier dans celui en etape 1
-
-			tests :
-			- 1er d'un type
-			- [x] Xeme d'un type
-			- [x]donnees avec guillement et apostrophes
-				* avec apostrophe passe bien, tester plus
-				* pour les guillemets, je dois mettre \\" , trouver la bonne fonction pour escaper les chars, à moins de mettre des entities
-			- [x] params manquant
-		*/
-		$query = 'SELECT ID_entite FROM entites WHERE ID_next = 0 AND ID_roman = ' . $_POST['idRoman'] . ' AND typeEntite = "' . $_POST['typeEntite'] . '";';
-
-		/*echo "1¬Query = ' $query '";
-		exit();*/
-
-		$result = $db->query ($query);
-		if(false !== $result){
-			$row = $result->fetch_row();
-			$ID_prev = $row[0]+0; // Le "+0" est pour les cas où le nouvel enregistrement est le premier pour un type d'entite, évite de faire un appel à $result->num_rows
-			$query = 'INSERT INTO entites (ID_roman, ID_prev, ID_next, typeEntite, titre, contenu, note) VALUES (' . $_POST['idRoman'] . ', ' . $ID_prev . ', 0, "' . $_POST['typeEntite'] . '", "' . $_POST['titre'] . '", "' . $_POST['contenu'] . '", "' . $_POST['note'] . '");';
-
-			/*echo "1¬ID_prev = $ID_prev :: Query = ' $query '";
-			exit();*/
-
-			$result = $db->query ($query);
-			if(false !== $result){
-				$ID_entite = $db->insert_id;
-				$query = 'UPDATE entites SET ID_next = ' . $ID_entite . ' WHERE ID_entite = ' . $ID_prev . ';';
-
-				/*echo "1¬Query = ' $query '";
-				exit();*/
-				$result = $db->query ($query);
-				if(false !== $result){
-					$resultat = "1¬[" . __FUNCTION__ . "] INSERT successful. New ID is " . $ID_entite;
-				}else{
-					$resultat = "0¬[" . __FUNCTION__ . "] An error occured during an UPDATE operation. (query = '$query')";
-				}
-			}else{
-				$resultat = "0¬[" . __FUNCTION__ . "] An error occured during an INSERT operation. (query = '$query')";
-			}
-		}else{
-			$resultat = "0¬[" . __FUNCTION__ . "] An error occured during a SELECT operation. (query = '$query')";
-		}
-	}
-#}else{
-#	$resultat = "0¬[" . __FUNCTION__ . "] Unknown operation '" . $_POST['oper'] . "'";
-}
-
 
 echo $resultat; /* résultat final retourné à XHR */
 exit();
@@ -279,6 +229,96 @@ function lireDonneesEntite($db){
 		}else{
 			$resultat = "0¬[" . __FUNCTION__ . "] An error occured during a SELECT operation. (query = '$query')";
 		}
+	}
+	return $resultat;
+}
+
+
+function miseAJourDonneesEntite($db){
+	global $arrValidEntities;
+	$resultat = false;
+
+	switch($_POST['typeEntite']){
+		case 'quoi' :
+		case 'ou' :
+		case 'comment' :
+		case 'pourquoi' :
+		case 'qui' :
+			$query = 'UPDATE entites SET ';
+			if(isset($_POST['contenu'])){ // Mise à jour intégrale
+				/*
+					TODO: validation des valeurs de contenu, titre, note
+				*/
+				$query .= "titre = \"{$_POST['titre']}\", contenu = \"{$_POST['contenu']}\", note = \"{$_POST['note']}\"";
+			}else if(isset($_POST['prev'])){ // l'entite as été visuellement déplacée, la partie de manipulation des autres autour d'elle relève du code JS
+				$query .= 'ID_prev = ' . $_POST['prev'] . ', ID_next = ' . $_POST['next'];
+				if(isset($_POST['nvTypeEntite'])){
+					if(!in_array($_POST['nvTypeEntite'], $arrValidEntities)){
+						$resultat = "0¬[" . __FUNCTION__ . "] Invalid value for 'nvTypeEntite'";
+					}
+					$query .= ', typeEntite = "' . $_POST['nvTypeEntite'] . '"';
+				}
+			}else if(isset($_POST['etat'])){ // ont veux "effacer" l'entitee
+				$query .= 'deleted = ' . $_POST['etat'];
+			}// à moins d'erreur dans le code plus haut, je n'ai pas besoin d'un ELSE ultime
+
+			$query .= ' WHERE ID_entite = ' . $_POST['idEntite'];
+			#if(!isset($_POST['nvTypeEntite'])){
+				$query .= ' AND typeEntite = "' . $_POST['typeEntite'] . '"';
+			#}
+			$query .= ';';
+			break;
+		case 'textePrincipal' :
+			/*
+				TODO: validation valeur de contenu, spécialement si les règles sont autres que pour les entités
+			*/
+			$query = 'UPDATE roman_texte SET contenu = "' . $_POST['contenu'] . '" WHERE ID_roman=' . $_POST['idRoman'] . ';';
+			break;
+		default:
+			$resultat = "0¬[" . __FUNCTION__ . "] Invalid value for 'typeEntite'";
+	}
+
+	if($resultat === false){
+		$result = $db->query ($query);
+		if(false !== $result){
+			if($db->affected_rows){
+				$resultat = "1¬[" . __FUNCTION__ . "] UPDATE successful :: '$query'";
+			}else{
+				$resultat = "0¬[" . __FUNCTION__ . "] UPDATE didn't occur :: '$query'";
+			}
+		}else{
+			$resultat = "0¬[" . __FUNCTION__ . "] An error occured during an UPDATE operation. (query = '$query')";
+		}
+	}
+	return $resultat;
+}
+
+
+function insererEntite($db){ // pour le moment ne s'appliquerais qu'aux entitées
+	$query = 'SELECT ID_entite FROM entites WHERE ID_next = 0 AND ID_roman = ' . $_POST['idRoman'] . ' AND typeEntite = "' . $_POST['typeEntite'] . '";';
+
+	$result = $db->query ($query);
+	if(false !== $result){
+		$row = $result->fetch_row();
+		$ID_prev = $row[0]+0; // Le "+0" est pour les cas où le nouvel enregistrement est le premier pour un type d'entite, évite de faire un appel à $result->num_rows
+		$query = 'INSERT INTO entites (ID_roman, ID_prev, ID_next, typeEntite, titre, contenu, note) VALUES (' . $_POST['idRoman'] . ', ' . $ID_prev . ', 0, "' . $_POST['typeEntite'] . '", "' . $_POST['titre'] . '", "' . $_POST['contenu'] . '", "' . $_POST['note'] . '");';
+
+		$result = $db->query ($query);
+		if(false !== $result){
+			$ID_entite = $db->insert_id;
+			$query = 'UPDATE entites SET ID_next = ' . $ID_entite . ' WHERE ID_entite = ' . $ID_prev . ';';
+
+			$result = $db->query ($query);
+			if(false !== $result){
+				$resultat = "1¬[" . __FUNCTION__ . "] INSERT successful. New ID is " . $ID_entite;
+			}else{
+				$resultat = "0¬[" . __FUNCTION__ . "] An error occured during an UPDATE operation. (query = '$query')";
+			}
+		}else{
+			$resultat = "0¬[" . __FUNCTION__ . "] An error occured during an INSERT operation. (query = '$query')";
+		}
+	}else{
+		$resultat = "0¬[" . __FUNCTION__ . "] An error occured during a SELECT operation. (query = '$query')";
 	}
 	return $resultat;
 }
