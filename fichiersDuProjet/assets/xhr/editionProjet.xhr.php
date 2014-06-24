@@ -6,6 +6,7 @@ TODO:
 	6. validation du contenu du texte principal et des entitées pour transformer ou rejetter les balises avant d'envoyer dans la BD
 	8. modifier les fonctions pour mettre un IF sur $_POST['typeEntite'] au lieu d'un SWITCH parce que j'ai ajouté une validation au début (qui s'occupe du "option invalide"), on peux donc avoir 'textePrincipal' et ELSE
 	9. retirer le besoin pour 'typeEntite' partout où c'est possible, surtout considérant que, tant qu'on parle des entitées, on peux faire presque tout seulement avec leur ID_entite pour les identifier de façon unique.
+	10. BUG :: si on change l'état DELETED, les entitées pointées par PREV/NEXT de l'entitée retirée ne sont -pas- corrigées ni au retrait, ni à la récupération, à corriger dès que possible
 */
 /*
 ---Pour oper = lire
