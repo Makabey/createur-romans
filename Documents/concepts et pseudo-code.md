@@ -14,6 +14,7 @@ To Do:
 - [ ] lire à propos de et prévoir XSS
 - [ ] lire à propos de et prévoir SQL injection
 - [ ] lire à propos de et implémenter mdp encryptés? voir http://glynrob.com/javascript/client-side-hashing-and-encryption/
+- [ ] encryption des données usager?
 - [ ] lire les APIs de G+ et F pour le login
 - [ ] fichier XHR + code JS pour query de validité usager (usr+pwd)
 - [ ] fichier XHR + code JS pour query de disponiblité nom usager, à moins de fusionner avec "validité" et d'utiliser les codes de retour ex:
@@ -21,6 +22,7 @@ To Do:
   * 1=usager existant (usager indisponible ou nom bien tapé),
   * 2=mot de passe invalide,
   * 3=mot de passe OK (-doit- sous-entendre usager existant) ; suppose que le champs PWD peux être vide et si c'est le cas la validation du PWD n'est pas faite donc pas de code 2 erroné
+- [ ] si on encrypte les données ET qu'on n'enregistre pas le MdP sur le serveur, par sécurité, ça veux dire qu'on peux associer les données au nom d'usager et que seul le bon mot de passe décrypte correctement les données, donc pas de validation MdP, je dois lire plus pour voir si j'ai bien compris comment implémenter un MdP qui n'est pas sauvé (même encrypté) sur le serveur. Implémenter?
 - [x] reprendre assets/inc/header.inc.php et corriger la description et les keywords, autant faire ça correctement pour le SEO ;)
 - [ ] voir http://www.fakenamegenerator.com/faq.php :: http://www.roguebasin.com/index.php?title=Random_name_generation :: http://www.godpatterns.com/2005/09/name-generators-for-npcs-to-populate.html
 
@@ -29,13 +31,16 @@ To Do:
 
 ####Page creationProjet ::
 - [x] est-ce qu'on veux qu'il soit possible de suspendre l'assistant et reprendre au même endroit?
+	* retiré
 - [x] créer une page pour "créer" les genres littéraire ds la BD?
 	* retiré
 - [x] page admin pour pouvoir ajouter personnages.role_fonction, personnages.role_poid, lieux.type_environnement, lieux.type_acces ??
+	* retiré
 - [x] fonction qui ne retourne -que- les noms/ID des genres
 - [x] déterminer si pour la lecture des données du genre choisi, une seule fonction retourne tout ou si on as une fonction qui initialise(avec retour de la première question et du nombre total de questions) et une qui demande la suite pour répondre FALSE s'il n'y as rien d'autres ?
 - [x] fonction avec jQuery pour créer les balises nécessaire pour afficher les questions
 - [ ] fonction qui enregistre tout
+- [ ] fonction pour créer le Roman dans les tables roman_details et roman_texte
 
 ####Page editionProjet
 - [x] décider si mettre "roman.contenu" dans fichier texte séparé au lieu de MySQL? <-- pê exagéré pour la démo??
