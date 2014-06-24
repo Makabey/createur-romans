@@ -36,17 +36,17 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Project name</a>
+          <a class="navbar-brand" href="#"><img src="images/logo.png" alt="créateur roman, bienvenue" />Créateur Roman</a>
         </div>
         <div class="navbar-collapse collapse">
           <form class="navbar-form navbar-right" role="form">
             <div class="form-group">
-              <input type="text" placeholder="Email" class="form-control">
+              <input type="text" placeholder="Identifiant" class="form-control">
             </div>
             <div class="form-group">
-              <input type="password" placeholder="Password" class="form-control">
+              <input type="password" placeholder="Mot de passe" class="form-control">
             </div>
-            <button type="submit" class="btn btn-success">Sign in</button>
+            <button type="submit" class="btn btn-success">Connexion</button>
           </form>
         </div><!--/.navbar-collapse -->
       </div>
@@ -57,21 +57,30 @@
 			<h1>Créateur Roman</h1>
 			<p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
 			<p><a href="#" class="btn btn-primary btn-lg" role="button">En savoir plus</a></p>
+			<div class="video">
+				<video width="100%" height="240">
+				  <source src="movie.mp4" type="video/mp4">
+				  <source src="movie.ogg" type="video/ogg">
+				Your browser does not support the video tag.
+				</video>
+			</div>
 		</div>
+		
 		
 		<form class="form-signin" role="form">
 			<h2 class="form-signin-heading">S'inscrire</h2>
 			<p>C'est rapide et gratuis !</p>
+			<input type="user" class="form-control" placeholder="Choisir un identifiant" required>
 			<input type="email" class="form-control" placeholder="Votre courriel" required>
-			<input type="email" class="form-control" placeholder="Confirmer votre courriel" required>
 			<input type="password" class="form-control" placeholder="Créer un mot de passe" required>
+			<input type="password" class="form-control" placeholder="Confirmer le mot de passe" required>
 			<button class="btn btn-lg btn-primary btn-block" type="submit">S'inscrire</button>
 		</form>
     </div>
 	
 	<div id="footer">
       <div class="container">
-        <p class="text-muted">Place sticky footer content here.</p>
+        <p class="text-muted">Création: Éric Robert, Thomas A. Séguin et Olivier Berthier</p>
       </div>
     </div>
 
