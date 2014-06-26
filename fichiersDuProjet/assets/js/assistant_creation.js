@@ -67,14 +67,18 @@ $(function(){
 				
 				
 				-faire une fonction qui s'appelle elle-meme
-				-si gblChoixUsager['etapeCreation'] est inexistant alors premier appel, commencer par mettre gblChoixUsager['etapeCreation']='textePrincipal' et sauver le texte principal 
-				-elle est sa propre fonction de traitement
+				-si gblChoixUsager['etapeCreation'] est inexistant alors premier appel, commencer par mettre gblChoixUsager['etapeCreation']='roman' et créer le roman/détails (appel XHR)
+				-cette fonction est sa propre fonction de traitement
+				-si gblChoixUsager['etapeCreation']='roman'  alors mettre gblChoixUsager['etapeCreation']='textePrincipal' et sauver le texte principal 
 				-si gblChoixUsager['etapeCreation']='textePrincipal', donc écrire gblChoixUsager['etapeCreation']='synopsis' et sauver le synopsis
 				-si gblChoixUsager['etapeCreation']='synopsis', donc écrire gblChoixUsager['etapeCreation']=nroQuestion et sauver cette question qui est en fait une entitée
 				-si gblChoixUsager['etapeCreation']=nroQuestion alors gblChoixUsager['etapeCreation']=nroQuestion+1 et si < gblChoixUsager['questions'].length alors sauver cette question qui est en fait une entitée
 				-si gblChoixUsager['etapeCreation']=nroQuestion+1 >= gblChoixUsager['questions'].length alors aller à la page d'édition!
 				
-
+				= OU =
+				
+				Penser comment créer une seule fonction qui sauvegarde tout pour faire un seul appel XHR. ça risque d'être gros mais au moins rapide en terme d'économie d'attente.
+				
 				// Envoyer à la page d'Édition
 				alert("Questions finies!");
 			break;
