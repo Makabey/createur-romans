@@ -80,7 +80,7 @@ $(function(){
 	$("#select_question").hide();
 	$("#button_nextQuestion").hide();
 
-	lireGenresLitteraires(afficherGenres, traiterErreurs);
+	//lireGenresLitteraires(afficherGenres, traiterErreurs);
 });
 
 
@@ -151,6 +151,65 @@ function afficherQuestions(donnees){
 		}
 		contenu += "<span>"+(iCmpt_lignes+1)+"/"+donnees.length+"</span></div>";
 		$("#form_question").append(contenu);
+	}
+	$("#button_nextQuestion").show();
+}
+
+function afficherQuestions2(donnees){
+	/*
+		Traite le retour de execXHR_Request("../assets/xhr/creationProjet.xhr.php", XHR_Query, afficherQuestions, traiterErreurs);
+
+		Quand rencontre "text" crée une balise input::text et pour select, un select::option
+
+		Fait principalement de la génération de balise et de la copie de contenu/propriétés à partir du tableau "donnees"
+	*/
+	var contenu = null;
+	var contenuDataList = '';
+	var arrNumber2Words = new Array("first", "second", "third", "fourth");
+	var parentDesBalises = "#form_question>fieldset";
+
+	donnees = JSON.parse(donnees); // contraire :: JSON.stringify(array);
+	//$("#form_question").html('');
+	//$(".form-inner").html('');
+	$(parentDesBalises).html('');
+	for(var iCmpt_lignes=0; iCmpt_lignes<donnees.length; iCmpt_lignes++){
+		contenuDataList = '';
+		contenu = '<div class="'+arrNumber2Words[iCmpt_lignes]+'-input"><label for="questions'+iCmpt_lignes+'">'+donnees[iCmpt_lignes]['texte']+'</label>';
+		if(donnees[iCmpt_lignes]['type_input'] == "text"){
+			contenu += '<input type="text" name="questions[]" id="question'+iCmpt_lignes;
+			if (donnees[iCmpt_lignes]['valeurs_defaut'] != null){
+				donnees[iCmpt_lignes]['valeurs_defaut'] = donnees[iCmpt_lignes]['valeurs_defaut'] .split('¤');
+				if(donnees[iCmpt_lignes]['valeurs_defaut'][0].length>0){
+					contenu += '" placeholder="'+donnees[iCmpt_lignes]['valeurs_defaut'][0];
+				}
+
+				if(donnees[iCmpt_lignes]['valeurs_defaut'].length>1){
+					contenu += '" list = "datalist_question'+iCmpt_lignes;
+					for(var iCmpt_Options=1;iCmpt_Options<donnees[iCmpt_lignes]['valeurs_defaut'].length;iCmpt_Options++){
+						contenuDataList += '<option value="'+donnees[iCmpt_lignes]['valeurs_defaut'][iCmpt_Options]+'" />';
+					}
+				}
+			}
+			contenu += '" />';
+			if(contenuDataList.length != ''){
+				contenu += '<datalist id="datalist_question'+iCmpt_lignes+'">'+contenuDataList+'</datalist>';
+			}
+		}else if(donnees[iCmpt_lignes]['type_input'] == "select"){
+			contenu += '<select name="questions[]" id="question'+iCmpt_lignes+'">';
+			donnees[iCmpt_lignes]['valeurs_defaut'] = donnees[iCmpt_lignes]['valeurs_defaut'] .split('¤');
+			for(var iCmpt_Options=0;iCmpt_Options<donnees[iCmpt_lignes]['valeurs_defaut'].length;iCmpt_Options++){
+				contenu += '<option>'+donnees[iCmpt_lignes]['valeurs_defaut'][iCmpt_Options]+'</option>';
+			}
+			contenu += '</select>';
+		}
+		if(donnees[iCmpt_lignes]['bouton_fonction']!=null){
+			donnees[iCmpt_lignes]['bouton_fonction'] = donnees[iCmpt_lignes]['bouton_fonction'].split('¤');
+			contenu += '<button type="button" class="bouton_question" data-fonction="'+donnees[iCmpt_lignes]['bouton_fonction'][0]+'" data-question="'+iCmpt_lignes+'">'+donnees[iCmpt_lignes]['bouton_fonction'][1]+'</button>';
+		}
+		//contenu += "<span>"+(iCmpt_lignes+1)+"/"+donnees.length+"</span>";
+		contenu += '<textarea placeholder="entrez une courte description"></textarea>';
+		contenu += "</div>";
+		$(parentDesBalises).append(contenu);
 	}
 	$("#button_nextQuestion").show();
 }

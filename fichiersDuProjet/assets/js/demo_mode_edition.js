@@ -211,7 +211,7 @@ function sauvegarderTextePrincipal(id_balise){
 	$("#temoin_activite").css("background-color", ($("#temoin_activite").css("background-color") == "rgb(255, 255, 0)")?"blue":"yellow");
 
 	if($("#main_write").data("dirtyBit") === true){
-		sauvegarderTexte(lancerDelaiSauvegardeTextePrincipal, traiterErreurs);
+		sauvegarderTexte(lancerDelaiSauvegardeTextePrincipal, traiterErreurs, idRoman, $("#"+id_balise).val());
 		console.log("sauvegarderTextePrincipal("+id_balise+") / DirtyBit :: True");
 	}else{
 		gbl_DelaiSauvegarde_TextePrincipal = setTimeout('sauvegarderTextePrincipal("main_write")', iFrequenceSauvegarde_TextePrincipal);
@@ -279,12 +279,10 @@ function chargerTexte(fctTraitementPositif, fctTraitementNegatif, idRoman){
 	execXHR_Request("../assets/xhr/editionProjet.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
 
-function sauveagarderTexte(){
-	var texte_encoder = encodeURIComponent ($("#"+id_balise).val());
-	var XHR_Query = "oper=ecrire&typeEntite=textePrincipal&idRoman="+idRoman+"&contenu="+texte_encoder;
+function sauvegarderTexte(fctTraitementPositif, fctTraitementNegatif, idRoman, nouveauTexte){
+	var nouveauTexte = encodeURIComponent (nouveauTexte);
+	var XHR_Query = "oper=ecrire&typeEntite=textePrincipal&idRoman="+idRoman+"&contenu="+nouveauTexte;
 	execXHR_Request("../assets/xhr/editionProjet.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
-	
-	
 }
 
 /* == EOF == */

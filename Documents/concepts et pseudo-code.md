@@ -5,7 +5,8 @@ To Do:
 - [x] page de test pour formulaire + table pour le supporter
 - [ ] Changer la sauvegarde pour qu'elle s'effectue si le dirtyBit est ON -et- qu'on as plus tapé depuis x secondes. Autre possibilité, detecter si web storage permis/disponible et si OUI alors sauve localement aux 15 secondes et aux 300 secs sur le web si on ne force pas pâr l'interface (bouton)
 - [ ] faire la page des questions avec ce que Thomas as créé en page et en data
-- [ ] fonction sauvegardertexte pas finie, manque les params
+- [x] fonction sauvegardertexte pas finie, manque les params
+- [ ] tout re-commenter
 ====
 
 ####Page index (au moins) ::

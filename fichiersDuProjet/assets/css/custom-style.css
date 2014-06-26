@@ -1,0 +1,38 @@
+body {
+  padding-top: 50px;
+}
+.starter-template {
+  padding: 40px 15px;
+  text-align: center;
+}
+.form{
+	text-align: center;
+}
+.form .form-inner fieldset div{
+	padding: 10px 0 10px 0;
+}
+.form .form-inner fieldset label{
+	display: block;
+	width: 30%;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 10px;
+}
+.form .form-inner fieldset label:nth-child(odd){
+	background:#000;
+	color: #fff;
+}
+.form .form-inner fieldset input{
+	width: 30%;
+	padding: 8px;
+}
+
+.form .form-inner fieldset textarea{
+	display: block;
+	margin-top: 10px;
+	resize: none;
+	width: 30%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
