@@ -5,11 +5,11 @@
 	-Aussi- si l'usager clique le bouton "sauvegarder", le timeout est tué si $("#main_write").data("dirtyBit") === true et la sauvegarde est forcée (pour les tests c'est 5 secs, je sais que c'est inutile/court, je pensais de 60 à 300 secondes une fois "en ligne")
 
 ===chronologie des fonctions:
-	-xhrFunctions.js::execXHR_Request ( texte principal [editionProjet.xhr.php] => db_access.php])
+	-chargerTexte
 	-attente du retour XHR
 	-appel à "afficherTextePrincipal"
 	-setTimeout de "iFrequenceSauvegarde_TextePrincipal" millisecondes pour appel à sauvegarderTextePrincipal
-	-si $("#main_write").data("dirtyBit") === true, la sauvegarde du texte principale est faite, attente XHR
+	-si on as tapé dans le textarea contenant le document, $("#main_write").data("dirtyBit") === true, la sauvegarde du texte principale est faite, attente XHR
 	-xhrFunctions.js::execXHR_Request ( sauvegarde) => appel à lancerDelaiSauvegardeTextePrincipal
 */
 
@@ -207,12 +207,11 @@ function sauvegarderTextePrincipal(id_balise){
 		Si le texte Principal as été modifié, alors il est sauvegardé.
 		L'état de $("#main_write").data("dirtyBit") en décide
 	*/
-	var texte_encoder = encodeURIComponent ($("#"+id_balise).val());
 
 	$("#temoin_activite").css("background-color", ($("#temoin_activite").css("background-color") == "rgb(255, 255, 0)")?"blue":"yellow");
 
 	if($("#main_write").data("dirtyBit") === true){
-		execXHR_Request("../assets/xhr/editionProjet.xhr.php", "oper=ecrire&typeEntite=textePrincipal&idRoman="+idRoman+"&contenu="+texte_encoder, lancerDelaiSauvegardeTextePrincipal, traiterErreurs);
+		sauvegarderTexte(lancerDelaiSauvegardeTextePrincipal, traiterErreurs);
 		console.log("sauvegarderTextePrincipal("+id_balise+") / DirtyBit :: True");
 	}else{
 		gbl_DelaiSauvegarde_TextePrincipal = setTimeout('sauvegarderTextePrincipal("main_write")', iFrequenceSauvegarde_TextePrincipal);
@@ -278,6 +277,14 @@ function effacerEntite(fctTraitementPositif, fctTraitementNegatif, idRoman, type
 function chargerTexte(fctTraitementPositif, fctTraitementNegatif, idRoman){
 	var XHR_Query = "oper=lire&typeEntite=textePrincipal&idRoman="+idRoman;
 	execXHR_Request("../assets/xhr/editionProjet.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
+}
+
+function sauveagarderTexte(){
+	var texte_encoder = encodeURIComponent ($("#"+id_balise).val());
+	var XHR_Query = "oper=ecrire&typeEntite=textePrincipal&idRoman="+idRoman+"&contenu="+texte_encoder;
+	execXHR_Request("../assets/xhr/editionProjet.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
+	
+	
 }
 
 /* == EOF == */
