@@ -10,6 +10,7 @@
     <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
     <!--Custom-style-->
     <link href="../assets/css/custom-style.css" rel="stylesheet">
+    <link href="../assets/css/styles.css" rel="stylesheet">
 
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -109,6 +110,7 @@
 			<form id="form_question" method="post" action="index.php">
 				<fieldset></fieldset>
 			</form>
+			<button id="button_nextQuestion" form="form_question" type="button">Suivant</button>
         </div>
       </div>
 
@@ -121,10 +123,12 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="../assets/js/bootstrap.min.js"></script>
 	<script src="../assets/xhr/xhrFunctions.js"></script>
-	<script src="../assets/js/demo_mode_creation.js"></script>
+	<script src="../assets/js/assistant_creation.js"></script>
 	<script>
 		$(function(){
-			lireQuestionsGenreLitteraire(afficherQuestions2, traiterErreurs, "policier");
+			//lireGenresLitteraires_Questions(afficherQuestions2, traiterErreurs, "policier");
+			afficherAttente();
+			lireGenresLitteraires_Noms(afficherGenres2, traiterErreurs);
 		});
 	</script>
   </body>

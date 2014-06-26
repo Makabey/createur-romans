@@ -4,9 +4,11 @@
 To Do:
 - [x] page de test pour formulaire + table pour le supporter
 - [ ] Changer la sauvegarde pour qu'elle s'effectue si le dirtyBit est ON -et- qu'on as plus tapé depuis x secondes. Autre possibilité, detecter si web storage permis/disponible et si OUI alors sauve localement aux 15 secondes et aux 300 secs sur le web si on ne force pas pâr l'interface (bouton)
-- [ ] faire la page des questions avec ce que Thomas as créé en page et en data
+- [x] faire la page des questions avec ce que Thomas as créé en page et en data
 - [x] fonction sauvegardertexte pas finie, manque les params
 - [ ] tout re-commenter
+- [] voir "Page creationProjet"
+- [] changer la fonction afficherAttente, elle doit maintenant : 1. occulter le FORM et le BUTTON de 'next'; 2. afficher un DIV ou P dédié et placé -avant- le FORM; 3. créer une fonction opposée? L'idée est de pouvoir cacher  le FORM durant la recomposition de son contenu indépendamment; 4. lui donner aussi un param pour le message! si pas là, mettre un défaut :)
 ====
 
 ####Page index (au moins) ::
@@ -44,6 +46,8 @@ To Do:
 - [x] fonction avec jQuery pour créer les balises nécessaire pour afficher les questions
 - [ ] fonction qui enregistre tout
 - [ ] fonction pour créer le Roman dans les tables roman_details et roman_texte
+- [ ] fonction qui encode les texte, doit être globale et utilisable par n'importe quel fichier (création + édition)
+- [ ] fonction qui DÉcode les texte, doit être globale et utilisable par n'importe quel fichier
 
 ####Page editionProjet
 - [x] décider si mettre "roman.contenu" dans fichier texte séparé au lieu de MySQL? <-- pê exagéré pour la démo??
@@ -78,7 +82,7 @@ représentation des questions/réponses pour l'assistant dans la BD :
   * nro_question : uTinyInt
   * texte : varchar(255)
   * type_input (text, select, ...) : varchar(20)
-  * valeurs_defaut : Text
+  * suggestions : Text
     - pour input="text" : chaine et si elle comporte un "¤" alors tout ce qui le suit est un 'placeholder', s'il y as encore un "¤" alors on suppose que ce qui suit sont des valeurs pour un datalist, ex: "jaune¤couleur du pantalon¤rouge¤vert¤noir "
     - pour select : liste séparée par des "¤" (la valeur sera la position numérique dans la liste d'options, au moment d'afficher on reprend le texte(?))
   * bouton_fonction : varchar(40);
