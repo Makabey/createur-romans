@@ -44,7 +44,8 @@
     <div class="container">
 
       <div class="starter-template">
-        <h1>Assistant à la structuration d'un roman policier</h1>
+        <h1>Assistant à la structuration d'un roman</h1>
+		<h2></h2>
         <p class="lead">Choisissez une valeur parmis les suggestions</p>
       </div>
       <div class="form">
@@ -129,7 +130,7 @@
 		$(function(){
 			//lireGenresLitteraires_Questions(afficherQuestions2, traiterErreurs, "policier");
 			afficherAttente();
-			lireGenresLitteraires_Noms(afficherGenres2, traiterErreurs);
+			lireGenresLitteraires_Noms(afficherGenres, traiterErreurs);
 		});
 	</script>
   </body>

@@ -46,6 +46,11 @@ switch($_POST['oper']){
 			$resultat = lireListeRomans($db);
 		}
 		break;
+		
+	case "creerLeRoman":
+		// Plus de validation à ajouter plus tard pour ce qui est des champs requis...
+		$resultat = creerLeRoman($db);
+		break;
 
 	default: $resultat = '0¬"' . $_POST["oper"] . '" unknown value for parameter "oper"';
 }
@@ -90,13 +95,9 @@ function lireQuestions($db){
 	*/
 	#global $db;
 	#$arrChamps_genres_litteraires = array('nom', 'nro_question', 'texte', 'type_input', 'suggestions', 'bouton_fonction');
-	$arrChamps_genres_litteraires = array('nro_question', 'typeEntite', 'texte', 'forme_synopsis', 'type_input', 'suggestions', 'bouton_fonction'); // j'ai enlevé le champs 'nom' pour que ça fasse moins de données retournés
+	$arrChamps_genres_litteraires = array('nro_question', 'texte', 'forme_synopsis', 'type_input', 'suggestions', 'bouton_fonction'); #, 'typeEntite'); // j'ai enlevé le champs 'nom' pour que ça fasse moins de données retournés
 
 	$query = "SELECT `genres_litteraires_questions`.`" . implode('`, `genres_litteraires_questions`.`', $arrChamps_genres_litteraires) . "` FROM genres_litteraires_questions, genres_litteraires_noms WHERE genres_litteraires_questions.ID_genre = genres_litteraires_noms.ID_genre AND genres_litteraires_noms.nom = '{$_POST['genre'] }' ORDER BY genres_litteraires_questions.nro_question;";
-
-	/*
-	SELECT genres_litteraires_questions.nro_question, genres_litteraires_questions.typeEntite, genres_litteraires_questions.texte, genres_litteraires_questions.type_input, genres_litteraires_questions.suggestions, genres_litteraires_questions.bouton_fonction FROM genres_litteraires_questions, genres_litteraires_noms WHERE genres_litteraires_questions.ID_genre = genres_litteraires_noms.ID_genre AND genres_litteraires_noms.nom = 'drame' ORDER BY genres_litteraires_questions.nro_question
-	*/
 
 	$result = $db->query ($query);
 	if(false !== $result){
@@ -138,6 +139,49 @@ function lireListeRomans($db){
 	}else{
 		$resultat = "0¬[" . __FUNCTION__ . "] " . $db->error . " ($query)";
 	}
+	return $resultat;
+}
+
+
+function creerLeRoman($db){
+	/*			queryString += "idUsager="+idUsager;
+				queryString += "&titreRoman="+encodeURIComponent (gblChoixUsager['titreRoman']);
+				queryString += "&synopsis="+encodeURIComponent (gblChoixUsager['synopsis']);
+				queryString += "&genreLitteraire="+gblChoixUsager['genreLitteraire'];
+				for(iCmpt=0;iCmpt<gblChoixUsager['questions'].length;iCmpt++){
+					queryString += "&question"+iCmpt+"[]="+encodeURIComponent (gblChoixUsager['questions'][iCmpt]['reponse']);
+					queryString += "&question"+iCmpt+"[]="+encodeURIComponent (gblChoixUsager['questions'][iCmpt]['description']);*/
+	
+	$_POST['titreRoman'] = real_escape_string($_POST['titreRoman'], $db);
+	
+	// Créer le roman
+	$query = "START TRANSACTION; INSERT INTO `roman_details` (`ID_usager`, `ID_genre`, `titre`) VALUES ({$_POST['idUsager']}, (SELECT ID_genre FROM genres_litteraires_noms WHERE nom = '{$_POST['genreLitteraire']}'), '{$_POST['titreRoman']}');";
+	
+	$result = $db->query ($query);
+	if(false !== $result){
+		$ID_roman = $db->insert_id;
+		// Ajouter le synopsis du Roman
+		$_POST['synopsis'] = real_escape_string($_POST['synopsis'], $db);
+		$query = "INSERT INTO `roman_texte` (`ID_roman`, `synopsis`, `contenu`) VALUES ($ID_roman, '{$_POST['synopsis']}', 'Bienvenue dans votre roman! Quel sera le commencement de votre histoire? :)');";
+		
+		$result = $db->query ($query);
+		if(false !== $result){
+			// Maintenant lire le nombre de questions pour le genre littéraire, ce qui permet de savoir combien d'insertions faire pour la suite
+			
+			// Insérer chaque entitées tel que commandé par la série "questionsX" où [0] est le contenu et [1] est la note, utiliser le champs forme_synopsis pour le titre
+			
+		}else{
+			$query="rollback;";
+			$result = $db->query ($query);
+			$resultat = "0¬[" . __FUNCTION__ . "] An error occured during an INSERT operation. (query = '$query')";
+		}
+	}else{
+		$query="rollback;";
+		$result = $db->query ($query);
+		$resultat = "0¬[" . __FUNCTION__ . "] An error occured during an INSERT operation. (query = '$query')";
+	}
+	
+	//$resultat = "0¬[" . __FUNCTION__ . "]  ($query)";
 	return $resultat;
 }
 

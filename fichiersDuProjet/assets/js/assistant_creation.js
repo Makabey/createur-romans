@@ -31,8 +31,11 @@ $(function(){
 				// Récupérer le choix de l'usager
 				if(!gblChoixUsager['genreLitteraire']) { gblChoixUsager['genreLitteraire'] = $("#select_question").val(); }
 
+				// Corriger le titre de la page
+				$("h2").text("du genre littéraire '"+gblChoixUsager['genreLitteraire']+"'");
+
 				// Lire et afficher les questions
-				lireGenresLitteraires_Questions(afficherQuestions2, traiterErreurs, gblChoixUsager['genreLitteraire']);
+				lireGenresLitteraires_Questions(afficherQuestions, traiterErreurs, gblChoixUsager['genreLitteraire']);
 
 				etapeAssistant++;
 				break;
@@ -63,33 +66,32 @@ $(function(){
 				gblChoixUsager['titreRoman'] = $("#titreRoman").val();
 
 				// Encoder titre et réponses
+				var queryString = '';
+				var iCmpt=0;
+				queryString += "idUsager="+idUsager;
+				queryString += "&titreRoman="+encodeURIComponent (gblChoixUsager['titreRoman']);
+				queryString += "&synopsis="+encodeURIComponent (gblChoixUsager['synopsis']);
+				queryString += "&genreLitteraire="+gblChoixUsager['genreLitteraire'];
+				for(iCmpt=0;iCmpt<gblChoixUsager['questions'].length;iCmpt++){
+					queryString += "&question"+iCmpt+"[]="+encodeURIComponent (gblChoixUsager['questions'][iCmpt]['reponse']);
+					queryString += "&question"+iCmpt+"[]="+encodeURIComponent (gblChoixUsager['questions'][iCmpt]['description']);
+				}
 
 				// Écrire le synopsis et le texte, tout créer les entitées
-/*				gblChoixUsager['etapeCreation']='textePrincipal'
-				gblChoixUsager['etapeCreation']='synopsis'
-				gblChoixUsager['etapeCreation']='question'+iCmpt
-
-
-				-faire une fonction qui s'appelle elle-meme
-				-si gblChoixUsager['etapeCreation'] est inexistant alors premier appel, commencer par mettre gblChoixUsager['etapeCreation']='roman' et créer le roman/détails (appel XHR)
-				-cette fonction est sa propre fonction de traitement
-				-si gblChoixUsager['etapeCreation']='roman' alors mettre gblChoixUsager['etapeCreation']='textePrincipal' et sauver le texte principal
-				-si gblChoixUsager['etapeCreation']='textePrincipal', donc écrire gblChoixUsager['etapeCreation']='synopsis' et sauver le synopsis
-				-si gblChoixUsager['etapeCreation']='synopsis', donc écrire gblChoixUsager['etapeCreation']=nroQuestion et sauver cette question qui est en fait une entitée
-				-si gblChoixUsager['etapeCreation']=nroQuestion alors gblChoixUsager['etapeCreation']=nroQuestion+1 et si < gblChoixUsager['questions'].length alors sauver cette question qui est en fait une entitée
-				-si gblChoixUsager['etapeCreation']=nroQuestion+1 >= gblChoixUsager['questions'].length alors aller à la page d'édition!
-
-				= OU =
-
-				Penser comment créer une seule fonction qui sauvegarde tout pour faire un seul appel XHR. ça risque d'être gros mais au moins rapide en terme d'économie d'attente.
-				*/
-				// Envoyer à la page d'Édition
-				alert("Questions finies!");
+				creerLeRoman(felicitationSurCreation, traiterErreurs, queryString);
 			break;
 		}
 		return false;
 	});
 
+
+	$("#"+gblParentDesBalises).on("keyup", "#titreRoman", function(){
+		//console.log("ca marche!");
+		/*
+			Mon idée ici était d'avertir l'usager s'il entre le même nom pour ce roman que pour un précédent
+			lui-appartenant, juste des classes CSS mais je met de côté pour me concentrer sur la sauvegarde
+		*/
+	});
 });
 
 /*
@@ -134,19 +136,24 @@ function lireListeRomansUsager(fctTraitementPositif, fctTraitementNegatif, ID_us
 	execXHR_Request("../assets/xhr/creationProjet.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
 
+function creerLeRoman(fctTraitementPositif, fctTraitementNegatif, queryString){
+	/*
+		Lance la requête pour lire les détails des romans que l'usager as déjà créés
+	*/
+	var XHR_Query = "oper=creerLeRoman&" + queryString;
+	execXHR_Request("../assets/xhr/creationProjet.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
+}
+
 /*
 	FONCTIONS DE TRAITEMENT DES RETOURS POSITIFS
 */
+function felicitationSurCreation(donnees){
+	console.log("pas d'erreurs");
+	// Envoyer à la page d'Édition
+	console.log("Questions finies!");
+}
+
 function afficherSynopsisEtDemandeNomRoman(donnees){
-/*
-PLAN:
-*-écrire la fonction qui lit les romans avec leur ID a partir du ID_usager
--afficher le synopsis et la possiblité de nommer son roman en plus d'avoir un datalist avec les romans précédents si applicable
--s'il y as des romans précédents, indiquer quand on en choisi un qu'il est pareil ou non à un autre pour éviter que l'auteur se répète
--écrire la fonction qui compacte tout et fait une seule requête XHR pour créer le roman et les entitées de départ
-*/
-
-
 	// Recopier les choix + Créer le synopsis; peux être aussi simple que juste un recap
 		//gblChoixUsager['questions'][iCmpt]['reponse'] = $("#question"+iCmpt).val();
 		//gblChoixUsager['questions'][iCmpt]['description'] = $("#description"+iCmpt).val();
@@ -158,7 +165,7 @@ PLAN:
 
 	gblChoixUsager['synopsis'] = '';
 	gblChoixUsager['romans'] = JSON.parse(donnees); // contraire :: JSON.stringify(array);
-	console.log(gblChoixUsager['romans'].length);
+	//console.log(gblChoixUsager['romans'].length);
 
 	//$("#"+gblParentDesBalises).hide();
 	for(iCmpt=0;iCmpt < gblChoixUsager['questions'].length; iCmpt++){
@@ -172,10 +179,11 @@ PLAN:
 	}
 	synopsis_afficher += '</dl></div>';
 	synopsis_afficher += '<div><label for="titreRoman">Quel est le titre de votre roman?</label>';
-	synopsis_afficher += '<input type="text" id="titreRoman"';
+	synopsis_afficher += '<input type="text" id="titreRoman" required="required"';
 
 	var maintenant = new Date();
-	synopsis_afficher += ' value = "test-'+maintenant+'"';
+	//maintenant = maintenant.getFullYear()+"/"+maintenant.getMonth()+"/"+maintenant.getDay();
+	synopsis_afficher += ' value = "test - \''+maintenant+'\'"';
 
 	if(gblChoixUsager['romans'].length>0){
 		synopsis_afficher += ' list="listeNomsRomans"';
@@ -199,30 +207,7 @@ PLAN:
 	$("#button_nextQuestion").show();
 }
 
-/*function afficherGenres(donnees){
-	/ *
-	Affiche un "select" lequel permet de sélectionner le Genre Littéraire
-	* /
-	var iCmpt = 0;
-
-	donnees = JSON.parse(donnees); // contraire :: JSON.stringify(array);
-
-	$("#select_question").html('');
-	var sSelections = '';
-	for(iCmpt=0;iCmpt<donnees.length;iCmpt++){
-		sSelections += '<option value="'+donnees[iCmpt]+'">'+donnees[iCmpt]+'</option>';
-	}
-	$("#form_question>p").hide();
-	$("#select_question").html(sSelections);
-	$("#label_question").attr("for", "select_question");
-	$("#label_question").text("Sélectionnez un genre littéraire : ");
-	$("#label_question").show();
-	$("#select_question").show();
-	$("#button_nextQuestion").show();
-}*/
-
-
-function afficherGenres2(donnees){
+function afficherGenres(donnees){
 	/*
 		Traite le retour de la fonction "lireGenresLitteraires_Noms"
 
@@ -255,61 +240,7 @@ function afficherGenres2(donnees){
 	}
 }
 
-/*function afficherQuestions(donnees){
-	/ *
-	kaduc
-		Traite le retour de lireGenreLitteraire_Questions(afficherQuestions2, traiterErreurs, genreChoisi);
-
-		Quand rencontre "text" crée une balise input::text et pour select, un select::option
-
-		Fait principalement de la génération de balise et de la copie de contenu/propriétés à partir du tableau "donnees"
-	* /
-	var contenu = null;
-	var contenuDataList = '';
-
-	donnees = JSON.parse(donnees); // contraire :: JSON.stringify(array);
-	$("#form_question").html('');
-	for(var iCmpt_lignes=0; iCmpt_lignes<donnees.length; iCmpt_lignes++){
-		contenuDataList = '';
-		contenu = '<div><label for="questions'+iCmpt_lignes+'">'+donnees[iCmpt_lignes]['texte']+'</label>';
-		if(donnees[iCmpt_lignes]['type_input'] == "text"){
-			contenu += '<input type="text" name="questions[]" id="question'+iCmpt_lignes;
-			if (donnees[iCmpt_lignes]['suggestions'] != null){
-				donnees[iCmpt_lignes]['suggestions'] = donnees[iCmpt_lignes]['suggestions'] .split('¤');
-				if(donnees[iCmpt_lignes]['suggestions'][0].length>0){
-					contenu += '" placeholder="'+donnees[iCmpt_lignes]['suggestions'][0];
-				}
-
-				if(donnees[iCmpt_lignes]['suggestions'].length>1){
-					contenu += '" list = "datalist_question'+iCmpt_lignes;
-					for(var iCmpt_Options=1;iCmpt_Options<donnees[iCmpt_lignes]['suggestions'].length;iCmpt_Options++){
-						contenuDataList += '<option>'+donnees[iCmpt_lignes]['suggestions'][iCmpt_Options]+'</option>';
-					}
-				}
-			}
-			contenu += '" />';
-			if(contenuDataList.length != ''){
-				contenu += '<datalist id="datalist_question'+iCmpt_lignes+'">'+contenuDataList+'</datalist>';
-			}
-		}else if(donnees[iCmpt_lignes]['type_input'] == "select"){
-			contenu += '<select name="questions[]" id="question'+iCmpt_lignes+'">';
-			donnees[iCmpt_lignes]['suggestions'] = donnees[iCmpt_lignes]['suggestions'] .split('¤');
-			for(var iCmpt_Options=0;iCmpt_Options<donnees[iCmpt_lignes]['suggestions'].length;iCmpt_Options++){
-				contenu += '<option>'+donnees[iCmpt_lignes]['suggestions'][iCmpt_Options]+'</option>';
-			}
-			contenu += '</select>';
-		}
-		if(donnees[iCmpt_lignes]['bouton_fonction']!=null){
-			donnees[iCmpt_lignes]['bouton_fonction'] = donnees[iCmpt_lignes]['bouton_fonction'].split('¤');
-			contenu += '<button type="button" class="bouton_question" data-fonction="'+donnees[iCmpt_lignes]['bouton_fonction'][0]+'" data-question="'+iCmpt_lignes+'">'+donnees[iCmpt_lignes]['bouton_fonction'][1]+'</button>';
-		}
-		contenu += "<span>"+(iCmpt_lignes+1)+"/"+donnees.length+"</span></div>";
-		$("#form_question").append(contenu);
-	}
-	$("#button_nextQuestion").show();
-}*/
-
-function afficherQuestions2(donnees){
+function afficherQuestions(donnees){
 	/*
 		Traite le retour de execXHR_Request("../assets/xhr/creationProjet.xhr.php", XHR_Query, afficherQuestions, traiterErreurs);
 
@@ -336,7 +267,7 @@ function afficherQuestions2(donnees){
 	for(iCmpt_lignes=0; iCmpt_lignes<donnees.length; iCmpt_lignes++){
 		gblChoixUsager['questions'][iCmpt_lignes] = new Array();
 		gblChoixUsager['questions'][iCmpt_lignes]['titre'] = donnees[iCmpt_lignes]['forme_synopsis'];
-		gblChoixUsager['questions'][iCmpt_lignes]['typeEntite'] = donnees[iCmpt_lignes]['typeEntite'];
+		//gblChoixUsager['questions'][iCmpt_lignes]['typeEntite'] = donnees[iCmpt_lignes]['typeEntite']; // sert au moment d'enregistrer le Roman OU on pourrais s'en servir ici pour donner une couleur aux questions, sinon je pourrais aussi bien ne pas envoyer ça ici et le lire de la BD au moment de créer les entitées parce qu'en principe les réponses sont dans l'ordre des questions donc par conséquent je peux savoir de façon assurée leurs type
 		contenuDataList = '';
 		contenu = '<div><label for="questions'+iCmpt_lignes+'">'+donnees[iCmpt_lignes]['texte']+'</label>';
 		if(donnees[iCmpt_lignes]['type_input'] == "text"){

@@ -15,4 +15,13 @@ function db_connect(){
 	return $db;
 }
 
+
+function real_escape_string($chaine, $db){
+	if(is_object($db) && (get_class($db) == "mysqli")){
+		$chaine = $db->real_escape_string($chaine);
+	}else{
+		$chaine = "0¬'db' is not a mysqli object";
+	}
+	return $chaine;
+}
 /* == EOF == */
