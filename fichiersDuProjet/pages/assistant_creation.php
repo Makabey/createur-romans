@@ -107,6 +107,7 @@
           </div><!- -fourth-input- ->
          
           </fieldset>-->
+		  	<p id="waitP"><img src="../assets/images/wait_circle2.png" class="waitCircle" alt="Attendez..." /><span></span></p>
 			<form id="form_question" method="post" action="index.php" autocomplete="off">
 				<fieldset></fieldset>
 			</form>

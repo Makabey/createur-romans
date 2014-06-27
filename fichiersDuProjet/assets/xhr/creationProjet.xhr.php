@@ -28,14 +28,22 @@ switch($_POST['oper']){
 		if(!isset($_POST['genre'])){
 			$resultat = '0¬"genre" is required';
 		}else{
-			$genresValides = lireGenreLitteraires($db, false); //"policier,drame"; 
+			$genresValides = lireGenreLitteraires($db, false); //"policier,drame";
 			//$pos = stripos($genresValides, $_POST['genre']);
 			$pos = in_array($_POST['genre'], $genresValides);
 			if(false === $pos){
 				$resultat = '0¬"genre" unknown value "' . $_POST["genre"] . '"';
 			}else{
-				$resultat = lireQuestions($db, $_POST['genre']);
+				$resultat = lireQuestions($db);
 			}
+		}
+		break;
+
+	case "lireListeRomans":
+		if(!isset($_POST['idUsager'])){
+			$resultat = '0¬"idUsager" is required';
+		}else{
+			$resultat = lireListeRomans($db);
 		}
 		break;
 
@@ -76,7 +84,7 @@ function lireGenreLitteraires($db, $encode_result=true){
 	return $resultat;
 }
 
-function lireQuestions($db, $genre){
+function lireQuestions($db){
 	/*
 		En accord avec $_POST['genre'] , lire les questions et retourner tout en bloc
 	*/
@@ -84,8 +92,8 @@ function lireQuestions($db, $genre){
 	#$arrChamps_genres_litteraires = array('nom', 'nro_question', 'texte', 'type_input', 'suggestions', 'bouton_fonction');
 	$arrChamps_genres_litteraires = array('nro_question', 'typeEntite', 'texte', 'forme_synopsis', 'type_input', 'suggestions', 'bouton_fonction'); // j'ai enlevé le champs 'nom' pour que ça fasse moins de données retournés
 
-	$query = "SELECT `genres_litteraires_questions`.`" . implode('`, `genres_litteraires_questions`.`', $arrChamps_genres_litteraires) . "` FROM genres_litteraires_questions, genres_litteraires_noms WHERE genres_litteraires_questions.ID_genre = genres_litteraires_noms.ID_genre AND genres_litteraires_noms.nom = '$genre' ORDER BY genres_litteraires_questions.nro_question;";
-	
+	$query = "SELECT `genres_litteraires_questions`.`" . implode('`, `genres_litteraires_questions`.`', $arrChamps_genres_litteraires) . "` FROM genres_litteraires_questions, genres_litteraires_noms WHERE genres_litteraires_questions.ID_genre = genres_litteraires_noms.ID_genre AND genres_litteraires_noms.nom = '{$_POST['genre'] }' ORDER BY genres_litteraires_questions.nro_question;";
+
 	/*
 	SELECT genres_litteraires_questions.nro_question, genres_litteraires_questions.typeEntite, genres_litteraires_questions.texte, genres_litteraires_questions.type_input, genres_litteraires_questions.suggestions, genres_litteraires_questions.bouton_fonction FROM genres_litteraires_questions, genres_litteraires_noms WHERE genres_litteraires_questions.ID_genre = genres_litteraires_noms.ID_genre AND genres_litteraires_noms.nom = 'drame' ORDER BY genres_litteraires_questions.nro_question
 	*/
@@ -94,6 +102,32 @@ function lireQuestions($db, $genre){
 	if(false !== $result){
 		while ($row = $result->fetch_row()){
 			$tmp[] = array_combine($arrChamps_genres_litteraires, $row);
+		}
+		$resultat = json_encode($tmp);
+		if(json_last_error() !== 0){
+			$resultat = "0¬" . decodeJSON_Error(json_last_error());
+		}else{
+			$resultat = "1¬" . $resultat;
+		}
+	}else{
+		$resultat = "0¬[" . __FUNCTION__ . "] " . $db->error . " ($query)";
+	}
+	return $resultat;
+}
+
+function lireListeRomans($db){
+	/*
+		En accord avec $_POST['idRoman'] , lire les détails des Romans
+	*/
+	$arrChamps_Romans = array('ID_roman', 'ID_genre', 'titre', 'date_creation', 'date_dnrEdition');
+
+	$query = "SELECT `roman_details`.`" . implode('`, `roman_details`.`', $arrChamps_Romans) . "`, `roman_texte`.`synopsis` FROM roman_details, roman_texte WHERE roman_details.ID_roman = roman_texte.ID_roman AND roman_details.ID_usager = '{$_POST['idUsager']}' AND roman_details.deleted = 0 ORDER BY roman_texte.ID_roman;";
+
+	$result = $db->query ($query);
+	if(false !== $result){
+		while ($row = $result->fetch_row()){
+			$arrChamps_Romans[] = 'synopsis';
+			$tmp[] = array_combine($arrChamps_Romans, $row);
 		}
 		$resultat = json_encode($tmp);
 		if(json_last_error() !== 0){
