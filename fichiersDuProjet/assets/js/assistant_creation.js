@@ -22,7 +22,7 @@ $(function(){
 			etapeAssistant == 0 :: La page vient d'être chargée, par conséquent on voit le choix de Genre Littéraire et l'étape suivante est le chargement des questions
 		*/
 		switch(etapeAssistant){
-			case 0:
+			case 0: // Le choix de Genre est fait, on passe aux questions
 				// Récupérer le choix de l'usager
 				if(!gblChoixUsager['genreLitteraire']) { gblChoixUsager['genreLitteraire'] = $("#select_question").val(); }
 
@@ -34,40 +34,39 @@ $(function(){
 
 				etapeAssistant++;
 				break;
-			case 1:
+			case 1: // Les questions sont faites, on demande à l'usager de nommer son roman
 				// Recopier les choix + Créer le synopsis; peux être aussi simple que juste un recap
-				var synopsis = '<div><p>Votre synopsis :</p><dl>';
 				for(var iCmpt=0;iCmpt < gblChoixUsager['questions'].length; iCmpt++){
-					gblChoixUsager['questions'][iCmpt]['choix'] = $("#question"+iCmpt).val();
-					gblChoixUsager['questions'][iCmpt]['note'] = $("#description"+iCmpt).val();
-					synopsis += '<dt>'+gblChoixUsager['questions'][iCmpt]['synopsis']+'</dt>';
-					synopsis += '<dd>'+gblChoixUsager['questions'][iCmpt]['choix'];
-					if(gblChoixUsager['questions'][iCmpt]['note'].length){
-						synopsis += '; '+gblChoixUsager['questions'][iCmpt]['note'];
-					}
-					synopsis += '</dd>'
+					gblChoixUsager['questions'][iCmpt]['reponse'] = $("#question"+iCmpt).val();
+					gblChoixUsager['questions'][iCmpt]['description'] = $("#description"+iCmpt).val();
 				}
-				synopsis += '</dl></div>';
-				synopsis += '<div><label for="titreRoman">Quel est le titre de votre roman?</label>';
-				synopsis += '<input type="text" id="titreRoman" /></div>';
-
-				
-				$("#"+gblParentDesBalises).html(synopsis);
-				
+	
 				// Mettre l'usager en attente
-				//afficherAttente();
+				afficherAttente();
+				
+				// Lire les noms de Roman de l'usager courant pour lui éviter de se répéter
+//				et la fonction DOIT être récupérable pour la page de sélection donc
+//				 elle retourne les ID, nom, genre et  synopsis
 
-				// Afficher un form pour demander le nom de l'oeuvre et confirmer le synopsis créé par les questions; le form doit vérifier realtime que le nom n'est pas déjà utilisé pour CET usager
-
+PLAN:
+-écrire la fonction qui lit les romans avec leur ID a partir du ID_usager
+-afficher le synopsis et la possiblité de nommer son roman en plus d'avoir un datalist avec les romans précédents si applicable
+-s'il y as des romans précédents, indiquer quand on en choisi un qu'il est pareil ou non à un autre pour éviter que l'auteur se répète
+-écrire la fonction qui compacte tout et fait une seule requête XHR pour créer le roman et les entitées de départ
 
 				etapeAssistant++;
 				break;
 			case 2:
+				// Récupérer le titre du Roman
+				gblChoixUsager['titreRoman'] = $("#titreRoman").val();
+			
 				// Mettre l'usager en attente
-				afficherAttente();
-/*
+				afficherAttente("Création de votre roman dans la base de données...");
+
+				// Encoder titre et réponses
+				
 				// Écrire le synopsis et le texte, tout créer les entitées
-				gblChoixUsager['etapeCreation']='textePrincipal'
+/*				gblChoixUsager['etapeCreation']='textePrincipal'
 				gblChoixUsager['etapeCreation']='synopsis'
 				gblChoixUsager['etapeCreation']='question'+iCmpt
 				
@@ -101,7 +100,9 @@ function afficherAttente(){
 	/*
 		Affiche une phrase et une image invitant l'usager à patienter
 	*/
-	$("#"+gblParentDesBalises).html('<p><img src="../assets/images/wait_circle2.png" class="waitCircle" alt="Attendez..." /> Récupération des Données...</p>');
+	var strMessage = 'Récupération des Données...';
+	if(arguments[0] !== undefined) { strMessage = arguments[0]; } // Si on as passé un paramètre à la fonction, l'utiliser
+	$("#"+gblParentDesBalises).html('<p><img src="../assets/images/wait_circle2.png" class="waitCircle" alt="Attendez..." /> '+strMessage+'</p>');
 	$("#button_nextQuestion").hide();
 }
 
@@ -127,6 +128,38 @@ function lireGenresLitteraires_Questions(fctTraitementPositif, fctTraitementNega
 /*
 	FONCTIONS DE TRAITEMENT DES RETOURS POSITIFS
 */
+function afficherSynopsisEtDemandeNomRoman(donnees){
+	// Recopier les choix + Créer le synopsis; peux être aussi simple que juste un recap
+		//gblChoixUsager['questions'][iCmpt]['reponse'] = $("#question"+iCmpt).val();
+		//gblChoixUsager['questions'][iCmpt]['description'] = $("#description"+iCmpt).val();
+	
+	var synopsis = '';
+	var synopsis_afficher = '<div><p>Votre synopsis :</p><dl>';
+	for(var iCmpt=0;iCmpt < gblChoixUsager['questions'].length; iCmpt++){
+		synopsis_afficher += '<dt>'+gblChoixUsager['questions'][iCmpt]['titre']+'</dt>';
+		synopsis_afficher += '<dd>'+gblChoixUsager['questions'][iCmpt]['reponse'];
+		if(gblChoixUsager['questions'][iCmpt]['description'].length){
+			synopsis_afficher += '; '+gblChoixUsager['questions'][iCmpt]['description'];
+		}
+		synopsis_afficher += '</dd>'
+	}
+	synopsis_afficher += '</dl></div>';
+	synopsis_afficher += '<div><label for="titreRoman">Quel est le titre de votre roman?</label>';
+	synopsis_afficher += '<input type="text" id="titreRoman"';
+	
+	var maintenant = new Date();
+	synopsis_afficher += ' value = "test-'+maintenant+'"';
+	
+	synopsis_afficher += ' /></div>';
+
+	/*
+		Afficher un form pour demander le nom de l'oeuvre et confirmer le synopsis créé par les
+		questions; le form doit vérifier realtime que le nom n'est pas déjà utilisé
+		pour CET usager ?
+	*/
+	$("#"+gblParentDesBalises).html(synopsis_afficher);
+}
+
 /*function afficherGenres(donnees){
 	/ *
 	Affiche un "select" lequel permet de sélectionner le Genre Littéraire
@@ -259,7 +292,8 @@ function afficherQuestions2(donnees){
 	gblChoixUsager['questions'] = new Array();
 	for(var iCmpt_lignes=0; iCmpt_lignes<donnees.length; iCmpt_lignes++){
 		gblChoixUsager['questions'][iCmpt_lignes] = new Array();
-		gblChoixUsager['questions'][iCmpt_lignes]['synopsis'] = donnees[iCmpt_lignes]['forme_synopsis'];
+		gblChoixUsager['questions'][iCmpt_lignes]['titre'] = donnees[iCmpt_lignes]['forme_synopsis'];
+		gblChoixUsager['questions'][iCmpt_lignes]['typeEntite'] = donnees[iCmpt_lignes]['typeEntite'];
 		contenuDataList = '';
 		contenu = '<div><label for="questions'+iCmpt_lignes+'">'+donnees[iCmpt_lignes]['texte']+'</label>';
 		if(donnees[iCmpt_lignes]['type_input'] == "text"){
@@ -277,6 +311,7 @@ function afficherQuestions2(donnees){
 					}
 				}
 			}
+			contenu += '" value="test';
 			contenu += '" required="required" />';
 			if(contenuDataList.length != ''){
 				contenu += '<datalist id="datalist_question'+iCmpt_lignes+'">'+contenuDataList+'</datalist>';
