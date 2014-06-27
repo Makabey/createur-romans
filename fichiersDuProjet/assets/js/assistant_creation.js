@@ -10,15 +10,21 @@ var gblParentDesBalises = "form_question>fieldset"; // Balise que l'on doit mani
 */
 $(function(){
 	var etapeAssistant = 0;
+	
+	$("#form_question").submit(function(){
+		/*
+			On doit attrapper l'évènement SUBMIT directement sur le FORM parce que si on agit sur le
+			CLICK d'un bouton et que le FORM n'est pas valide selon le BROWSER, la fonction du
+			bouton est appellée malgré tout.
+		*/
 
-	$("#button_nextQuestion").click(function(){
 		/*
 			etapeAssistant == 0 :: La page vient d'être chargée, par conséquent on voit le choix de Genre Littéraire et l'étape suivante est le chargement des questions
 		*/
 		switch(etapeAssistant){
 			case 0:
 				// Récupérer le choix de l'usager
-				gblChoixUsager['genreLitteraire'] = $("#select_question").val();
+				if(!gblChoixUsager['genreLitteraire']) { gblChoixUsager['genreLitteraire'] = $("#select_question").val(); }
 
 				// Mettre l'usager en attente
 				afficherAttente();
@@ -59,7 +65,7 @@ $(function(){
 			case 2:
 				// Mettre l'usager en attente
 				afficherAttente();
-
+/*
 				// Écrire le synopsis et le texte, tout créer les entitées
 				gblChoixUsager['etapeCreation']='textePrincipal'
 				gblChoixUsager['etapeCreation']='synopsis'
@@ -78,11 +84,12 @@ $(function(){
 				= OU =
 				
 				Penser comment créer une seule fonction qui sauvegarde tout pour faire un seul appel XHR. ça risque d'être gros mais au moins rapide en terme d'économie d'attente.
-				
+				*/
 				// Envoyer à la page d'Édition
 				alert("Questions finies!");
 			break;
 		}
+		return false;
 	});
 
 });
@@ -120,6 +127,61 @@ function lireGenresLitteraires_Questions(fctTraitementPositif, fctTraitementNega
 /*
 	FONCTIONS DE TRAITEMENT DES RETOURS POSITIFS
 */
+/*function afficherGenres(donnees){
+	/ *
+	Affiche un "select" lequel permet de sélectionner le Genre Littéraire
+	* /
+	var iCmpt = 0;
+
+	donnees = JSON.parse(donnees); // contraire :: JSON.stringify(array);
+
+	$("#select_question").html('');
+	var sSelections = '';
+	for(iCmpt=0;iCmpt<donnees.length;iCmpt++){
+		sSelections += '<option value="'+donnees[iCmpt]+'">'+donnees[iCmpt]+'</option>';
+	}
+	$("#form_question>p").hide();
+	$("#select_question").html(sSelections);
+	$("#label_question").attr("for", "select_question");
+	$("#label_question").text("Sélectionnez un genre littéraire : ");
+	$("#label_question").show();
+	$("#select_question").show();
+	$("#button_nextQuestion").show();
+}*/
+
+
+function afficherGenres2(donnees){
+	/*
+		Traite le retour de la fonction "lireGenresLitteraires_Noms"
+
+		Affiche un "select" lequel permet de sélectionner le Genre Littéraire
+	*/
+	var iCmpt = 0;
+	var sSelections = '<div><label for="select_question">Sélectionnez le genre littéraire désiré :</label><select id="select_question">';
+
+	donnees = JSON.parse(donnees); // contraire :: JSON.stringify(array);
+	//console.log(donnees.length);
+
+	if(donnees.length < 2){ // si on as qu'un seul genre, passer la sélection manuelle par l'usager
+		gblChoixUsager['genreLitteraire']  = donnees[0];
+		//$("#button_nextQuestion").click();
+		$("#form_question").submit();
+	}else{
+		// Créer un SELECT pour choisir le genre littéraire
+		$("#"+gblParentDesBalises).hide();
+		//$("#"+gblParentDesBalises).html('');
+
+		for(iCmpt=0;iCmpt<donnees.length;iCmpt++){
+			sSelections += '<option value="'+donnees[iCmpt]+'">'+donnees[iCmpt]+'</option>';
+			//sSelections += '<option>'+donnees[iCmpt]+'</option>';
+		}
+		sSelections += '</select></div>';
+		$("#"+gblParentDesBalises).html(sSelections);
+		$("#"+gblParentDesBalises).show();
+		$("#button_nextQuestion").show();
+	}
+}
+
 /*function afficherQuestions(donnees){
 	/ *
 	kaduc
@@ -236,52 +298,6 @@ function afficherQuestions2(donnees){
 		contenu += "</div>";
 		$("#"+gblParentDesBalises).append(contenu);
 	}
-	$("#button_nextQuestion").show();
-}
-
-/*function afficherGenres(donnees){
-	/ *
-	Affiche un "select" lequel permet de sélectionner le Genre Littéraire
-	* /
-	var iCmpt = 0;
-
-	donnees = JSON.parse(donnees); // contraire :: JSON.stringify(array);
-
-	$("#select_question").html('');
-	var sSelections = '';
-	for(iCmpt=0;iCmpt<donnees.length;iCmpt++){
-		sSelections += '<option value="'+donnees[iCmpt]+'">'+donnees[iCmpt]+'</option>';
-	}
-	$("#form_question>p").hide();
-	$("#select_question").html(sSelections);
-	$("#label_question").attr("for", "select_question");
-	$("#label_question").text("Sélectionnez un genre littéraire : ");
-	$("#label_question").show();
-	$("#select_question").show();
-	$("#button_nextQuestion").show();
-}*/
-
-
-function afficherGenres2(donnees){
-	/*
-		Traite le retour de la fonction "lireGenresLitteraires_Noms"
-
-		Affiche un "select" lequel permet de sélectionner le Genre Littéraire
-	*/
-	var iCmpt = 0;
-	var sSelections = '<div><label for="select_question">Sélectionnez le genre littéraire désiré :</label><select id="select_question">';
-
-	donnees = JSON.parse(donnees); // contraire :: JSON.stringify(array);
-
-	$("#"+gblParentDesBalises).hide();
-	//$("#"+gblParentDesBalises).html('');
-
-	for(iCmpt=0;iCmpt<donnees.length;iCmpt++){
-		sSelections += '<option value="'+donnees[iCmpt]+'">'+donnees[iCmpt]+'</option>';
-	}
-	sSelections += '</select></div>';
-	$("#"+gblParentDesBalises).html(sSelections);
-	$("#"+gblParentDesBalises).show();
 	$("#button_nextQuestion").show();
 }
 

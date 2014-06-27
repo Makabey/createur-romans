@@ -107,10 +107,10 @@
           </div><!- -fourth-input- ->
          
           </fieldset>-->
-			<form id="form_question" method="post" action="index.php">
+			<form id="form_question" method="post" action="index.php" autocomplete="off">
 				<fieldset></fieldset>
 			</form>
-			<button id="button_nextQuestion" form="form_question" type="button">Suivant</button>
+			<button id="button_nextQuestion" form="form_question" type="submit">Suivant</button>
         </div>
       </div>
 

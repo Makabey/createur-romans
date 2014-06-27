@@ -55,7 +55,7 @@ function lireGenreLitteraires($db, $encode_result=true){
 		Extraire de la BD une copie de chaques noms "Genre Littéraire"
 	*/
 	#global $db;
-	$query = "SELECT nom FROM genres_litteraires_noms;";
+	$query = "SELECT nom FROM genres_litteraires_noms;"; # LIMIT 0,1;";
 
 	$result = $db->query ($query);
 	if(false !== $result){
