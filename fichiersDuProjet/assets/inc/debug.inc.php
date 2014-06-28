@@ -26,7 +26,7 @@ function clearDebugMsg(){
 */
 function addToDebugMsg($chaine){
 	global $gblDebugReturnMessage;
-	
+
 	if(!empty($chaine)){
 		$callers=debug_backtrace();
 		if(isset($callers[1]['function'])){

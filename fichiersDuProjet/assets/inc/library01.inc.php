@@ -100,11 +100,11 @@ function decodeJSON_Error($error){
 #
 function array_keys_like($arrHaystack, $keyString, $anyWhere = false, $caseInsensitive = false){
 	// vérifier et forcer le type des paramètres
-	if(!is_array($arrHaystack) || !is_string($keyString) || !is_bool($anyWhere) || !is_bool($caseInsensitive)){return NULL;}
-	
+	if(!is_array($arrHaystack) || empty($arrHaystack) || !is_string($keyString) || !is_bool($anyWhere) || !is_bool($caseInsensitive)){return NULL;}
+
 	$tableau = array();
 	$findpos = ($caseInsensitive)?'stripos':'strpos';
-	
+
 	foreach($arrHaystack as $key => $val){
 		$foundPos = $findpos($key, $keyString);
 
@@ -112,7 +112,7 @@ function array_keys_like($arrHaystack, $keyString, $anyWhere = false, $caseInsen
 			$tableau[]=$key;
 		}
 	}
-	
+
 	return $tableau;
 }
 

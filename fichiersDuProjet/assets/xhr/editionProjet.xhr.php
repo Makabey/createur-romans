@@ -79,7 +79,7 @@ if($_POST['idRoman'] <= 0){
 	exit();
 }
 
-$arrValidEntities = array('quoi', 'ou', 'comment', 'pourquoi', 'qui', 'textePrincipal');
+$arrValidEntities = array('quoi', 'ou', 'comment', 'pourquoi', 'qui', 'quand', 'textePrincipal');
 if(!in_array($_POST['typeEntite'], $arrValidEntities)){
 	echo "0¬Invalid value for 'typeEntite'";
 	exit();
@@ -187,11 +187,12 @@ function lireDonneesEntite($db){
 		case 'comment' :
 		case 'pourquoi' :
 		case 'qui' :
+		case 'quand' :
 			$query = 'SELECT ID_entite, ' . implode(', ', $arrChamps_entites) . ' FROM entites WHERE ID_roman = ' . $_POST['idRoman'] . ' AND typeEntite = "' . $_POST['typeEntite'] . '" AND deleted = 0 ORDER BY ID_prev ASC;';
 			$mode=2;
 			break;
 		case 'textePrincipal' :
-			$query = "SELECT contenu FROM roman_texte WHERE ID_roman=".$_POST['idRoman'].";";
+			$query = "SELECT `roman_texte`.`contenu` FROM `roman_texte`, `roman_details` WHERE `roman_texte`.`ID_roman` = `roman_details`.`ID_roman` AND `roman_details`.`ID_roman` = " . $_POST['idRoman'] . " AND `roman_details`.`deleted` = 0;";
 			$mode=1;
 			break;
 		default:
@@ -203,8 +204,11 @@ function lireDonneesEntite($db){
 		if(false !== $result){
 			if($mode == 1){
 				/* On veux le texte ? Faire une simple lecture */
-				$row = $result->fetch_row();
-				$resultat = $row[0];
+				//$row = $result->fetch_row();
+				$resultat = $result->fetch_row();
+				//var_dump($row);
+				//var_dump($resultat);
+				//$resultat = $row[0];
 			}elseif($mode == 2){
 				$resultat[0]['typeEntite'] = $_POST['typeEntite'];
 				$resultat[0]['target'] = $_POST['target'];
@@ -244,6 +248,7 @@ function miseAJourDonneesEntite($db){
 		case 'comment' :
 		case 'pourquoi' :
 		case 'qui' :
+		case 'quand' :
 			$query = 'UPDATE entites SET ';
 			if(isset($_POST['contenu'])){ // Mise à jour intégrale
 				/*

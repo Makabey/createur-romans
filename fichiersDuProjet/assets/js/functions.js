@@ -6,14 +6,14 @@
 function strStripHTML(str){
 /*
 	Enlève tout le HTML de 'str' et retourne ce qu'il reste
-	
+
 	source :: http://stackoverflow.com/questions/822452/strip-html-from-text-javascript
 */
 	str=str.replace(/<br>/gi, "\n");
 	str=str.replace(/<p.*>/gi, "\n");
 	str=str.replace(/<a.*href="(.*?)".*>(.*?)<\/a>/gi, " $2 (Link->$1) ");
 	str=str.replace(/<(?:.|\s)*?>/g, "");
-	
+
 	return str;
 }
 

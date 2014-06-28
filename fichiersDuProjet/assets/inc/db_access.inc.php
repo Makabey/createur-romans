@@ -1,6 +1,6 @@
 <?php
 /*
-	Ouvre une connection sur la BD MySQL. 
+	Ouvre une connection sur la BD MySQL.
 */
 function db_connect(){
 	#$db = @new mysqli('localhost', 'team_codeH', '^gtCNl06', 'createurromans');

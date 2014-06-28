@@ -197,7 +197,7 @@ function afficherSynopsisEtDemandeNomRoman(donnees){
 		}
 		contenuDataList += '</datalist>';
 	}
-	
+
 	synopsis_afficher += ' />'+contenuDataList+'</div>';
 
 	/*
@@ -302,7 +302,7 @@ function afficherQuestions(donnees){
 			}
 			contenu += '</select>';
 		}
-		if(donnees[iCmpt_lignes]['bouton_fonction']!=null){
+		if(donnees[iCmpt_lignes]['bouton_fonction'] != null){
 			donnees[iCmpt_lignes]['bouton_fonction'] = donnees[iCmpt_lignes]['bouton_fonction'].split('¤');
 			contenu += '<button type="button" class="bouton_question" data-fonction="'+donnees[iCmpt_lignes]['bouton_fonction'][0]+'" data-question="'+iCmpt_lignes+'">'+donnees[iCmpt_lignes]['bouton_fonction'][1]+'</button>';
 		}
@@ -330,7 +330,7 @@ function traiterErreurs(msgErreur){
 	if(msgErreur.substring(0,6) =="<br />"){ // On suppose que c'est une erreur PHP!
 		msgErreur = "[PHP] " + strStripHTML(msgErreur);
 	}
-	
+
 	alert("L'erreur suivante est survenue : '"+msgErreur+"'");
 }
 

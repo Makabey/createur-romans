@@ -24,7 +24,7 @@ require_once "../assets/inc/menus.inc.php";
 		});*/
 		/* Variables nécessaires pour le fichier JS qui suit, si applicable */
 		<?php
-		// Variables générées par PHP  pour JS
+		// Variables générées par PHP pour JS
 		/*switch($sNomDeCettePage){
 			case 'index':
 				break;

@@ -174,7 +174,7 @@ function creerLeRoman($db){
 
 	// Ajouter le synopsis et premier contenu du Roman
 	if(false !== $resultat){
-		$ID_roman = $db->insert_id;  // Lire le nouvel ID (dernier AUTONUM généré)
+		$ID_roman = $db->insert_id; // Lire le nouvel ID (dernier AUTONUM généré)
 	#}else{
 	#	$resultat = true;
 	#}
@@ -202,14 +202,14 @@ function creerLeRoman($db){
 	}
 
 	if(false !== $resultat){
-		// Collecter les types de questions avec la forme_synopsis qui deviendra le "titre" de l'entitée
+		// Collecter les types de questions avec la "forme_synopsis" qui deviendra le "titre" de l'entitée
 		while ($row = $resultat->fetch_row()){
 			$typesEntiteQuestions[] = $row;
 		}
 
-		// Les numéros de questions provenant de JS doivent être 0-based
+		// Les numéros de questions provenant de JS doivent être "0-based" (donc le premier "questionX" doit s'appeller "questions0")
 		// Faire les INSERT d'entitées, on force 0 pour le next et on corrigera dans un UPDATE après
-		// Insérer chaque entitées tel que commandé par la série "questionsX" où [0] est le contenu et [1] est la note, utiliser le champs forme_synopsis pour le titre
+		// Insérer chaque entitées tel que commandé par la série "questionX" où [0] est le contenu et [1] est la note, utiliser le champs "forme_synopsis" pour le titre
 		$arrPrevNextIDs = array();
 		$typeQuery = "n INSERT";
 		foreach($typesEntiteQuestions as $key => $val){
@@ -218,14 +218,14 @@ function creerLeRoman($db){
 				$arrPrevNextIDs[$currEntite][] = 0;
 			}
 
-			$PrevID = $arrPrevNextIDs[$currEntite][count($arrPrevNextIDs[$currEntite]) - 1];
-			$val[1] = real_escape_string($val[1], $db);
-			$_POST['question'.$key][0] = real_escape_string($_POST['question'.$key][0], $db);
-			
+			$PrevID = $arrPrevNextIDs[$currEntite][count($arrPrevNextIDs[$currEntite]) - 1]; // ID du précédent
+			$val[1] = real_escape_string($val[1], $db); // le titre de cette entitée
+			$_POST['question'.$key][0] = real_escape_string($_POST['question'.$key][0], $db); // le contenu, ce que l'usager as tapé
+
 			#$query = "INSERT INTO `entites` (`ID_roman`, `ID_prev`, `typeEntite`, `titre`, `contenu`, `note`) VALUES ($ID_roman, $PrevID, `$currEntite`, `{$val[1]}`, `{$_POST['question'.$key][0]}`, `{$_POST['question'.$key][1]}`);";
 			$query = "INSERT INTO `entites` (`ID_roman`, `ID_prev`, `typeEntite`, `titre`, `contenu`%s) VALUES ($ID_roman, $PrevID, '$currEntite', '{$val[1]}', '{$_POST['question'.$key][0]}'%s);";
 
-			if($_POST['question'.$key][1] !== ''){
+			if($_POST['question'.$key][1] !== ''){ // la note que l'usager as tapé, si quelque chose
 				$_POST['question'.$key][1] = real_escape_string($_POST['question'.$key][1], $db);
 				$query = sprintf($query, ", `note`", ", '{$_POST['question'.$key][1]}'");
 			}else{
@@ -235,7 +235,7 @@ function creerLeRoman($db){
 			$resultat = $db->query ($query);
 
 			if(false !== $resultat){
-				$arrPrevNextIDs[$currEntite][] = $db->insert_id;  // Lire le nouvel ID (dernier AUTONUM généré);
+				$arrPrevNextIDs[$currEntite][] = $db->insert_id; // Lire le nouvel ID (dernier AUTONUM généré);
 			}else{
 				break;
 			}
@@ -243,16 +243,33 @@ function creerLeRoman($db){
 	}
 
 	if(false !== $resultat){
-				/ *
-
+				/*
+$typesEntiteQuestions
 		-en passant dans $arrPrevNextIDs[$currEntite] pour tout les count > 1
 			- update de index 0 à index count-2 (-1 pour le nombre , -1 pour sauter le dernier qui devrait avoir 0 et comme c'est fait, ne rien changer.)
 			- `ID_next`
-			
+
 			*/
+		$typeQuery = "n UPDATE";
+		$query = "UPDATE `entites` SET `ID_next` = CASE `ID_entite`";
+		$IDsAChanger = array();
+		foreach($arrPrevNextIDs as $val){
+			$count_questions = count($val);
+			if($count_questions > 2){
+				for($iter_questions=1;$iter_questions<($count_questions-1);$iter_questions++){
+					$query .= " WHEN " . $val[$iter_questions] . " THEN " . $val[$iter_questions+1];
+					$IDsAChanger[] = $val[$iter_questions];
+				}
+			}
+			#$IDsAChanger[] = implode(', ', $val);
+		}
+		$query .= " ELSE `ID_next` END WHERE `ID_entite` IN (" . implode(', ', $IDsAChanger) . ");";
+		#var_dump($typesEntiteQuestions);
+		#var_dump($arrPrevNextIDs);
+		#$resultat = FALSE;
+		$resultat = $db->query ($query);
 	}
-	
-	
+
 	if(false === $resultat){
 		$resultat = $db->query ("rollback;");
 		$resultat = "0¬[" . __FUNCTION__ . "] An error occured during a$typeQuery operation. (query = $query :: " . $db->error . " )";
