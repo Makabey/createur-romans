@@ -88,8 +88,9 @@ $(function(){
 	$("#"+gblParentDesBalises).on("keyup", "#titreRoman", function(){
 		//console.log("ca marche!");
 		/*
-			Mon idée ici était d'avertir l'usager s'il entre le même nom pour ce roman que pour un précédent
-			lui-appartenant, juste des classes CSS mais je met de côté pour me concentrer sur la sauvegarde
+			Mon idée ici était d'avertir l'usager s'il entre le même nom pour ce roman que pour un
+			précédent lui-appartenant, juste avec des classes CSS mais je met de côté pour me
+			concentrer sur la sauvegarde
 		*/
 	});
 });
@@ -200,7 +201,6 @@ function afficherSynopsisEtDemandeNomRoman(donnees){
 		questions; le form doit vérifier realtime que le nom n'est pas déjà utilisé
 		pour CET usager ?
 	*/
-
 	$("#"+gblParentDesBalises).html(synopsis_afficher);
 	$("#waitP").hide();
 	$("#"+gblParentDesBalises).show();

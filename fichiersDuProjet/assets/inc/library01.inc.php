@@ -85,4 +85,35 @@ function decodeJSON_Error($error){
 	 return $retour;
 }
 
+##############
+#
+# Retourne un tableau avec les clés répondant à la sous-chaine désirée
+#
+#	Parametres:
+#		$arrHaystack : (array) le tableau à parcourir
+#		$keyString : (string) la chaine recherchée
+#		$anyWhere : (bool = false / optionnel) la sous-chaine peux être n'importe où
+#		$caseInsensitive : (bool = false /optionnel) ignore la casse
+#
+#	Retour :
+#		un tableau contenant les clés trouvées ou un tableau vide si erreur
+#
+function array_keys_like($arrHaystack, $keyString, $anyWhere = false, $caseInsensitive = false){
+	// vérifier et forcer le type des paramètres
+	if(!is_array($arrHaystack) || !is_string($keyString) || !is_bool($anyWhere) || !is_bool($caseInsensitive)){return NULL;}
+	
+	$tableau = array();
+	$findpos = ($caseInsensitive)?'stripos':'strpos';
+	
+	foreach($arrHaystack as $key => $val){
+		$foundPos = $findpos($key, $keyString);
+
+		if((!$anyWhere && $foundPos === 0) || ($anyWhere && $foundPos !== false)){
+			$tableau[]=$key;
+		}
+	}
+	
+	return $tableau;
+}
+
 /* == EOF == */

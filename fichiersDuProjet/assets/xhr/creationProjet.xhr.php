@@ -46,7 +46,7 @@ switch($_POST['oper']){
 			$resultat = lireListeRomans($db);
 		}
 		break;
-		
+
 	case "creerLeRoman":
 		// Plus de validation à ajouter plus tard pour ce qui est des champs requis...
 		$resultat = creerLeRoman($db);
@@ -151,37 +151,90 @@ function creerLeRoman($db){
 				for(iCmpt=0;iCmpt<gblChoixUsager['questions'].length;iCmpt++){
 					queryString += "&question"+iCmpt+"[]="+encodeURIComponent (gblChoixUsager['questions'][iCmpt]['reponse']);
 					queryString += "&question"+iCmpt+"[]="+encodeURIComponent (gblChoixUsager['questions'][iCmpt]['description']);*/
-	
+
+	//$resultat = false; // Représente la présence ou non d'une erreur jusqu'à ce qu'elle contienne un résultat
+	$typeQuery = "INSERT";
 	$_POST['titreRoman'] = real_escape_string($_POST['titreRoman'], $db);
-	
+
 	// Créer le roman
 	$query = "START TRANSACTION; INSERT INTO `roman_details` (`ID_usager`, `ID_genre`, `titre`) VALUES ({$_POST['idUsager']}, (SELECT ID_genre FROM genres_litteraires_noms WHERE nom = '{$_POST['genreLitteraire']}'), '{$_POST['titreRoman']}');";
-	
-	$result = $db->query ($query);
-	if(false !== $result){
-		$ID_roman = $db->insert_id;
-		// Ajouter le synopsis du Roman
+
+	$resultat = $db->query ($query);
+
+	// Ajouter le synopsis du Roman
+	if(false !== $resultat){
+		$ID_roman = $db->insert_id;  // Lire le nouvel ID (dernier AUTONUM généré)
+	#}else{
+	#	$resultat = true;
+	#}
+
+	#if(!$resultat){
+	#if(false !== $resultat){
+
 		$_POST['synopsis'] = real_escape_string($_POST['synopsis'], $db);
 		$query = "INSERT INTO `roman_texte` (`ID_roman`, `synopsis`, `contenu`) VALUES ($ID_roman, '{$_POST['synopsis']}', 'Bienvenue dans votre roman! Quel sera le commencement de votre histoire? :)');";
-		
-		$result = $db->query ($query);
-		if(false !== $result){
-			// Maintenant lire le nombre de questions pour le genre littéraire, ce qui permet de savoir combien d'insertions faire pour la suite
-			
-			// Insérer chaque entitées tel que commandé par la série "questionsX" où [0] est le contenu et [1] est la note, utiliser le champs forme_synopsis pour le titre
-			
-		}else{
-			$query="rollback;";
-			$result = $db->query ($query);
-			$resultat = "0¬[" . __FUNCTION__ . "] An error occured during an INSERT operation. (query = '$query')";
-		}
-	}else{
-		$query="rollback;";
-		$result = $db->query ($query);
-		$resultat = "0¬[" . __FUNCTION__ . "] An error occured during an INSERT operation. (query = '$query')";
+
+		$resultat = $db->query ($query);
 	}
-	
-	//$resultat = "0¬[" . __FUNCTION__ . "]  ($query)";
+
+	// Maintenant lire le nombre de questions pour le genre littéraire, ce qui permet de savoir combien d'insertions faire pour la suite
+	if(false !== $resultat){
+
+		#$questions = array_keys_like($_POST, 'question', false, true); // <== fonctionne mais j'avais oublié qu'il me faut les types d'entitées :'(
+		#$arrChamps_genres_litteraires = array('nro_question', 'texte', 'forme_synopsis', 'type_input', 'suggestions', 'bouton_fonction'); #, 'typeEntite'); // j'ai enlevé le champs 'nom' pour que ça fasse moins de données retournés
+
+		$query = "SELECT `genres_litteraires_questions`.`typeEntite`, `genres_litteraires_questions`.`forme_synopsis` FROM genres_litteraires_questions, genres_litteraires_noms WHERE genres_litteraires_questions.ID_genre = genres_litteraires_noms.ID_genre AND genres_litteraires_noms.nom = '{$_POST['genreLitteraire'] }' ORDER BY genres_litteraires_questions.nro_question;";
+
+		$typeQuery = "SELECT";
+		$resultat = $db->query ($query);
+	}
+
+	if(false !== $resultat){
+		// Collecter les types de questions avec la forme_synopsis qui deviendra le "titre" de l'entitée
+		while ($row = $resultat->fetch_row()){
+			$typesEntiteQuestions[] = $row;
+		}
+
+		// Les numéros de questions provenant de JS doivent être 0-based
+		// Faire les INSERT d'entitées, on force 0 pour le next et on corrigera dans un UPDATE après
+		// Insérer chaque entitées tel que commandé par la série "questionsX" où [0] est le contenu et [1] est la note, utiliser le champs forme_synopsis pour le titre
+			/*
+	brainstorm
+
+		array qui est rempli selons les types utilisé dont le premier cle sera 0 pour le précédent
+		pour remplir on se dit que si non oexistant on mer 0 sinon on lit le dernier autonum et on mle met pour l'utliiser pour l e prochain insert_id
+		en principe je peux reparcourir en UPDATE cette liste et déterminer le next
+		`ID_next`, , `deleted`
+
+		pour la pase UPDATE essayer de tous les fiare en une seule opération.
+	*/
+		$arrPrevNextIDs = array();
+		foreach($typesEntiteQuestions as $key => $val){
+			$currEntite = $val['typeEntite'];
+			if(true !== array_key_exists($currEntite, $arrPrevNextIDs){
+				$arrPrevNextIDs[$currEntite][] = 0;
+			}
+
+			$PrevID = $arrPrevNextIDs[$currEntite][count($arrPrevNextIDs[$currEntite]) - 1];
+			$query = "INSERT INTO `entites` (`ID_roman`, `ID_prev`, `typeEntite`, `titre`, `contenu`, `note`) VALUES ($ID_roman, $PrevID, $currEntite, {$val['forme_synopsis']}, {$_POST['question'.$key][0]}, {$_POST['question'.$key][1]});";
+
+			$typeQuery = "INSERT";
+			$resultat = $db->query ($query);
+
+			if(false !== $resultat){
+				$arrPrevNextIDs[$currEntite][] = $db->insert_id;  // Lire le nouvel ID (dernier AUTONUM généré);
+			}else{
+				break;
+			}
+		}
+	}
+
+	if(false === $resultat){
+		$query="rollback;";
+		$resultat = $db->query ($query);
+		$resultat = "0¬[" . __FUNCTION__ . "] An error occured during an $typeQuery operation. (query = '$query')";
+	}
+
 	return $resultat;
 }
 
