@@ -16,7 +16,8 @@
 /*
 	VALEURS LUES DE php (une fois qu'on aura l'authentification)
 */
-var idRoman = 1;
+var idUsager = 1;
+//var idRoman = 1; //(isset($_GET['idRoman']))?$_GET['idRoman']:1;
 
 /*
 	CONFIGURATION
@@ -177,29 +178,39 @@ function afficherEntites(donnees){
 	var typeEntite = donnees[0]['typeEntite']; //"qui";
 	var baliseParent = "#"+donnees[0]['target'];
 	//$(donnees[0]['target']).html('');
-	/*
-		Créer l'interface dans le parent donnees[0]['target']
-	*/
-	//for(var iCmpt_Entites=1;iCmpt_Entites<arrDonnees_length;iCmpt_Entites++){
-	do{
-		//console.log(iCmpt_Entites);
-		contenu +='<div data-idprev="'+donnees[curIndex]['ID_prev']+'" data-idnext="'+donnees[curIndex]['ID_next'];
-		contenu += '" id="contenantEntite_'+typeEntite+'_'+curIndex+'"><div><h4>'+donnees[curIndex]['titre']+"</h4></div>";
-		contenu += '<div><p data-idparent="'+curIndex+'">'+donnees[curIndex]['contenu']+'</p></div><div>';
-		donnees[curIndex]['note'] = (donnees[curIndex]['note'] === null)?'':donnees[curIndex]['note'];
-		contenu += donnees[curIndex]['note'] + '</div></div>';
-		curIndex = donnees[curIndex]['ID_next'];
-	//}
-	}while(curIndex != 0);
-	//console.log(contenu);
-	$(baliseParent).html(contenu);
+	if(curIndex !== null){
+		/*
+			Créer l'interface dans le parent donnees[0]['target']
+		*/
+		//for(var iCmpt_Entites=1;iCmpt_Entites<arrDonnees_length;iCmpt_Entites++){
+		do{
+			//console.log(iCmpt_Entites);
+			contenu +='<div data-idprev="'+donnees[curIndex]['ID_prev']+'" data-idnext="'+donnees[curIndex]['ID_next'];
+			contenu += '" id="contenantEntite_'+typeEntite+'_'+curIndex+'"><div><h4>'+donnees[curIndex]['titre']+"</h4></div>";
+			contenu += '<div><p data-idparent="'+curIndex+'">'+donnees[curIndex]['contenu']+'</p></div><div>';
+			donnees[curIndex]['note'] = (donnees[curIndex]['note'] === null)?'':donnees[curIndex]['note'];
+			contenu += donnees[curIndex]['note'] + '</div></div>';
+			curIndex = donnees[curIndex]['ID_next'];
+		//}
+		}while(curIndex != 0);
+		//console.log(contenu);
+		$(baliseParent).html(contenu);
+	}else{
+		alert("Aucune entitée attachée à ce Roman!");
+	}
 }
 
-function afficherTextePrincipal(contenu){
+function afficherTextePrincipal(donnees){
 	$("#balise_attendez").hide();
-	contenu = contenu.substring(1, contenu.length-1); // Enlever les guillemets autour du texte
-	$("#main_write").text(contenu);
-	gbl_DelaiSauvegarde_TextePrincipal = setTimeout('sauvegarderTextePrincipal("main_write")', iFrequenceSauvegarde_TextePrincipal);
+	donnees = JSON.parse(donnees); // contraire :: JSON.stringify(array);
+	console.log(donnees);
+	if(donnees !== null){
+		//donnees[0] = donnees[0].substring(1, donnees[0].length-1); // Enlever les guillemets autour du texte
+		$("#main_write").text(donnees[0]);
+		gbl_DelaiSauvegarde_TextePrincipal = setTimeout('sauvegarderTextePrincipal("main_write")', iFrequenceSauvegarde_TextePrincipal);
+	}else{
+		$("#main_write").text("[Cet usager n'as aucun Roman ou il y as eût une erreur de BD.]");
+	}
 }
 
 function sauvegarderTextePrincipal(id_balise){
@@ -211,7 +222,7 @@ function sauvegarderTextePrincipal(id_balise){
 	$("#temoin_activite").css("background-color", ($("#temoin_activite").css("background-color") == "rgb(255, 255, 0)")?"blue":"yellow");
 
 	if($("#main_write").data("dirtyBit") === true){
-		sauvegarderTexte(lancerDelaiSauvegardeTextePrincipal, traiterErreurs);
+		sauvegarderTexte(lancerDelaiSauvegardeTextePrincipal, traiterErreurs, idRoman, $("#"+id_balise).val());
 		console.log("sauvegarderTextePrincipal("+id_balise+") / DirtyBit :: True");
 	}else{
 		gbl_DelaiSauvegarde_TextePrincipal = setTimeout('sauvegarderTextePrincipal("main_write")', iFrequenceSauvegarde_TextePrincipal);
@@ -267,9 +278,9 @@ function deplacerEntite(fctTraitementPositif, fctTraitementNegatif, idRoman, typ
 }
 
 function effacerEntite(fctTraitementPositif, fctTraitementNegatif, idRoman, typeEntite, idEntite){
-	//console.log("arguments[5]  = "+arguments[5]);
+	//console.log("arguments[5] = "+arguments[5]);
 	var etatDeleted = (arguments[5] != undefined)?arguments[5]:1; // argument optionel
-	//console.log("arguments[5]  = "+etatDeleted);
+	//console.log("arguments[5] = "+etatDeleted);
 	var XHR_Query = "oper=effacer&typeEntite="+typeEntite+"&idRoman="+idRoman+"&idEntite="+idEntite+"&etat="+etatDeleted;
 	execXHR_Request("../assets/xhr/editionProjet.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
@@ -279,12 +290,10 @@ function chargerTexte(fctTraitementPositif, fctTraitementNegatif, idRoman){
 	execXHR_Request("../assets/xhr/editionProjet.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
 
-function sauveagarderTexte(){
-	var texte_encoder = encodeURIComponent ($("#"+id_balise).val());
-	var XHR_Query = "oper=ecrire&typeEntite=textePrincipal&idRoman="+idRoman+"&contenu="+texte_encoder;
+function sauvegarderTexte(fctTraitementPositif, fctTraitementNegatif, idRoman, nouveauTexte){
+	var nouveauTexte = encodeURIComponent (nouveauTexte);
+	var XHR_Query = "oper=ecrire&typeEntite=textePrincipal&idRoman="+idRoman+"&contenu="+nouveauTexte;
 	execXHR_Request("../assets/xhr/editionProjet.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
-	
-	
 }
 
 /* == EOF == */

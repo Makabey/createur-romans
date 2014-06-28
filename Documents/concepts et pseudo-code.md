@@ -4,8 +4,15 @@
 To Do:
 - [x] page de test pour formulaire + table pour le supporter
 - [ ] Changer la sauvegarde pour qu'elle s'effectue si le dirtyBit est ON -et- qu'on as plus tapé depuis x secondes. Autre possibilité, detecter si web storage permis/disponible et si OUI alors sauve localement aux 15 secondes et aux 300 secs sur le web si on ne force pas pâr l'interface (bouton)
-- [ ] faire la page des questions avec ce que Thomas as créé en page et en data
-- [ ] fonction sauvegardertexte pas finie, manque les params
+- [x] faire la page des questions avec ce que Thomas as créé en page et en data
+- [x] fonction sauvegardertexte pas finie, manque les params
+- [ ] tout re-commenter
+- [ ] menage code mort!!!
+- [x] voir "Page creationProjet"
+- [x] changer la fonction afficherAttente, elle doit maintenant : 1. occulter le FORM et le BUTTON de 'next'; 2. afficher un DIV ou P dédié et placé -avant- le FORM; 3. créer une fonction opposée? L'idée est de pouvoir cacher le FORM durant la recomposition de son contenu indépendamment; 4. lui donner aussi un param pour le message! si pas là, mettre un défaut :)
+- [x] bug : s'il n'y as aucune entrée dans la table romans_details mais que celle correspondant dans romans_texte existe, agit comme s'il ne manquait rien, donc changer le code pour tout passer par romans_details, surtout que c'est elle qui décide si un roman est deleted ou non; en fait le bug persiste avec les entitées! oui bon, dans le cas des entitées, en principe une fois le code bien écrit il sera impossible de les charger ^_^'...
+- [ ] bug : encodage pas au point ou cest pcq jai pas updater page edition avec les ameliorations de creation... hum ... ??? O_o
+
 ====
 
 ####Page index (au moins) ::
@@ -20,10 +27,10 @@ To Do:
 - [ ] lire les APIs de G+ et F pour le login
 - [ ] fichier XHR + code JS pour query de validité usager (usr+pwd)
 - [ ] fichier XHR + code JS pour query de disponiblité nom usager, à moins de fusionner avec "validité" et d'utiliser les codes de retour ex:
-  * 0=usager inexistant (usager libre ou nom mal tapé),
-  * 1=usager existant (usager indisponible ou nom bien tapé),
-  * 2=mot de passe invalide,
-  * 3=mot de passe OK (-doit- sous-entendre usager existant) ; suppose que le champs PWD peux être vide et si c'est le cas la validation du PWD n'est pas faite donc pas de code 2 erroné
+ * 0=usager inexistant (usager libre ou nom mal tapé),
+ * 1=usager existant (usager indisponible ou nom bien tapé),
+ * 2=mot de passe invalide,
+ * 3=mot de passe OK (-doit- sous-entendre usager existant) ; suppose que le champs PWD peux être vide et si c'est le cas la validation du PWD n'est pas faite donc pas de code 2 erroné
 - [ ] si on encrypte les données ET qu'on n'enregistre pas le MdP sur le serveur, par sécurité, ça veux dire qu'on peux associer les données au nom d'usager et que seul le bon mot de passe décrypte correctement les données, donc pas de validation MdP, je dois lire plus pour voir si j'ai bien compris comment implémenter un MdP qui n'est pas sauvé (même encrypté) sur le serveur. Implémenter?
 - [x] reprendre assets/inc/header.inc.php et corriger la description et les keywords, autant faire ça correctement pour le SEO ;)
 - [ ] voir http://www.fakenamegenerator.com/faq.php :: http://www.roguebasin.com/index.php?title=Random_name_generation :: http://www.godpatterns.com/2005/09/name-generators-for-npcs-to-populate.html
@@ -42,7 +49,9 @@ To Do:
 - [x] déterminer si pour la lecture des données du genre choisi, une seule fonction retourne tout ou si on as une fonction qui initialise(avec retour de la première question et du nombre total de questions) et une qui demande la suite pour répondre FALSE s'il n'y as rien d'autres ?
 - [x] fonction avec jQuery pour créer les balises nécessaire pour afficher les questions
 - [ ] fonction qui enregistre tout
-- [ ] fonction pour créer le Roman dans les tables roman_details et roman_texte
+- [x] fonction pour créer le Roman dans les tables roman_details et roman_texte
+- [ ] fonction qui encode les texte, doit être globale et utilisable par n'importe quel fichier (création + édition)
+- [ ] fonction qui DÉcode les texte, doit être globale et utilisable par n'importe quel fichier
 
 ####Page editionProjet
 - [x] décider si mettre "roman.contenu" dans fichier texte séparé au lieu de MySQL? <-- pê exagéré pour la démo??
@@ -71,89 +80,89 @@ structure des tables de BD ::
 
 représentation des questions/réponses pour l'assistant dans la BD :
 - genres_litteraires
-  * ID_ligne_genre: Unique, clé primaire, uTinyInt
-  * ID_genre : uSmallInt
-  * nom : varchar(50)
-  * nro_question : uTinyInt
-  * texte : varchar(255)
-  * type_input (text, select, ...) : varchar(20)
-  * valeurs_defaut : Text
-    - pour input="text" : chaine et si elle comporte un "¤" alors tout ce qui le suit est un 'placeholder', s'il y as encore un "¤" alors on suppose que ce qui suit sont des valeurs pour un datalist, ex: "jaune¤couleur du pantalon¤rouge¤vert¤noir "
-    - pour select : liste séparée par des "¤" (la valeur sera la position numérique dans la liste d'options, au moment d'afficher on reprend le texte(?))
-  * bouton_fonction : varchar(40);
-    - si valeur = NUL alors pas de bouton, sinon nom de la fonction liée et après le "¤" c'est le texte qui doit apparaitre ex: "tirer_nom(4, 20, 2)¤Générer" (ici je pense : min lng, max lng, nombre de mots)
-    - le bouton "(question) Suivant" est toujours ajouté par le code pour toutes les questions et la dernière (question) dicte qu'on doit mettre "Fin" à la place pour ensuite compiler les réponses en synopsis.
+ * ID_ligne_genre: Unique, clé primaire, uTinyInt
+ * ID_genre : uSmallInt
+ * nom : varchar(50)
+ * nro_question : uTinyInt
+ * texte : varchar(255)
+ * type_input (text, select, ...) : varchar(20)
+ * suggestions : Text
+ - pour input="text" : chaine et si elle comporte un "¤" alors tout ce qui le suit est un 'placeholder', s'il y as encore un "¤" alors on suppose que ce qui suit sont des valeurs pour un datalist, ex: "jaune¤couleur du pantalon¤rouge¤vert¤noir "
+ - pour select : liste séparée par des "¤" (la valeur sera la position numérique dans la liste d'options, au moment d'afficher on reprend le texte(?))
+ * bouton_fonction : varchar(40);
+ - si valeur = NUL alors pas de bouton, sinon nom de la fonction liée et après le "¤" c'est le texte qui doit apparaitre ex: "tirer_nom(4, 20, 2)¤Générer" (ici je pense : min lng, max lng, nombre de mots)
+ - le bouton "(question) Suivant" est toujours ajouté par le code pour toutes les questions et la dernière (question) dicte qu'on doit mettre "Fin" à la place pour ensuite compiler les réponses en synopsis.
 
 - usagers:
-  * ID_usager : Unique, clé primaire, uMediumInt
-  * pseudo : varchar(30)
-  * nom : varchar(50)
-  * motdepasse : varchar(20)
-  * courriel : varchar(40)
-  * dateInscription : datetime
+ * ID_usager : Unique, clé primaire, uMediumInt
+ * pseudo : varchar(30)
+ * nom : varchar(50)
+ * motdepasse : varchar(20)
+ * courriel : varchar(40)
+ * dateInscription : datetime
 
 - roman:
-  * ID_roman : Unique, clé primaire, uInt
-  * ID_usager : uMediumInt
-  * ID_genre : bit(8) (si 0 alors "page blanche", si cloné/sequel alors même que "parent", si plus qu'un c'est le total mais la limite est que genres_litteraires.ID_genre ne peux pas dépasser 127)
-  * titre : varchar(50)
-  * synopsis : Text
-  * contenu : mediumText
-  * date_creation : datetime
-  * date_dnrEdition : datetime
-  * choix_assistant : Text, les choix fait lors de la création séparés par "¤" si on as utilisé l'assistant, sinon NUL
-  * deleted : bit (1)
+ * ID_roman : Unique, clé primaire, uInt
+ * ID_usager : uMediumInt
+ * ID_genre : bit(8) (si 0 alors "page blanche", si cloné/sequel alors même que "parent", si plus qu'un c'est le total mais la limite est que genres_litteraires.ID_genre ne peux pas dépasser 127)
+ * titre : varchar(50)
+ * synopsis : Text
+ * contenu : mediumText
+ * date_creation : datetime
+ * date_dnrEdition : datetime
+ * choix_assistant : Text, les choix fait lors de la création séparés par "¤" si on as utilisé l'assistant, sinon NUL
+ * deleted : bit (1)
 
 - personnages:
-  * ID_personnage : Unique, clé primaire, uInt
-  * ID_roman : uInt
-  * ID_prev : uInt, index du personnage à afficher -avant- ou 0 si premier
-  * ID_next : uInt, index du personnage à afficher -après- ou 0 si dernier
-  * ~~IDs_references : Text, liste des IDs des autres entitées référencées sous la forme "[lettre][chiffres]" séparés par "¤" où [lettre] est le type tel que [p]ersonnage/ [n]ote / [l]ieux/ [a]utres suivi du ID_[perso/lieu/note/autres], donne ~5039 références max @~11 char+1séparateur/référence vs varchar(255) qui donnait ~18 ~~
-  * nom : varchar(50)
-  * sexe : enum[femme, homme]
-  * role_fonction : enum [protagoniste, antagoniste, figurant, intérêt amoureux, ...]
-  * ~~role_poid: enum [primaire, secondaire, tertiaire, ...]~~
-  * taille_cm : uSmallInt
-  * poids_kg : uSmallInt
-  * description : Text, tout les autres détails, dont "background"
-  * sticky : bit (1), si TRUE alors (discuter laquelle des trois options prendre) soit l'entitée apparait en tête de sa liste, soit elle apparait dans un onglet dédié (stickied), soit les deux
-  * deleted : bit (1)
+ * ID_personnage : Unique, clé primaire, uInt
+ * ID_roman : uInt
+ * ID_prev : uInt, index du personnage à afficher -avant- ou 0 si premier
+ * ID_next : uInt, index du personnage à afficher -après- ou 0 si dernier
+ * ~~IDs_references : Text, liste des IDs des autres entitées référencées sous la forme "[lettre][chiffres]" séparés par "¤" où [lettre] est le type tel que [p]ersonnage/ [n]ote / [l]ieux/ [a]utres suivi du ID_[perso/lieu/note/autres], donne ~5039 références max @~11 char+1séparateur/référence vs varchar(255) qui donnait ~18 ~~
+ * nom : varchar(50)
+ * sexe : enum[femme, homme]
+ * role_fonction : enum [protagoniste, antagoniste, figurant, intérêt amoureux, ...]
+ * ~~role_poid: enum [primaire, secondaire, tertiaire, ...]~~
+ * taille_cm : uSmallInt
+ * poids_kg : uSmallInt
+ * description : Text, tout les autres détails, dont "background"
+ * sticky : bit (1), si TRUE alors (discuter laquelle des trois options prendre) soit l'entitée apparait en tête de sa liste, soit elle apparait dans un onglet dédié (stickied), soit les deux
+ * deleted : bit (1)
 
 - lieux:
-  * ID_lieu : Unique, clé primaire, uInt
-  * ID_roman : uInt
-  * ID_prev : uInt, index du lieu à afficher -avant- ou 0 si premier
-  * ID_next : uInt, index du lieu à afficher -après- ou 0 si dernier
-  * ~~IDs_references : Text, liste des IDs des autres entitées référencées sous la forme "[lettre][chiffres]" séparés par "¤" où [lettre] est le type tel que [p]ersonnage/ [n]ote / [l]ieux/ [a]utres suivi du ID_[perso/lieu/note/autres], donne ~5039 références max @~11 char+1séparateur/référence vs varchar(255) qui donnait ~18 ~~
-  * ~~type_environnement enum[intérieur, extérieur, sous-terrain, sous-marin, sous vide (espace)]~~
-  * ~~type_acces enum[privé, publique, sur invitation]~~
-  * nom : varchar(50)
-  * taille_approx_m3 : uMediumInt (mesure en mètres cubes)
-  * description : Text, tout les autres détails, dont "background"
-  * sticky : bit (1), si TRUE alors (discuter laquelle des trois options prendre) soit l'entitée apparait en tête de sa liste, soit elle apparait dans un onglet dédié (stickied), soit les deux
-  * deleted : bit (1)
+ * ID_lieu : Unique, clé primaire, uInt
+ * ID_roman : uInt
+ * ID_prev : uInt, index du lieu à afficher -avant- ou 0 si premier
+ * ID_next : uInt, index du lieu à afficher -après- ou 0 si dernier
+ * ~~IDs_references : Text, liste des IDs des autres entitées référencées sous la forme "[lettre][chiffres]" séparés par "¤" où [lettre] est le type tel que [p]ersonnage/ [n]ote / [l]ieux/ [a]utres suivi du ID_[perso/lieu/note/autres], donne ~5039 références max @~11 char+1séparateur/référence vs varchar(255) qui donnait ~18 ~~
+ * ~~type_environnement enum[intérieur, extérieur, sous-terrain, sous-marin, sous vide (espace)]~~
+ * ~~type_acces enum[privé, publique, sur invitation]~~
+ * nom : varchar(50)
+ * taille_approx_m3 : uMediumInt (mesure en mètres cubes)
+ * description : Text, tout les autres détails, dont "background"
+ * sticky : bit (1), si TRUE alors (discuter laquelle des trois options prendre) soit l'entitée apparait en tête de sa liste, soit elle apparait dans un onglet dédié (stickied), soit les deux
+ * deleted : bit (1)
 
 - notes :
-  * ID_note : Unique, clé primaire, uInt
-  * ID_roman : uInt
-  * ID_prev : uInt, index de note à afficher -avant- ou 0 si premier
-  * ID_next : uInt, index de note à afficher -après- ou 0 si dernier
-  * ~~IDs_references : Text, liste des IDs des autres entitées référencées sous la forme "[lettre][chiffres]" séparés par "¤" où [lettre] est le type tel que [p]ersonnage/ [n]ote / [l]ieux/ [a]utres suivi du ID_[perso/lieu/note/autres], donne ~5039 références max @~11 char+1séparateur/référence vs varchar(255) qui donnait ~18 ~~
-  * contenu : Text
-  * sticky : bit (1), si TRUE alors (discuter laquelle des trois options prendre) soit l'entitée apparait en tête de sa liste, soit elle apparait dans un onglet dédié (stickied), soit les deux
-  * deleted : bit (1)
+ * ID_note : Unique, clé primaire, uInt
+ * ID_roman : uInt
+ * ID_prev : uInt, index de note à afficher -avant- ou 0 si premier
+ * ID_next : uInt, index de note à afficher -après- ou 0 si dernier
+ * ~~IDs_references : Text, liste des IDs des autres entitées référencées sous la forme "[lettre][chiffres]" séparés par "¤" où [lettre] est le type tel que [p]ersonnage/ [n]ote / [l]ieux/ [a]utres suivi du ID_[perso/lieu/note/autres], donne ~5039 références max @~11 char+1séparateur/référence vs varchar(255) qui donnait ~18 ~~
+ * contenu : Text
+ * sticky : bit (1), si TRUE alors (discuter laquelle des trois options prendre) soit l'entitée apparait en tête de sa liste, soit elle apparait dans un onglet dédié (stickied), soit les deux
+ * deleted : bit (1)
 
 - autres (ex:bateaux, avion, coffre d'outils, le Tardis,...):
-  * ID_autres : Unique, clé primaire, uInt
-  * ID_roman : uInt
-  * ID_prev : uInt, index de "autres" à afficher -avant- ou 0 si premier
-  * ID_next : uInt, index de "autres" à afficher -après- ou 0 si dernier
-  * ~~IDs_references : Text, liste des IDs des autres entitées référencées sous la forme "[lettre][chiffres]" séparés par "¤" où [lettre] est le type tel que [p]ersonnage/ [n]ote / [l]ieux/ [a]utres suivi du ID_[perso/lieu/note/autres], donne ~5039 références max @~11 char+1séparateur/référence vs varchar(255) qui donnait ~18 ~~
-  * nom : varchar(50)
-  * description : Text
-  * sticky : bit (1), si TRUE alors (discuter laquelle des trois options prendre) soit l'entitée apparait en tête de sa liste, soit elle apparait dans un onglet dédié (stickied), soit les deux
-  * deleted : bit (1)
+ * ID_autres : Unique, clé primaire, uInt
+ * ID_roman : uInt
+ * ID_prev : uInt, index de "autres" à afficher -avant- ou 0 si premier
+ * ID_next : uInt, index de "autres" à afficher -après- ou 0 si dernier
+ * ~~IDs_references : Text, liste des IDs des autres entitées référencées sous la forme "[lettre][chiffres]" séparés par "¤" où [lettre] est le type tel que [p]ersonnage/ [n]ote / [l]ieux/ [a]utres suivi du ID_[perso/lieu/note/autres], donne ~5039 références max @~11 char+1séparateur/référence vs varchar(255) qui donnait ~18 ~~
+ * nom : varchar(50)
+ * description : Text
+ * sticky : bit (1), si TRUE alors (discuter laquelle des trois options prendre) soit l'entitée apparait en tête de sa liste, soit elle apparait dans un onglet dédié (stickied), soit les deux
+ * deleted : bit (1)
 
 
 =====

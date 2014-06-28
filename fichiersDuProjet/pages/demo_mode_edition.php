@@ -1,10 +1,12 @@
 <?php
 $sPageTitle = "(demo) mode Édition | ";
 
+$idRoman = (isset($_GET['idRoman']))?$_GET['idRoman']:1;
+
 include "../assets/inc/header.inc.php";
 ?>
-<form id="form_question" method="post" action="index.php"></form>
 <p id="balise_attendez"><img src="../assets/images/wait_circle2.png" class="waitCircle" alt="Attendez..." />Récupération du document...</p>
+<form id="form_question" method="post" action="index.php"></form>
 <textarea id="main_write" form="form_question" cols="80" rows="20"></textarea>
 <button type="button" id="btn_save" form="form_question">Sauvegarder</button>
 <div id="temoin_activite"></div>

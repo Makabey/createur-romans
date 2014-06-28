@@ -12,7 +12,7 @@ function execXHR_Request(urlAuthentify, queryString, fct_callBack, fct_callError
 				xhr.abort(); // On annule la requête en cours !
 			}
 		*/
-	
+
 		// On défini ce qu'on va faire quand on aura la réponse
 		xhr.onreadystatechange = function(){
 			// On ne fait quelque chose que si on a tout reçu et que le serveur est ok
