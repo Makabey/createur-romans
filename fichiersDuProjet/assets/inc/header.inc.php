@@ -29,6 +29,7 @@ require_once "../assets/inc/menus.inc.php";
 			case 'index':
 				break;
 		}*/
+		echo "var idRoman = $idRoman;", PHP_EOL
 		?>
 		</script>
 		<!-- Fichier JS spécifique à la page -->

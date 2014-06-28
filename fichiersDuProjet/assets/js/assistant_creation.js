@@ -149,9 +149,12 @@ function creerLeRoman(fctTraitementPositif, fctTraitementNegatif, queryString){
 	FONCTIONS DE TRAITEMENT DES RETOURS POSITIFS
 */
 function felicitationSurCreation(donnees){
-	console.log("pas d'erreurs");
+	//console.log("pas d'erreurs");
 	// Envoyer à la page d'Édition
-	console.log("Questions finies!");
+	//console.log("Questions finies!");
+	donnees = donnees.split('¤');
+	alert(donnees[1]);
+	document.location.href="demo_mode_edition.php?idRoman="+donnees[0];
 }
 
 function afficherSynopsisEtDemandeNomRoman(donnees){
@@ -165,7 +168,6 @@ function afficherSynopsisEtDemandeNomRoman(donnees){
 	var iCmpt=0;
 
 	gblChoixUsager['synopsis'] = '';
-	gblChoixUsager['romans'] = JSON.parse(donnees); // contraire :: JSON.stringify(array);
 	//console.log(gblChoixUsager['romans'].length);
 
 	//$("#"+gblParentDesBalises).hide();
@@ -186,6 +188,7 @@ function afficherSynopsisEtDemandeNomRoman(donnees){
 	//maintenant = maintenant.getFullYear()+"/"+maintenant.getMonth()+"/"+maintenant.getDay();
 	synopsis_afficher += ' value = "test - \''+maintenant+'\'"';
 
+	gblChoixUsager['romans'] = (donnees.length)?JSON.parse(donnees):''; // contraire :: JSON.stringify(array);
 	if(gblChoixUsager['romans'].length>0){
 		synopsis_afficher += ' list="listeNomsRomans"';
 		contenuDataList += '<datalist id="listeNomsRomans">';
@@ -194,6 +197,7 @@ function afficherSynopsisEtDemandeNomRoman(donnees){
 		}
 		contenuDataList += '</datalist>';
 	}
+	
 	synopsis_afficher += ' />'+contenuDataList+'</div>';
 
 	/*
@@ -321,10 +325,12 @@ function traiterErreurs(msgErreur){
 	/*
 	Voir appels à "execXHR_Request",
 	Sert à traiter l'erreur recue.
-	Pour le moment l'erreur la plus commune devrais être "usager team_codeH inexistant"
-	ce qui veux dire que l'on doit créer l'usager pour accèder à la BD (ne pas mélanger avec la table "usagers"
-	parce que ce n'est pas du tout la même chose), voir le fichier db_access.inc.php pour le mot de passe
 	*/
+
+	if(msgErreur.substring(0,6) =="<br />"){ // On suppose que c'est une erreur PHP!
+		msgErreur = "[PHP] " + strStripHTML(msgErreur);
+	}
+	
 	alert("L'erreur suivante est survenue : '"+msgErreur+"'");
 }
 

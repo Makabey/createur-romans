@@ -126,11 +126,15 @@ function lireListeRomans($db){
 
 	$result = $db->query ($query);
 	if(false !== $result){
+		$arrChamps_Romans[] = 'synopsis';
 		while ($row = $result->fetch_row()){
-			$arrChamps_Romans[] = 'synopsis';
+			#var_dump($row);
+			#var_dump($arrChamps_Romans);
 			$tmp[] = array_combine($arrChamps_Romans, $row);
 		}
-		$resultat = json_encode($tmp);
+
+		$resultat = (!empty($tmp))?json_encode($tmp):'';
+
 		if(json_last_error() !== 0){
 			$resultat = "0¬" . decodeJSON_Error(json_last_error());
 		}else{
@@ -153,15 +157,22 @@ function creerLeRoman($db){
 					queryString += "&question"+iCmpt+"[]="+encodeURIComponent (gblChoixUsager['questions'][iCmpt]['description']);*/
 
 	//$resultat = false; // Représente la présence ou non d'une erreur jusqu'à ce qu'elle contienne un résultat
-	$typeQuery = "INSERT";
+
 	$_POST['titreRoman'] = real_escape_string($_POST['titreRoman'], $db);
 
-	// Créer le roman
-	$query = "START TRANSACTION; INSERT INTO `roman_details` (`ID_usager`, `ID_genre`, `titre`) VALUES ({$_POST['idUsager']}, (SELECT ID_genre FROM genres_litteraires_noms WHERE nom = '{$_POST['genreLitteraire']}'), '{$_POST['titreRoman']}');";
-
+	// Démarrer une TRANSACTION pour pouvoir reculer si nécessaire et ne pas laisser d'orphelins
+	$typeQuery = " TRANSACTION";
+	$query = "START TRANSACTION;";
 	$resultat = $db->query ($query);
 
-	// Ajouter le synopsis du Roman
+	// Créer le roman
+	if(false !== $resultat){
+		$query = "INSERT INTO `roman_details` (`ID_usager`, `ID_genre`, `titre`) VALUES ({$_POST['idUsager']}, (SELECT ID_genre FROM genres_litteraires_noms WHERE nom = '{$_POST['genreLitteraire']}'), '{$_POST['titreRoman']}');";
+
+		$resultat = $db->query ($query);
+	}
+
+	// Ajouter le synopsis et premier contenu du Roman
 	if(false !== $resultat){
 		$ID_roman = $db->insert_id;  // Lire le nouvel ID (dernier AUTONUM généré)
 	#}else{
@@ -174,10 +185,11 @@ function creerLeRoman($db){
 		$_POST['synopsis'] = real_escape_string($_POST['synopsis'], $db);
 		$query = "INSERT INTO `roman_texte` (`ID_roman`, `synopsis`, `contenu`) VALUES ($ID_roman, '{$_POST['synopsis']}', 'Bienvenue dans votre roman! Quel sera le commencement de votre histoire? :)');";
 
+		$typeQuery = "n INSERT";
 		$resultat = $db->query ($query);
 	}
 
-	// Maintenant lire le nombre de questions pour le genre littéraire, ce qui permet de savoir combien d'insertions faire pour la suite
+	// Lire les type et forme_synopis des questions pour le genre littéraire, leur nombre permet de savoir combien d'insertions faire pour la suite
 	if(false !== $resultat){
 
 		#$questions = array_keys_like($_POST, 'question', false, true); // <== fonctionne mais j'avais oublié qu'il me faut les types d'entitées :'(
@@ -185,7 +197,7 @@ function creerLeRoman($db){
 
 		$query = "SELECT `genres_litteraires_questions`.`typeEntite`, `genres_litteraires_questions`.`forme_synopsis` FROM genres_litteraires_questions, genres_litteraires_noms WHERE genres_litteraires_questions.ID_genre = genres_litteraires_noms.ID_genre AND genres_litteraires_noms.nom = '{$_POST['genreLitteraire'] }' ORDER BY genres_litteraires_questions.nro_question;";
 
-		$typeQuery = "SELECT";
+		$typeQuery = " SELECT";
 		$resultat = $db->query ($query);
 	}
 
@@ -198,27 +210,28 @@ function creerLeRoman($db){
 		// Les numéros de questions provenant de JS doivent être 0-based
 		// Faire les INSERT d'entitées, on force 0 pour le next et on corrigera dans un UPDATE après
 		// Insérer chaque entitées tel que commandé par la série "questionsX" où [0] est le contenu et [1] est la note, utiliser le champs forme_synopsis pour le titre
-			/*
-	brainstorm
-
-		array qui est rempli selons les types utilisé dont le premier cle sera 0 pour le précédent
-		pour remplir on se dit que si non oexistant on mer 0 sinon on lit le dernier autonum et on mle met pour l'utliiser pour l e prochain insert_id
-		en principe je peux reparcourir en UPDATE cette liste et déterminer le next
-		`ID_next`, , `deleted`
-
-		pour la pase UPDATE essayer de tous les fiare en une seule opération.
-	*/
 		$arrPrevNextIDs = array();
+		$typeQuery = "n INSERT";
 		foreach($typesEntiteQuestions as $key => $val){
-			$currEntite = $val['typeEntite'];
-			if(true !== array_key_exists($currEntite, $arrPrevNextIDs){
+			$currEntite = $val[0]; // 'typeEntite'
+			if(true !== array_key_exists($currEntite, $arrPrevNextIDs)){
 				$arrPrevNextIDs[$currEntite][] = 0;
 			}
 
 			$PrevID = $arrPrevNextIDs[$currEntite][count($arrPrevNextIDs[$currEntite]) - 1];
-			$query = "INSERT INTO `entites` (`ID_roman`, `ID_prev`, `typeEntite`, `titre`, `contenu`, `note`) VALUES ($ID_roman, $PrevID, $currEntite, {$val['forme_synopsis']}, {$_POST['question'.$key][0]}, {$_POST['question'.$key][1]});";
+			$val[1] = real_escape_string($val[1], $db);
+			$_POST['question'.$key][0] = real_escape_string($_POST['question'.$key][0], $db);
+			
+			#$query = "INSERT INTO `entites` (`ID_roman`, `ID_prev`, `typeEntite`, `titre`, `contenu`, `note`) VALUES ($ID_roman, $PrevID, `$currEntite`, `{$val[1]}`, `{$_POST['question'.$key][0]}`, `{$_POST['question'.$key][1]}`);";
+			$query = "INSERT INTO `entites` (`ID_roman`, `ID_prev`, `typeEntite`, `titre`, `contenu`%s) VALUES ($ID_roman, $PrevID, '$currEntite', '{$val[1]}', '{$_POST['question'.$key][0]}'%s);";
 
-			$typeQuery = "INSERT";
+			if($_POST['question'.$key][1] !== ''){
+				$_POST['question'.$key][1] = real_escape_string($_POST['question'.$key][1], $db);
+				$query = sprintf($query, ", `note`", ", '{$_POST['question'.$key][1]}'");
+			}else{
+				$query = sprintf($query, '', '');
+			}
+
 			$resultat = $db->query ($query);
 
 			if(false !== $resultat){
@@ -229,10 +242,29 @@ function creerLeRoman($db){
 		}
 	}
 
+	if(false !== $resultat){
+				/ *
+
+		-en passant dans $arrPrevNextIDs[$currEntite] pour tout les count > 1
+			- update de index 0 à index count-2 (-1 pour le nombre , -1 pour sauter le dernier qui devrait avoir 0 et comme c'est fait, ne rien changer.)
+			- `ID_next`
+			
+			*/
+	}
+	
+	
 	if(false === $resultat){
-		$query="rollback;";
+		$resultat = $db->query ("rollback;");
+		$resultat = "0¬[" . __FUNCTION__ . "] An error occured during a$typeQuery operation. (query = $query :: " . $db->error . " )";
+	}else{
+		$query="commit;";
 		$resultat = $db->query ($query);
-		$resultat = "0¬[" . __FUNCTION__ . "] An error occured during an $typeQuery operation. (query = '$query')";
+		if(false !== $resultat){
+			$_POST['titreRoman'] = str_replace('\\', '', $_POST['titreRoman']);
+			$resultat = "1¬$ID_roman ¤Le roman \"{$_POST['titreRoman']}\" ainsi que ses ".count($typesEntiteQuestions)." premières entitées, as été créé.";
+		}else{
+			$resultat = "0¬[" . __FUNCTION__ . "] An error occured during the COMMIT phase ( " . $db->error . " )";
+		}
 	}
 
 	return $resultat;

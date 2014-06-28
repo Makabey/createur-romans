@@ -126,9 +126,10 @@
     <script src="../assets/js/bootstrap.min.js"></script>
 	<script src="../assets/xhr/xhrFunctions.js"></script>
 	<script src="../assets/js/assistant_creation.js"></script>
+	<script src="../assets/js/functions.js"></script>
 	<script>
 		$(function(){
-			//lireGenresLitteraires_Questions(afficherQuestions2, traiterErreurs, "policier");
+			// Au lancement de la page, tout de suite charger les genres littéraires...
 			afficherAttente();
 			lireGenresLitteraires_Noms(afficherGenres, traiterErreurs);
 		});

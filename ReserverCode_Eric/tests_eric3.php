@@ -11,3 +11,8 @@ var_dump($t2);
 var_dump(array_keys_like($tableau, "Valeur", false, true));
 
 var_dump(array_keys_like($tableau, "ff", true));
+
+$chaine1= "moi";
+$chaine2 = "rien";
+
+echo sprintf("chaine de %s et de %s.", $chaine1, $chaine2);
