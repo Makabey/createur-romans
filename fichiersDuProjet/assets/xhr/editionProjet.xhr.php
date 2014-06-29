@@ -2,7 +2,6 @@
 /*
 
 TODO:
-	5. faire un peu de validation de type dans les Wrapper JS ?
 	6. validation du contenu du texte principal et des entitées pour transformer ou rejetter les balises avant d'envoyer dans la BD
 	8. modifier les fonctions pour mettre un IF sur $_POST['typeEntite'] au lieu d'un SWITCH parce que j'ai ajouté une validation au début (qui s'occupe du "option invalide"), on peux donc avoir 'textePrincipal' et ELSE
 	9. retirer le besoin pour 'typeEntite' partout où c'est possible, surtout considérant que, tant qu'on parle des entitées, on peux faire presque tout seulement avec leur ID_entite pour les identifier de façon unique.
@@ -251,9 +250,10 @@ function miseAJourDonneesEntite($db){
 		case 'quand' :
 			$query = 'UPDATE entites SET ';
 			if(isset($_POST['contenu'])){ // Mise à jour intégrale
-				/*
-					TODO: validation des valeurs de contenu, titre, note
-				*/
+				$_POST['titre'] = real_escape_string($_POST['titre'], $db);
+				$_POST['contenu'] = real_escape_string($_POST['contenu'], $db);
+				$_POST['note'] = real_escape_string($_POST['note'], $db);
+				
 				$query .= "titre = \"{$_POST['titre']}\", contenu = \"{$_POST['contenu']}\", note = \"{$_POST['note']}\"";
 			}else if(isset($_POST['prev'])){ // l'entite as été visuellement déplacée, la partie de manipulation des autres autour d'elle relève du code JS
 				$query .= 'ID_prev = ' . $_POST['prev'] . ', ID_next = ' . $_POST['next'];
@@ -274,9 +274,7 @@ function miseAJourDonneesEntite($db){
 			$query .= ';';
 			break;
 		case 'textePrincipal' :
-			/*
-				TODO: validation valeur de contenu, spécialement si les règles sont autres que pour les entités
-			*/
+			$_POST['contenu'] = real_escape_string($_POST['contenu'], $db);
 			$query = 'UPDATE roman_texte SET contenu = "' . $_POST['contenu'] . '" WHERE ID_roman=' . $_POST['idRoman'] . ';';
 			break;
 		default:

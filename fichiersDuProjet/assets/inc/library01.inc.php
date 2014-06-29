@@ -2,8 +2,9 @@
 
 ############
 #
-# Retourne une chaine de $nombre tabulations
-# en tant que tel un peu inutile mais bon, moins long à écrire que la commande elle-même
+#	Retourne une chaine de $nombre tabulations
+#	en tant que tel un peu inutile mais bon, moins long à écrire que la commande elle-même
+#	écrite originalement pour "corriger" le code HTML généré par PHP afin qu'il soit plus lisible/indenté
 #
 function tabs($nombre){
 	return str_repeat(chr(9),$nombre);
@@ -12,29 +13,29 @@ function tabs($nombre){
 
 #############
 #
-# Validation de chaines par Expression Régulière et autres mesures
+#	Validation de chaines par Expression Régulière et autres mesures
 #
 function cleanUpString($chaine,$typeValidation='a1') {
 	if (strlen($chaine)) {
 		switch ($typeValidation) {
-			case 'list': # ex: "1;Nereide"
+			/*case 'list': # ex: "1;Nereide"
 				$chaine=preg_replace('/[^0-9a-zA-Z;]/','',$chaine);
-				break;
+				break;*/
 			case 1:
 				$chaine=preg_replace('/[^0-9]/','',$chaine);
 				break;
 			case 'a':
 				$chaine=preg_replace('/[^a-zA-Z]/','',$chaine);
 				break;
-			case 'items': # ex: -1;0;0;0
+			/*case 'items': # ex: -1;0;0;0
 				$chaine=preg_replace('/[^0-9\-;]/','',$chaine);
-				break;
-			case 'desc' : #ex mots avec espaces
+				break;*/
+			/*case 'desc' : #ex mots avec espaces
 				#$chaine=preg_replace('/[^0-9a-zA-Z,:;\' ]/','',$chaine);
 				$chaine=str_replace('<', '&lt;', $chaine);
 				$chaine=str_replace('>', '&gt;', $chaine);
 				$chaine=str_replace('/', '|', $chaine);
-				break;
+				break;*/
 			default : # 'a1'
 				$chaine=preg_replace('/[^0-9a-zA-Z]/','',$chaine);
 		}
@@ -87,13 +88,13 @@ function decodeJSON_Error($error){
 
 ##############
 #
-# Retourne un tableau avec les clés répondant à la sous-chaine désirée
+#	Retourne un tableau avec les clés répondant à la sous-chaine désirée
 #
 #	Parametres:
 #		$arrHaystack : (array) le tableau à parcourir
 #		$keyString : (string) la chaine recherchée
-#		$anyWhere : (bool = false / optionnel) la sous-chaine peux être n'importe où
-#		$caseInsensitive : (bool = false /optionnel) ignore la casse
+#		$anyWhere : (bool = false / optionnel) si TRUE, alors la sous-chaine peux être n'importe où dans la clé sondée
+#		$caseInsensitive : (bool = false /optionnel) si TRUE, alors ignore la casse
 #
 #	Retour :
 #		un tableau contenant les clés trouvées ou un tableau vide si erreur
@@ -108,6 +109,8 @@ function array_keys_like($arrHaystack, $keyString, $anyWhere = false, $caseInsen
 	foreach($arrHaystack as $key => $val){
 		$foundPos = $findpos($key, $keyString);
 
+		// Soit on veux que $key commence impératigement par $keyString,
+		// soit on ne veux que trouver $keyString dans $key
 		if((!$anyWhere && $foundPos === 0) || ($anyWhere && $foundPos !== false)){
 			$tableau[]=$key;
 		}

@@ -148,16 +148,6 @@ function lireListeRomans($db){
 
 
 function creerLeRoman($db){
-	/*			queryString += "idUsager="+idUsager;
-				queryString += "&titreRoman="+encodeURIComponent (gblChoixUsager['titreRoman']);
-				queryString += "&synopsis="+encodeURIComponent (gblChoixUsager['synopsis']);
-				queryString += "&genreLitteraire="+gblChoixUsager['genreLitteraire'];
-				for(iCmpt=0;iCmpt<gblChoixUsager['questions'].length;iCmpt++){
-					queryString += "&question"+iCmpt+"[]="+encodeURIComponent (gblChoixUsager['questions'][iCmpt]['reponse']);
-					queryString += "&question"+iCmpt+"[]="+encodeURIComponent (gblChoixUsager['questions'][iCmpt]['description']);*/
-
-	//$resultat = false; // Représente la présence ou non d'une erreur jusqu'à ce qu'elle contienne un résultat
-
 	$_POST['titreRoman'] = real_escape_string($_POST['titreRoman'], $db);
 
 	// Démarrer une TRANSACTION pour pouvoir reculer si nécessaire et ne pas laisser d'orphelins

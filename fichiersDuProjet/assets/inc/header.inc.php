@@ -2,8 +2,7 @@
 $sNomDeCettePage = substr($_SERVER['SCRIPT_NAME'], (strrpos($_SERVER['SCRIPT_NAME'],'/')+1));
 $sNomDeCettePage = substr($sNomDeCettePage, 0, (strpos($sNomDeCettePage,'.')));
 
-#require_once "assets/inc/tools.inc.php";
-require_once "../assets/inc/menus.inc.php";
+require_once "menus.inc.php";
 ?>
 <!DOCTYPE html>
 <html lang="fr" xmlns="http://www.w3.org/1999/xhtml">

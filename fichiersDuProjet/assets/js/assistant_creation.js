@@ -1,27 +1,25 @@
 "use strict";
-/*
+/**********************
 	Variables globales
-*/
+**********************/
 var gblChoixUsager = new Array(); // retenir les choix de l'usager et accessoirement quelques donnees
 var gblParentDesBalises = "form_question>fieldset"; // Balise que l'on doit manipuler pour changer l'interface
-var idUsager = 1;
-
-/*
+var idUsager = 1; // valeur forcée en attendant de la lire par PHP; (auquel cas cette variable ira dans "header.inc.php")
+var etapeAssistant = 0; // À quelle étape de la création nous sommes
+var iCmpt=0; // Compteur, global;
+	
+/**********************
 	EVENT HANDLERS
-*/
+**********************/
 $(function(){
-	var etapeAssistant = 0;
-	var iCmpt=0;
-
 	$("#form_question").submit(function(){
 		/*
-			On doit attrapper l'évènement SUBMIT directement sur le FORM parce que si on agit sur le
-			CLICK d'un bouton et que le FORM n'est pas valide selon le BROWSER, la fonction du
-			bouton est appellée malgré tout.
+			Validation par HTML5 : On doit attrapper l'évènement SUBMIT directement sur le FORM
+			parce que si on agit sur le CLICK d'un bouton et que le FORM n'est pas valide selon le
+			BROWSER, la fonction du bouton est appellée malgré tout.
 		*/
-
 		/*
-			etapeAssistant == 0 :: La page vient d'être chargée, par conséquent on voit le choix de Genre Littéraire et l'étape suivante est le chargement des questions
+			Si etapeAssistant == 0 :: La page vient d'être chargée, par conséquent on voit le choix de Genres Littéraire et l'étape suivante est le chargement des questions
 		*/
 		switch(etapeAssistant){
 			case 0: // Le choix de Genre est fait, on passe aux questions
@@ -29,7 +27,9 @@ $(function(){
 				afficherAttente();
 
 				// Récupérer le choix de l'usager
-				if(!gblChoixUsager['genreLitteraire']) { gblChoixUsager['genreLitteraire'] = $("#select_question").val(); }
+				if(!gblChoixUsager['genreLitteraire']) {
+					gblChoixUsager['genreLitteraire'] = $("#select_question").val();
+				}
 
 				// Corriger le titre de la page
 				$("h2").text("du genre littéraire '"+gblChoixUsager['genreLitteraire']+"'");
@@ -44,15 +44,13 @@ $(function(){
 				// Mettre l'usager en attente
 				afficherAttente();
 
-				// Recopier les choix + Créer le synopsis; peux être aussi simple que juste un recap
+				// Recopier les choix maintenant, puisque l'interface est chamboulée un peu plus loin
 				for(iCmpt=0;iCmpt < gblChoixUsager['questions'].length; iCmpt++){
 					gblChoixUsager['questions'][iCmpt]['reponse'] = $("#question"+iCmpt).val();
 					gblChoixUsager['questions'][iCmpt]['description'] = $("#description"+iCmpt).val();
 				}
 
-				// Lire les noms de Roman de l'usager courant pour lui éviter de se répéter
-//				et la fonction DOIT être récupérable pour la page de sélection donc
-//				 elle retourne les ID, nom, genre et synopsis
+				//	Lire les noms de Roman de l'usager courant, pour lui éviter de choisir un même nom.
 				lireListeRomansUsager(afficherSynopsisEtDemandeNomRoman, traiterErreurs, idUsager);
 
 				etapeAssistant++;
@@ -67,7 +65,6 @@ $(function(){
 
 				// Encoder titre et réponses
 				var queryString = '';
-				var iCmpt=0;
 				queryString += "idUsager="+idUsager;
 				queryString += "&titreRoman="+encodeURIComponent (gblChoixUsager['titreRoman']);
 				queryString += "&synopsis="+encodeURIComponent (gblChoixUsager['synopsis']);
@@ -77,7 +74,7 @@ $(function(){
 					queryString += "&question"+iCmpt+"[]="+encodeURIComponent (gblChoixUsager['questions'][iCmpt]['description']);
 				}
 
-				// Écrire le synopsis et le texte, tout créer les entitées
+				// Écrire le synopsis et le texte, créer toutes les entitées
 				creerLeRoman(felicitationSurCreation, traiterErreurs, queryString);
 			break;
 		}
@@ -95,20 +92,20 @@ $(function(){
 	});
 });
 
-/*
+/**********************
 	WRAPPERS
-*/
+**********************/
 function afficherAttente(){
 	/*
 		Affiche une phrase et une image invitant l'usager à patienter
+		Utilisé juste avant le lancement des requêtes XHR
 	*/
 	var strMessage = 'Récupération des Données...';
-	if(arguments[0] !== undefined) { strMessage = arguments[0]; } // Si on as passé un paramètre à la fonction, l'utiliser
-	//$("#"+gblParentDesBalises).html('<p><img src="../assets/images/wait_circle2.png" class="waitCircle" alt="Attendez..." /> '+strMessage+'</p>');
-	$("#"+gblParentDesBalises).hide();
+	if(arguments[0] !== undefined) { strMessage = arguments[0]; } // Si on as passé un paramètre à la fonction, l'utiliser comme "strMessage"
+	$("#"+gblParentDesBalises).hide(); // cacher le FORM (permettant de quérir les réponses de l'usager)
 	$("#button_nextQuestion").hide();
 	$("#waitP>span").text(strMessage);
-	$("#waitP").show();
+	$("#waitP").show(); // Afficher le bloc d'attente
 }
 
 function lireGenresLitteraires_Noms(fctTraitementPositif, fctTraitementNegatif){
@@ -129,48 +126,48 @@ function lireGenresLitteraires_Questions(fctTraitementPositif, fctTraitementNega
 	execXHR_Request("../assets/xhr/creationProjet.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
 
-function lireListeRomansUsager(fctTraitementPositif, fctTraitementNegatif, ID_usager){
-	/*
-		Lance la requête pour lire les détails des romans que l'usager as déjà créés
-	*/
-	var XHR_Query = "oper=lireListeRomans&idUsager=" + ID_usager;
-	execXHR_Request("../assets/xhr/creationProjet.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
-}
-
 function creerLeRoman(fctTraitementPositif, fctTraitementNegatif, queryString){
 	/*
-		Lance la requête pour lire les détails des romans que l'usager as déjà créés
+		Lance la requête pour créer le Roman, ce qui sous-entend: détails, texte et entitees
 	*/
 	var XHR_Query = "oper=creerLeRoman&" + queryString;
 	execXHR_Request("../assets/xhr/creationProjet.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
 
-/*
+/*********************
 	FONCTIONS DE TRAITEMENT DES RETOURS POSITIFS
-*/
+	(C'est à dire, quand la requête XHR s'est complètée correctement. Ici on réagit selon le
+	type de la requête, que ce soit par un message de confirmation ou la manipulation des
+	données de retour.)
+*********************/
 function felicitationSurCreation(donnees){
-	//console.log("pas d'erreurs");
-	// Envoyer à la page d'Édition
-	//console.log("Questions finies!");
+	/*
+		Affiche un message d'état confirmant le nom du Roman et le nombre d'entitées
+		pré-créées en accord avec les types et le nombre de questions pour le genre
+		littéraire choisi.
+
+		Ensuite, envoie à la page d'Édition
+	*/
 	donnees = donnees.split('¤');
 	alert(donnees[1]);
 	document.location.href="demo_mode_edition.php?idRoman="+donnees[0];
 }
 
 function afficherSynopsisEtDemandeNomRoman(donnees){
-	// Recopier les choix + Créer le synopsis; peux être aussi simple que juste un recap
-		//gblChoixUsager['questions'][iCmpt]['reponse'] = $("#question"+iCmpt).val();
-		//gblChoixUsager['questions'][iCmpt]['description'] = $("#description"+iCmpt).val();
+	/*
+		Construit en parrallèle le SYNOPSIS qui sera enregistré dans la BD (si l'usager
+		passe à l'étape suivate) et celui qui sera affiché. Puis ajoute un court FORM pour
+		demander à l'usager le nom de son oeuvre. Du même coup, l'usager confirme le
+		contenu du synopsis créé par les questions;
 
-
+		le form doit vérifier realtime que le nom du nouveau Roman n'est pas déjà utilisé
+		pour CET usager ?
+	*/
 	var synopsis_afficher = '<div><p>Votre synopsis :</p><dl>';
 	var contenuDataList = '';
-	var iCmpt=0;
 
 	gblChoixUsager['synopsis'] = '';
-	//console.log(gblChoixUsager['romans'].length);
 
-	//$("#"+gblParentDesBalises).hide();
 	for(iCmpt=0;iCmpt < gblChoixUsager['questions'].length; iCmpt++){
 		synopsis_afficher += '<dt>'+gblChoixUsager['questions'][iCmpt]['titre']+'</dt>';
 		synopsis_afficher += '<dd>'+gblChoixUsager['questions'][iCmpt]['reponse'];
@@ -184,11 +181,12 @@ function afficherSynopsisEtDemandeNomRoman(donnees){
 	synopsis_afficher += '<div><label for="titreRoman">Quel est le titre de votre roman?</label>';
 	synopsis_afficher += '<input type="text" id="titreRoman" required="required"';
 
+	// variable "maintenant" et son utilisation sont optionnel et primairement pour tests
 	var maintenant = new Date();
-	//maintenant = maintenant.getFullYear()+"/"+maintenant.getMonth()+"/"+maintenant.getDay();
 	synopsis_afficher += ' value = "test - \''+maintenant+'\'"';
 
-	gblChoixUsager['romans'] = (donnees.length)?JSON.parse(donnees):''; // contraire :: JSON.stringify(array);
+	// Analyse des données reçues et création du DATALIST si applicable
+	gblChoixUsager['romans'] = (donnees.length)?JSON.parse(donnees):'';
 	if(gblChoixUsager['romans'].length>0){
 		synopsis_afficher += ' list="listeNomsRomans"';
 		contenuDataList += '<datalist id="listeNomsRomans">';
@@ -198,13 +196,8 @@ function afficherSynopsisEtDemandeNomRoman(donnees){
 		contenuDataList += '</datalist>';
 	}
 
-	synopsis_afficher += ' />'+contenuDataList+'</div>';
+	synopsis_afficher += ' />'+contenuDataList+'</div>'; // La fermeture du input "titreRoman" est ici
 
-	/*
-		Afficher un form pour demander le nom de l'oeuvre et confirmer le synopsis créé par les
-		questions; le form doit vérifier realtime que le nom n'est pas déjà utilisé
-		pour CET usager ?
-	*/
 	$("#"+gblParentDesBalises).html(synopsis_afficher);
 	$("#waitP").hide();
 	$("#"+gblParentDesBalises).show();
@@ -220,21 +213,19 @@ function afficherGenres(donnees){
 	var iCmpt = 0;
 	var sSelections = '<div><label for="select_question">Sélectionnez le genre littéraire désiré :</label><select id="select_question">';
 
-	donnees = JSON.parse(donnees); // contraire :: JSON.stringify(array);
-	//console.log(donnees.length);
+	donnees = JSON.parse(donnees); 
 
-	if(donnees.length < 2){ // si on as qu'un seul genre, passer la sélection manuelle par l'usager
+	if(donnees.length < 2){
+		/*
+			Si on as qu'un seul genre, passer la sélection manuelle par l'usager,
+			on "clique" le bouton à sa place.
+		*/
 		gblChoixUsager['genreLitteraire'] = donnees[0];
-		//$("#button_nextQuestion").click();
 		$("#form_question").submit();
 	}else{
-		// Créer un SELECT pour choisir le genre littéraire
-		//$("#"+gblParentDesBalises).hide();
-		//$("#"+gblParentDesBalises).html('');
-
+		// Créer un SELECT pour pouvoir choisir le genre littéraire
 		for(iCmpt=0;iCmpt<donnees.length;iCmpt++){
 			sSelections += '<option value="'+donnees[iCmpt]+'">'+donnees[iCmpt]+'</option>';
-			//sSelections += '<option>'+donnees[iCmpt]+'</option>';
 		}
 		sSelections += '</select></div>';
 		$("#"+gblParentDesBalises).html(sSelections);
@@ -318,9 +309,9 @@ function afficherQuestions(donnees){
 }
 
 
-/*
+/**********************
 	FONCTIONS DE TRAITEMENT DES RETOURS NÉGATIFS
-*/
+**********************/
 function traiterErreurs(msgErreur){
 	/*
 	Voir appels à "execXHR_Request",
@@ -335,8 +326,9 @@ function traiterErreurs(msgErreur){
 }
 
 
-/*
+/**********************
 	FONCTIONS NOMMÉES DANS LA BD
-*/
+	(ça c'est le contenu du champs `genres_litteraires_questions`.`bouton_fonction`)
+**********************/
 
 /* == EOF == */
