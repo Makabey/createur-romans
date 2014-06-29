@@ -7,7 +7,7 @@ var gblParentDesBalises = "form_question>fieldset"; // Balise que l'on doit mani
 var idUsager = 1; // valeur forcée en attendant de la lire par PHP; (auquel cas cette variable ira dans "header.inc.php")
 var etapeAssistant = 0; // À quelle étape de la création nous sommes
 var iCmpt=0; // Compteur, global;
-	
+
 /**********************
 	EVENT HANDLERS
 **********************/
@@ -95,19 +95,6 @@ $(function(){
 /**********************
 	WRAPPERS
 **********************/
-function afficherAttente(){
-	/*
-		Affiche une phrase et une image invitant l'usager à patienter
-		Utilisé juste avant le lancement des requêtes XHR
-	*/
-	var strMessage = 'Récupération des Données...';
-	if(arguments[0] !== undefined) { strMessage = arguments[0]; } // Si on as passé un paramètre à la fonction, l'utiliser comme "strMessage"
-	$("#"+gblParentDesBalises).hide(); // cacher le FORM (permettant de quérir les réponses de l'usager)
-	$("#button_nextQuestion").hide();
-	$("#waitP>span").text(strMessage);
-	$("#waitP").show(); // Afficher le bloc d'attente
-}
-
 function lireGenresLitteraires_Noms(fctTraitementPositif, fctTraitementNegatif){
 	/*
 		Lance la requête pour récupérer de la BD les noms des genres littéraires.
@@ -132,6 +119,34 @@ function creerLeRoman(fctTraitementPositif, fctTraitementNegatif, queryString){
 	*/
 	var XHR_Query = "oper=creerLeRoman&" + queryString;
 	execXHR_Request("../assets/xhr/creationProjet.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
+}
+
+/*********************
+	FONCTIONS GLOBALES
+*********************/
+function afficherAttente(){
+	/*
+		Affiche une phrase et une image invitant l'usager à patienter
+		Utilisé juste avant le lancement des requêtes XHR
+	*/
+	var strMessage = 'Récupération des Données...';
+	if(arguments[0] !== undefined) { strMessage = arguments[0]; } // Si on as passé un paramètre à la fonction, l'utiliser comme "strMessage"
+	$("#"+gblParentDesBalises).hide(); // cacher le FORM (permettant de quérir les réponses de l'usager)
+	$("#button_nextQuestion").hide();
+	$("#waitP>span").text(strMessage);
+	$("#waitP").show(); // Afficher le bloc d'attente
+}
+
+function afficherFormulaire(){
+	/*
+		Occulter la balise d'attente et afficher le FORM qui permet
+		à l'usager de faire ses choix
+		
+		C'est une fonction pour éviter de changer les 3-4 endroits où c'est utilisé
+	*/
+	$("#"+gblParentDesBalises).show();
+	$("#button_nextQuestion").show();
+	$("#waitP").hide();
 }
 
 /*********************
@@ -199,9 +214,7 @@ function afficherSynopsisEtDemandeNomRoman(donnees){
 	synopsis_afficher += ' />'+contenuDataList+'</div>'; // La fermeture du input "titreRoman" est ici
 
 	$("#"+gblParentDesBalises).html(synopsis_afficher);
-	$("#waitP").hide();
-	$("#"+gblParentDesBalises).show();
-	$("#button_nextQuestion").show();
+	afficherFormulaire();
 }
 
 function afficherGenres(donnees){
@@ -213,7 +226,7 @@ function afficherGenres(donnees){
 	var iCmpt = 0;
 	var sSelections = '<div><label for="select_question">Sélectionnez le genre littéraire désiré :</label><select id="select_question">';
 
-	donnees = JSON.parse(donnees); 
+	donnees = JSON.parse(donnees);
 
 	if(donnees.length < 2){
 		/*
@@ -228,18 +241,19 @@ function afficherGenres(donnees){
 			sSelections += '<option value="'+donnees[iCmpt]+'">'+donnees[iCmpt]+'</option>';
 		}
 		sSelections += '</select></div>';
+
 		$("#"+gblParentDesBalises).html(sSelections);
-		$("#waitP").hide();
-		$("#"+gblParentDesBalises).show();
-		$("#button_nextQuestion").show();
+		afficherFormulaire();
 	}
 }
 
 function afficherQuestions(donnees){
 	/*
-		Traite le retour de execXHR_Request("../assets/xhr/creationProjet.xhr.php", XHR_Query, afficherQuestions, traiterErreurs);
+		Afficher les questions lues de la base de données pour le genre littéraire
+		sélectionné plus tôt
 
-		Quand rencontre "text" crée une balise input::text et pour select, un select::option
+		Le champs "donnees[]['type_input']" déterminer s'il faut créer une balise de
+		type "input::text" ou "select"
 
 		Fait principalement de la génération de balise et de la copie de contenu/propriétés à partir du tableau "donnees"
 	*/
@@ -247,22 +261,13 @@ function afficherQuestions(donnees){
 	var contenuDataList = '';
 	var iCmpt_lignes=0;
 	var iCmpt_Options=0;
-	//var arrNumber2Words = new Array("first", "second", "third", "fourth");
-	//var "#"+gblParentDesBalises = "#"+gblParentDesBalises;//+">fieldset";
 
-	donnees = JSON.parse(donnees); // contraire :: JSON.stringify(array);
-	//gblChoixUsager['donnees'] = donnees;
-	//gblChoixUsager['nbrQuestions'] = donnees.length;
+	donnees = JSON.parse(donnees);
 
-	//$("#form_question").html('');
-	//$(".form-inner").html('');
-	//$("#"+gblParentDesBalises).hide();
-	$("#"+gblParentDesBalises).html('');
 	gblChoixUsager['questions'] = new Array();
 	for(iCmpt_lignes=0; iCmpt_lignes<donnees.length; iCmpt_lignes++){
 		gblChoixUsager['questions'][iCmpt_lignes] = new Array();
 		gblChoixUsager['questions'][iCmpt_lignes]['titre'] = donnees[iCmpt_lignes]['forme_synopsis'];
-		//gblChoixUsager['questions'][iCmpt_lignes]['typeEntite'] = donnees[iCmpt_lignes]['typeEntite']; // sert au moment d'enregistrer le Roman OU on pourrais s'en servir ici pour donner une couleur aux questions, sinon je pourrais aussi bien ne pas envoyer ça ici et le lire de la BD au moment de créer les entitées parce qu'en principe les réponses sont dans l'ordre des questions donc par conséquent je peux savoir de façon assurée leurs type
 		contenuDataList = '';
 		contenu = '<div><label for="questions'+iCmpt_lignes+'">'+donnees[iCmpt_lignes]['texte']+'</label>';
 		if(donnees[iCmpt_lignes]['type_input'] == "text"){
@@ -297,15 +302,12 @@ function afficherQuestions(donnees){
 			donnees[iCmpt_lignes]['bouton_fonction'] = donnees[iCmpt_lignes]['bouton_fonction'].split('¤');
 			contenu += '<button type="button" class="bouton_question" data-fonction="'+donnees[iCmpt_lignes]['bouton_fonction'][0]+'" data-question="'+iCmpt_lignes+'">'+donnees[iCmpt_lignes]['bouton_fonction'][1]+'</button>';
 		}
-		//contenu += "<span>"+(iCmpt_lignes+1)+"/"+donnees.length+"</span>";
+		//contenu += "<span>"+(iCmpt_lignes+1)+"/"+donnees.length+"</span>"; // numéroter les questions
 		contenu += '<textarea id="description'+iCmpt_lignes+'" placeholder="entrez une courte description"></textarea>';
 		contenu += "</div>";
 		$("#"+gblParentDesBalises).append(contenu);
 	}
-
-	$("#waitP").hide();
-	$("#"+gblParentDesBalises).show();
-	$("#button_nextQuestion").show();
+	afficherFormulaire();
 }
 
 
@@ -314,11 +316,13 @@ function afficherQuestions(donnees){
 **********************/
 function traiterErreurs(msgErreur){
 	/*
-	Voir appels à "execXHR_Request",
-	Sert à traiter l'erreur recue.
+		Voir appels à "execXHR_Request",
+		Sert à traiter l'erreur recue.
+		
+		Il n'y as que cette fonction parce que je n'ai pas eût un besoin de traitement autre
 	*/
 
-	if(msgErreur.substring(0,6) =="<br />"){ // On suppose que c'est une erreur PHP!
+	if(msgErreur.substring(0,6) =="<br />"){ // Si commence par '<br />', on suppose que c'est une erreur PHP!
 		msgErreur = "[PHP] " + strStripHTML(msgErreur);
 	}
 
@@ -328,7 +332,9 @@ function traiterErreurs(msgErreur){
 
 /**********************
 	FONCTIONS NOMMÉES DANS LA BD
-	(ça c'est le contenu du champs `genres_litteraires_questions`.`bouton_fonction`)
+	(ça c'est le contenu du champs `genres_litteraires_questions`.`bouton_fonction`
+	la section est vide parce que Thomas n'en as pas eût besoin dans ses questions.
+	Pour un exemple, chercher dans les contributions antérieur sur GitHub)
 **********************/
 
 /* == EOF == */

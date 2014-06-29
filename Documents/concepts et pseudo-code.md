@@ -7,7 +7,7 @@ To Do:
 - [ ] tout re-commenter
 - [ ] vérifier sinon coder la fonction qui retourne tout les romans de l'usager
 - [ ] écrire la fonction de création d'usager
-- [ ] écrire la fonction de lecture usager, voir en fait la requête plus bas
+- [ ] écrire la fonction de lecture usager, voir en fait la requête plus bas (sous "page index")
 - [x] page de test pour formulaire + table pour le supporter
 - [ ] Changer la sauvegarde pour qu'elle s'effectue si le dirtyBit est ON -et- qu'on as plus tapé depuis x secondes. Autre possibilité, detecter si web storage permis/disponible et si OUI alors sauve localement aux 15 secondes et aux 300 secs sur le web si on ne force pas pâr l'interface (bouton)
 - [x] faire la page des questions avec ce que Thomas as créé en page et en data
@@ -16,6 +16,7 @@ To Do:
 - [x] changer la fonction afficherAttente, elle doit maintenant : 1. occulter le FORM et le BUTTON de 'next'; 2. afficher un DIV ou P dédié et placé -avant- le FORM; 3. créer une fonction opposée? L'idée est de pouvoir cacher le FORM durant la recomposition de son contenu indépendamment; 4. lui donner aussi un param pour le message! si pas là, mettre un défaut :)
 - [x] bug : s'il n'y as aucune entrée dans la table romans_details mais que celle correspondant dans romans_texte existe, agit comme s'il ne manquait rien, donc changer le code pour tout passer par romans_details, surtout que c'est elle qui décide si un roman est deleted ou non; en fait le bug persiste avec les entitées! oui bon, dans le cas des entitées, en principe une fois le code bien écrit il sera impossible de les charger ^_^'...
 - [ ] petit bug : le bouton "lire entitées" de la page Édition ne lit pas tout les entitées, un peu normal, il faut autant de requêtes que de types, pour la démo, je pourrais le faire (tout les appels)
+- [ ] bug : le retour de "execXHR_Request" elle-même n'est pas traité, c'est à dire que si retourne purement FALSE alors le fureteur du client ne supporte pas XHR et cette erreur n'est traité (je crois) par aucun de mes "wrappers".
 
 
 ====
