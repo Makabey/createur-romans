@@ -12,7 +12,7 @@ $db = db_connect();
 
 if(!is_object($db)){
 	// On suppose ici que $db contient une erreur texte et non un objet
-	echo "0¬(DB pas un objet) " . $db;
+	echo $db;
 	exit();
 }
 
@@ -28,8 +28,7 @@ switch($_POST['oper']){
 		if(!isset($_POST['genre'])){
 			$resultat = '0¬"genre" is required';
 		}else{
-			$genresValides = lireGenreLitteraires($db, false); //"policier,drame";
-			//$pos = stripos($genresValides, $_POST['genre']);
+			$genresValides = lireGenreLitteraires($db, false);
 			$pos = in_array($_POST['genre'], $genresValides);
 			if(false === $pos){
 				$resultat = '0¬"genre" unknown value "' . $_POST["genre"] . '"';
@@ -65,7 +64,9 @@ exit();
 */
 function lireGenreLitteraires($db, $encode_result=true){
 	/*
-		Extraire de la BD une copie de chaques noms "Genre Littéraire"
+		Extraire de la BD les noms de chaque "Genre Littéraire"
+
+		$encode_result sert à passer l'encodage en JSON
 	*/
 	#global $db;
 	$query = "SELECT nom FROM genres_litteraires_noms;"; # LIMIT 0,1;";
@@ -91,11 +92,9 @@ function lireGenreLitteraires($db, $encode_result=true){
 
 function lireQuestions($db){
 	/*
-		En accord avec $_POST['genre'] , lire les questions et retourner tout en bloc
+		En accord avec $_POST['genre'] , c'est à dire le genre littéraire choisi, lire les questions et retourner tout en bloc
 	*/
-	#global $db;
-	#$arrChamps_genres_litteraires = array('nom', 'nro_question', 'texte', 'type_input', 'suggestions', 'bouton_fonction');
-	$arrChamps_genres_litteraires = array('nro_question', 'texte', 'forme_synopsis', 'type_input', 'suggestions', 'bouton_fonction'); #, 'typeEntite'); // j'ai enlevé le champs 'nom' pour que ça fasse moins de données retournés
+	$arrChamps_genres_litteraires = array('nro_question', 'texte', 'forme_synopsis', 'type_input', 'suggestions', 'bouton_fonction');
 
 	$query = "SELECT `genres_litteraires_questions`.`" . implode('`, `genres_litteraires_questions`.`', $arrChamps_genres_litteraires) . "` FROM genres_litteraires_questions, genres_litteraires_noms WHERE genres_litteraires_questions.ID_genre = genres_litteraires_noms.ID_genre AND genres_litteraires_noms.nom = '{$_POST['genre'] }' ORDER BY genres_litteraires_questions.nro_question;";
 
@@ -118,18 +117,16 @@ function lireQuestions($db){
 
 function lireListeRomans($db){
 	/*
-		En accord avec $_POST['idRoman'] , lire les détails des Romans
+		Lire les détails des Romans pour "idUsager", ce qui comprend : leur ID, genre, titre, date de creation, date de dernière édition et le synopsis
 	*/
 	$arrChamps_Romans = array('ID_roman', 'ID_genre', 'titre', 'date_creation', 'date_dnrEdition');
 
-	$query = "SELECT `roman_details`.`" . implode('`, `roman_details`.`', $arrChamps_Romans) . "`, `roman_texte`.`synopsis` FROM roman_details, roman_texte WHERE roman_details.ID_roman = roman_texte.ID_roman AND roman_details.ID_usager = '{$_POST['idUsager']}' AND roman_details.deleted = 0 ORDER BY roman_texte.ID_roman;";
+	$query = "SELECT `roman_details`.`" . implode('`, `roman_details`.`', $arrChamps_Romans) . "`, `roman_texte`.`synopsis` FROM roman_details, roman_texte WHERE roman_details.ID_roman = roman_texte.ID_roman AND roman_details.ID_usager = '{$_POST['idUsager']}' AND roman_details.deleted = 0 ORDER BY roman_details.date_dnrEdition DESC;";
 
 	$result = $db->query ($query);
 	if(false !== $result){
 		$arrChamps_Romans[] = 'synopsis';
 		while ($row = $result->fetch_row()){
-			#var_dump($row);
-			#var_dump($arrChamps_Romans);
 			$tmp[] = array_combine($arrChamps_Romans, $row);
 		}
 
@@ -146,31 +143,34 @@ function lireListeRomans($db){
 	return $resultat;
 }
 
-
 function creerLeRoman($db){
-	$_POST['titreRoman'] = real_escape_string($_POST['titreRoman'], $db);
+	/*
+		Pousser dans la BD tout les détails pour le nouveau Roman
+	*/
+	$resultat = $_POST['titreRoman'] = real_escape_string($_POST['titreRoman'], $db);
+	if(mb_substr($resultat, 0, 2, "UTF-8") == "0¬") {
+		return $resultat; // S'il y as erreur ici, c'est que $db n'est pas une BD ouverte
+	}
 
-	// Démarrer une TRANSACTION pour pouvoir reculer si nécessaire et ne pas laisser d'orphelins
-	$typeQuery = " TRANSACTION";
-	$query = "START TRANSACTION;";
-	$resultat = $db->query ($query);
+	if(false !== $resultat){
+		// Démarrer une TRANSACTION pour pouvoir reculer avec un ROLLBACK si nécessaire et ne pas laisser d'orphelins
+		// Normalement je devrais regarder l'aide pour LOCK TABLE et l'appliquer, mais je vais garder ça pour un peu plus tard
+		$typeQuery = " TRANSACTION";
+		$query = "START TRANSACTION;";
+		$resultat = $db->query ($query);
+	}
 
 	// Créer le roman
 	if(false !== $resultat){
 		$query = "INSERT INTO `roman_details` (`ID_usager`, `ID_genre`, `titre`) VALUES ({$_POST['idUsager']}, (SELECT ID_genre FROM genres_litteraires_noms WHERE nom = '{$_POST['genreLitteraire']}'), '{$_POST['titreRoman']}');";
 
+		$typeQuery = "n INSERT";
 		$resultat = $db->query ($query);
 	}
 
 	// Ajouter le synopsis et premier contenu du Roman
 	if(false !== $resultat){
 		$ID_roman = $db->insert_id; // Lire le nouvel ID (dernier AUTONUM généré)
-	#}else{
-	#	$resultat = true;
-	#}
-
-	#if(!$resultat){
-	#if(false !== $resultat){
 
 		$_POST['synopsis'] = real_escape_string($_POST['synopsis'], $db);
 		$query = "INSERT INTO `roman_texte` (`ID_roman`, `synopsis`, `contenu`) VALUES ($ID_roman, '{$_POST['synopsis']}', 'Bienvenue dans votre roman! Quel sera le commencement de votre histoire? :)');";
@@ -179,27 +179,25 @@ function creerLeRoman($db){
 		$resultat = $db->query ($query);
 	}
 
-	// Lire les type et forme_synopis des questions pour le genre littéraire, leur nombre permet de savoir combien d'insertions faire pour la suite
+	// Lire les typeEntite et forme_synopis des questions pour le Genre Littéraire choisi pour ce Roman, leur nombre permet de savoir combien d'insertions faire pour la suite
 	if(false !== $resultat){
-
-		#$questions = array_keys_like($_POST, 'question', false, true); // <== fonctionne mais j'avais oublié qu'il me faut les types d'entitées :'(
-		#$arrChamps_genres_litteraires = array('nro_question', 'texte', 'forme_synopsis', 'type_input', 'suggestions', 'bouton_fonction'); #, 'typeEntite'); // j'ai enlevé le champs 'nom' pour que ça fasse moins de données retournés
-
 		$query = "SELECT `genres_litteraires_questions`.`typeEntite`, `genres_litteraires_questions`.`forme_synopsis` FROM genres_litteraires_questions, genres_litteraires_noms WHERE genres_litteraires_questions.ID_genre = genres_litteraires_noms.ID_genre AND genres_litteraires_noms.nom = '{$_POST['genreLitteraire'] }' ORDER BY genres_litteraires_questions.nro_question;";
 
 		$typeQuery = " SELECT";
 		$resultat = $db->query ($query);
 	}
 
+	// Insérer dans la BD chaque entitée pour lesquelles on as récolté des renseignements de l'usager
 	if(false !== $resultat){
-		// Collecter les types de questions avec la "forme_synopsis" qui deviendra le "titre" de l'entitée
+		// Collecter les types de questions/typeEntite avec leur "forme_synopsis" qui deviendra le "titre" de l'entitée
 		while ($row = $resultat->fetch_row()){
 			$typesEntiteQuestions[] = $row;
 		}
 
-		// Les numéros de questions provenant de JS doivent être "0-based" (donc le premier "questionX" doit s'appeller "questions0")
-		// Faire les INSERT d'entitées, on force 0 pour le next et on corrigera dans un UPDATE après
-		// Insérer chaque entitées tel que commandé par la série "questionX" où [0] est le contenu et [1] est la note, utiliser le champs "forme_synopsis" pour le titre
+		/*
+			Le premier "questionX" provenant de la QUERY STRING doit s'appeller "questions0" et les autres suivre
+			-Durant les INSERT, NEXT est mis à 0, on corrigera pour la bonne valeur dans un UPDATE plus loin
+		*/
 		$arrPrevNextIDs = array();
 		$typeQuery = "n INSERT";
 		foreach($typesEntiteQuestions as $key => $val){
@@ -212,7 +210,6 @@ function creerLeRoman($db){
 			$val[1] = real_escape_string($val[1], $db); // le titre de cette entitée
 			$_POST['question'.$key][0] = real_escape_string($_POST['question'.$key][0], $db); // le contenu, ce que l'usager as tapé
 
-			#$query = "INSERT INTO `entites` (`ID_roman`, `ID_prev`, `typeEntite`, `titre`, `contenu`, `note`) VALUES ($ID_roman, $PrevID, `$currEntite`, `{$val[1]}`, `{$_POST['question'.$key][0]}`, `{$_POST['question'.$key][1]}`);";
 			$query = "INSERT INTO `entites` (`ID_roman`, `ID_prev`, `typeEntite`, `titre`, `contenu`%s) VALUES ($ID_roman, $PrevID, '$currEntite', '{$val[1]}', '{$_POST['question'.$key][0]}'%s);";
 
 			if($_POST['question'.$key][1] !== ''){ // la note que l'usager as tapé, si quelque chose
@@ -232,14 +229,9 @@ function creerLeRoman($db){
 		}
 	}
 
+	// Faire un UPDATE du champs NEXT pour tout les typeEntite qui ont plus d'un membre
+	// La requête est un peu compliquée pour permettre de faire toutes les mises à jour d'une seule requête
 	if(false !== $resultat){
-				/*
-$typesEntiteQuestions
-		-en passant dans $arrPrevNextIDs[$currEntite] pour tout les count > 1
-			- update de index 0 à index count-2 (-1 pour le nombre , -1 pour sauter le dernier qui devrait avoir 0 et comme c'est fait, ne rien changer.)
-			- `ID_next`
-
-			*/
 		$typeQuery = "n UPDATE";
 		$query = "UPDATE `entites` SET `ID_next` = CASE `ID_entite`";
 		$IDsAChanger = array();
@@ -251,20 +243,17 @@ $typesEntiteQuestions
 					$IDsAChanger[] = $val[$iter_questions];
 				}
 			}
-			#$IDsAChanger[] = implode(', ', $val);
 		}
 		$query .= " ELSE `ID_next` END WHERE `ID_entite` IN (" . implode(', ', $IDsAChanger) . ");";
-		#var_dump($typesEntiteQuestions);
-		#var_dump($arrPrevNextIDs);
-		#$resultat = FALSE;
 		$resultat = $db->query ($query);
 	}
 
+	// Traitement des erreurs!
 	if(false === $resultat){
-		$resultat = $db->query ("rollback;");
-		$resultat = "0¬[" . __FUNCTION__ . "] An error occured during a$typeQuery operation. (query = $query :: " . $db->error . " )";
+		$resultat = "0¬[" . __FUNCTION__ . "] An error occured during a$typeQuery operation.\n\n" . $db->error . "\n\n $query";
+		$resultat2 = $db->query ("ROLLBACK;");
 	}else{
-		$query="commit;";
+		$query="COMMIT;";
 		$resultat = $db->query ($query);
 		if(false !== $resultat){
 			$_POST['titreRoman'] = str_replace('\\', '', $_POST['titreRoman']);

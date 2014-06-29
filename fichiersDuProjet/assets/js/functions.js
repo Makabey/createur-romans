@@ -7,7 +7,7 @@ function lireListeRomansUsager(fctTraitementPositif, fctTraitementNegatif, ID_us
 	/*
 		Lance la requête pour lire les détails des romans que l'usager as déjà créés
 
-		Appellée dans "assistant_creation.js" et  devras l'etre aussi dans " 'hub_client.php' "
+		Appellée dans "assistant_creation.js" et devras l'etre aussi dans " 'hub_client.php' "
 	*/
 	var XHR_Query = "oper=lireListeRomans&idUsager=" + ID_usager;
 	execXHR_Request("../assets/xhr/creationProjet.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);

@@ -92,6 +92,7 @@ $(function(){
 	});
 });
 
+
 /**********************
 	WRAPPERS
 **********************/
@@ -121,6 +122,7 @@ function creerLeRoman(fctTraitementPositif, fctTraitementNegatif, queryString){
 	execXHR_Request("../assets/xhr/creationProjet.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
 
+
 /*********************
 	FONCTIONS GLOBALES
 *********************/
@@ -148,6 +150,7 @@ function afficherFormulaire(){
 	$("#button_nextQuestion").show();
 	$("#waitP").hide();
 }
+
 
 /*********************
 	FONCTIONS DE TRAITEMENT DES RETOURS POSITIFS
@@ -263,6 +266,7 @@ function afficherQuestions(donnees){
 	var iCmpt_Options=0;
 
 	donnees = JSON.parse(donnees);
+	$("#"+gblParentDesBalises).html('');
 
 	gblChoixUsager['questions'] = new Array();
 	for(iCmpt_lignes=0; iCmpt_lignes<donnees.length; iCmpt_lignes++){
