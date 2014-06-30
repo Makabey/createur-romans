@@ -17,7 +17,6 @@
 	VALEURS LUES DE php (une fois qu'on aura l'authentification)
 **********************/
 var idUsager = 1;
-//var idRoman = 1; //(isset($_GET['idRoman']))?$_GET['idRoman']:1;
 
 /**********************
 	CONFIGURATION

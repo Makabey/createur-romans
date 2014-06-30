@@ -5,7 +5,8 @@ To Do:
 - [x] bug : encodage pas au point ou cest pcq jai pas updater page edition avec les ameliorations de creation... hum ... ??? O_o spécifiquement les guillemets
 - [x] menage code mort!!!
 - [x] tout re-commenter
-- [ ] vérifier sinon coder la fonction qui retourne tout les romans de l'usager
+- [x] vérifier sinon coder la fonction qui retourne tout les romans de l'usager
+	* fait mais manque intégration dans "hub_client.php"
 - [ ] écrire la fonction de création d'usager
 - [ ] écrire la fonction de lecture usager, voir en fait la requête plus bas (sous "page index")
 - [x] page de test pour formulaire + table pour le supporter
@@ -42,7 +43,7 @@ To Do:
 - [ ] voir http://www.fakenamegenerator.com/faq.php :: http://www.roguebasin.com/index.php?title=Random_name_generation :: http://www.godpatterns.com/2005/09/name-generators-for-npcs-to-populate.html
 
 ####Page selectionProjet ::
-- [ ] fonction qui retourne les projets existants de l'usager en notation JSON (parce que plus efficace que ma façon de "parser" du TP de HTML5 et avant!!)
+- [x] fonction qui retourne les projets existants de l'usager en notation JSON (parce que plus efficace que ma façon de "parser" du TP de HTML5 et avant!!)
 
 ####Page creationProjet ::
 - [x] est-ce qu'on veux qu'il soit possible de suspendre l'assistant et reprendre au même endroit?

@@ -68,8 +68,7 @@ function lireGenreLitteraires($db, $encode_result=true){
 
 		$encode_result sert à passer l'encodage en JSON
 	*/
-	#global $db;
-	$query = "SELECT nom FROM genres_litteraires_noms;"; # LIMIT 0,1;";
+	$query = "SELECT nom FROM genres_litteraires_noms;";
 
 	$result = $db->query ($query);
 	if(false !== $result){
