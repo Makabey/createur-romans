@@ -10,9 +10,15 @@ TODO:
  * 0=usager inexistant (usager libre ou nom mal tapé),
  * 1=usager existant (usager indisponible ou nom bien tapé),
  * 2=mot de passe invalide,
- * 3=mot de passe OK (-doit- sous-entendre usager existant) ; suppose que le champs PWD peux être vide et si c'est le cas la validation du PWD n'est pas faite donc pas de code 2 erroné
+ * 3=mot de passe OK (-doit- sous-entendre usager existant) ; suppose que le champs PWD peux être vide (pour pouvoir demander si usager existe sans donner d'erreur de MdP) et si c'est le cas la validation du PWD n'est pas faite donc pas de code 2 erroné
 
  après réflection, ici aussi je vais faire 4 fonctions : lire, insérer, effacer et actualiser
+
+
+ 0 = user+mdp OK
+ 1 = mdp erroné
+ 2 = usager inexistant
+
 
 */
 
@@ -41,10 +47,10 @@ switch($_POST['oper']){
 		/*
 
 		*/
-		if(isset($_POST[''])){
+		if(isset($_POST['usager'])){
 			$resultat = lireUsager($db);
 		}else{
-			$resultat = "0¬Specify either contenu, titre, note, idEntite and typeEntite != 'textePrincipal' -or- contenu, idRoman and typeEntite = 'textePrincipal' but not both branches.";
+			$resultat = "0¬Missing parameter 'usager'";
 		}
 		break;
 
@@ -68,32 +74,52 @@ exit();
 */
 function lireUsager($db){
 	/*
-		Lire de la BD, selon la valeur de $_POST['typeEntite'], les données soit du Texte lui-même soit de l'une des sections d'entitées
+		Lire de la BD les données de l'usager et retourner leurs validité versus
+		ce qui est été reçu par $_POST
+
+		Si ne reçoit pas  $_POST['pwd'], alors on ne veux que savoir si le nom est disponible
 	*/
-	$arrChamps_entites = array('ID_prev', 'ID_next', 'titre', 'contenu', 'note');
-	$resultat = false;
-	$query = 'SELECT ID_entite, ' . implode(', ', $arrChamps_entites) . ' FROM entites WHERE ID_roman = ' . $_POST['idRoman'] . ' AND typeEntite = "' . $_POST['typeEntite'] . '" AND deleted = 0 ORDER BY ID_prev ASC;';
+	$pseudoMatch = preg_match("/[0-9A-Za-z]{4,20}/", $_POST['usager']);
 
-	$result = $db->query ($query);
-	if(false !== $result){
-		$resultat = $result->fetch_row();
-		$resultat[$ID_entite] = array_combine($arrChamps_entites, $row);
+	if(1 === $pseudoMatch){
+		$query = 'SELECT ID_usager, pseudo, motdepasse, nom FROM usagers WHERE pseudo = "' . $_POST['usager'] . '" AND deleted = 0;';
 
-		/* Convertir en JSON */
-		$resultat = json_encode($resultat);
-		if(json_last_error() !== 0){
-			$resultat = "0¬" . decodeJSON_Error(json_last_error());
+		$db_result = $db->query ($query);
+		if(false !== $db_result){
+			$resultat = 0;
+
+			if($db_result->num_rows > 0){
+				$row = $db_result->fetch_row();
+
+				if(isset($_POST['pwd'])){
+					$motDePasseMatch = preg_match("/[^\<\>]{8,20}/", $_POST['pwd']);
+					if((1 !== $motDePasseMatch) || ($row[2] !== $_POST['pwd'])){
+						$resultat += 1;
+					}
+				}
+			}else{
+				$resultat = 2; // Pseudo erroné ou introuvable, selon la fct qui recoit le code d'erreur
+			}
+
+			if($resultat != 0){
+				$resultat = "0¬" . $resultat; // 1 = MdP erroné, 2 = usager erroné/pris, 3 = rien de bon
+			}else{
+				$resultat = "1¬" . $row[0]; // ID usager
+				session_start();
+				$_SESSION['usager'] = $row[0];
+				$_SESSION['nom'] = ($row[3] !== null)?$row[3]:$row[1];
+			}
 		}else{
-			$resultat = "1¬" . $resultat;
+			$resultat = "0¬[" . __FUNCTION__ . "] An error occured during a SELECT operation.\n\n" . $db->error . "\n\n $query";
 		}
 	}else{
-		$resultat = "0¬[" . __FUNCTION__ . "] An error occured during a SELECT operation.\n\n" . $db->error . "\n\n $query";
+		$resultat = "0¬4"; // Nom usager ne repond pas a regexp, potentiel injection!
 	}
 
 	return $resultat;
 }
 
-
+/*
 function miseAJourUsager($db){
 	$resultat = false;
 
@@ -119,13 +145,13 @@ function miseAJourUsager($db){
 	}
 	return $resultat;
 }
-
-
+*/
+/*
 function insererUsager($db){ // pour le moment ne s'appliquerais qu'aux entitées
-	/*
+	/ *
 		Insérer une nouvelle entitée dans la BD
-	*/
-	
+	* /
+
 		$_POST['titre'] = real_escape_string($_POST['titre'], $db);
 		$_POST['contenu'] = real_escape_string($_POST['contenu'], $db);
 		$_POST['note'] = real_escape_string($_POST['note'], $db);
@@ -134,7 +160,7 @@ function insererUsager($db){ // pour le moment ne s'appliquerais qu'aux entitée
 		$queryType = "n INSERT";
 
 		$resultat = $db->query ($query);
-	
+
 
 		$ID_entite = $db->insert_id;
 
@@ -142,7 +168,7 @@ function insererUsager($db){ // pour le moment ne s'appliquerais qu'aux entitée
 		$queryType = "n UPDATE";
 
 		$resultat = $db->query ($query);
-	
+
 
 	// Traitement des erreurs!
 	if(false !== $resultat){
@@ -156,5 +182,5 @@ function insererUsager($db){ // pour le moment ne s'appliquerais qu'aux entitée
 	}
 	return $resultat;
 }
-
+*/
 /* == EOF == */
