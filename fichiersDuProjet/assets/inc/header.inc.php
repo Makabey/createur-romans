@@ -18,10 +18,22 @@ require_once "menus.inc.php";
 		<meta name="author" content="Thomas A. Séguin, Olivier Berthier, Eric Robert</p>" />
 		<meta name="description" content="Effacez le syndrome de la page blanche avec notre assistant. Sélectionnez un genre, répondez à quelques questions et vous voilà avec un paragraphe suggèrant le fil de votre prochaine oeuvre." />
 		<meta name="keywords" content="roman, assistant, page blanche, aide à l'écriture, scrivener, evernote, gratuit, composer" />
-		<link rel="stylesheet" href="../assets/css/styles.css" media="only screen" />
+		<link rel="stylesheet" href="assets/css/styles.css" media="only screen" />
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 		<script src="<?php echo $rootDomaine; ?>assets/xhr/xhrFunctions.js"></script>
 		<script src="<?php echo $rootDomaine; ?>assets/js/functions.js"></script>
+		<!-- Bootstrap core CSS -->
+		<link href="assets/css/bootstrap.min.css" rel="stylesheet">
+		
+
+		<!-- Custom css -->
+		<link href="assets/css/theme.css" rel="stylesheet">
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!--[if lt IE 9]>
+		  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		  <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
 		<script>
 		"use strict";
 		/*window.addEventListener("load", function(){ // J'utilise un listener pour éviter de marcher sur les platebandes de jQuery
@@ -53,12 +65,43 @@ require_once "menus.inc.php";
 	</head>
 	<body id="<?php echo $sNomDeCettePage; ?>">
 		<header role="banner">
-		<?php
-			/*
-				Le menu irait ici...
-			*/
-			spawnHeaderMenu();
-		?>
+		<div class='navbar navbar-inverse navbar-fixed-top' role='navigation'>
+				<div class='container'>
+					<div class='navbar-header'>
+					  <button type='button' class='navbar-toggle' data-toggle='collapse' data-target='.navbar-collapse'>
+						<span class='sr-only'>Toggle navigation</span>
+						<span class='icon-bar'></span>
+						<span class='icon-bar'></span>
+						<span class='icon-bar'></span>
+					  </button>
+					  <a class='navbar-brand' href='#'><img src='assets/images/logo.png' alt='créateur roman, bienvenue' />Créateur Roman</a>
+					</div>
+					<div class='navbar-collapse collapse'>
+						<?php
+							#echo '$usager = ' , $_SESSION['usager'] , "<br />", PHP_EOL;
+							if(!isset($_SESSION['usager'])){
+								echo "
+								  <form id='form_login' method='post' action='#' class='navbar-form navbar-right' role='form'>
+									<div class='form-group'>
+									  <input type='text' id='loginName' required='required' pattern='[0-9A-Za-z]{4,20}' title='de 4 à 20 charactères sans accents' type='text' placeholder='Identifiant' class='form-control'>
+									</div>
+									<div class='form-group'>
+									  <input type='password' id='loginPwd' required='required' pattern='[^\<\>]{8,20}' title='de 8 à 20 caractères' placeholder='Mot de passe' class='form-control'>
+									</div>
+									<button type='submit' class='btn btn-success'>Connexion</button>
+								  </form>
+								";
+							}
+							else{
+								echo "<p>Bienvenue {$_SESSION['nom']} ({$_SESSION['usager']})</p>";
+								echo ' <a href="index.php?oper=deconnecter">Se déconnecter</a>';
+							}
+							spawnHeaderMenu();
+						?>
+					</div><!--/.navbar-collapse -->
+				</div>
+			</div>
 		</header>
-		<div id="container">
-			<div id="content" role="main">
+		<div class="container" role="main">
+
+			
