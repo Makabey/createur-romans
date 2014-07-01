@@ -26,7 +26,7 @@
   </head>
 
   <body>
-
+	<header>
 	 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
@@ -51,7 +51,7 @@
         </div><!--/.navbar-collapse -->
       </div>
     </div>
-
+	</header>
     <div class="container">
 		<div class="titre">
 			<h1>Créateur Roman</h1>
