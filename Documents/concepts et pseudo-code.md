@@ -2,23 +2,23 @@
 ####Contient tâches, idées, concepts, questions et "ToDo"
 
 To Do:
-- [x] bug : encodage pas au point ou cest pcq jai pas updater page edition avec les ameliorations de creation... hum ... ??? O_o spécifiquement les guillemets
-- [x] menage code mort!!!
-- [x] tout re-commenter
-- [x] vérifier sinon coder la fonction qui retourne tout les romans de l'usager
-	* fait mais manque intégration dans "hub_client.php"
-- [ ] écrire la fonction de création d'usager
-- [ ] écrire la fonction de lecture usager, voir en fait la requête plus bas (sous "page index")
-- [x] page de test pour formulaire + table pour le supporter
-- [ ] Changer la sauvegarde pour qu'elle s'effectue si le dirtyBit est ON -et- qu'on as plus tapé depuis x secondes. Autre possibilitée, detecter si le "web storage" est permis/disponible et si OUI alors sauve localement aux 15 secondes et aux 300 secs sur le web si on ne le force pas par l'interface (bouton)
-- [x] faire la page des questions avec ce que Thomas as créé en page et en data
-- [x] fonction sauvegardertexte pas finie, manque les params
-- [x] voir "Page creationProjet"
-- [x] changer la fonction afficherAttente, elle doit maintenant : 1. occulter le FORM et le BUTTON de 'next'; 2. afficher un DIV ou P dédié et placé -avant- le FORM; 3. créer une fonction opposée? L'idée est de pouvoir cacher le FORM durant la recomposition de son contenu indépendamment; 4. lui donner aussi un param pour le message! si pas là, mettre un défaut :)
-- [x] bug : s'il n'y as aucune entrée dans la table romans_details mais que celle correspondant dans romans_texte existe, agit comme s'il ne manquait rien, donc changer le code pour tout passer par romans_details, surtout que c'est elle qui décide si un roman est deleted ou non; en fait le bug persiste avec les entitées! oui bon, dans le cas des entitées, en principe une fois le code bien écrit il sera impossible de les charger ^_^'...
+- [ ] Changer la sauvegarde pour qu'elle s'effectue si le dirtyBit est ON -et- qu'on as pas tapé depuis x secondes. Autre possibilitée, detecter si le "web storage" est permis/disponible et si OUI alors sauve localement aux 15 secondes et aux 300 secs sur le web si on ne le force pas par l'interface (bouton)
 - [ ] petit bug : le bouton "lire entitées" de la page Édition ne lit pas tout les entitées, un peu normal, il faut autant de requêtes que de types, pour la démo je pourrais le faire (tout les appels)
 - [ ] bug : le retour de "execXHR_Request" elle-même n'est pas traité, c'est à dire que si la fonction retourne purement FALSE (le fureteur du client ne supporte pas XHR), cette erreur n'est traité (je crois) par aucun de mes "wrappers".
 -[ ] pour editionProjet.xhr.php//oper=deplacer, voir ce que j'ai fait avec assistant_creation.xhr.php//creerLeRoman pour ce qui est de la multi-mise à jour en une seule requête
+- [x] bug : encodage pas au point ou cest pcq jai pas updater page edition avec les ameliorations de creation... hum ... ??? O_o spécifiquement les guillemets
+- [x] menage code mort!!!
+- [x] tout re-commenter
+- [x] page de test pour formulaire + table pour le supporter
+
+Pour "editionProjet.xhr.php" :
+TODO:
+	9. retirer le besoin pour 'typeEntite' partout où c'est possible, surtout considérant que, tant qu'on parle des entitées, on peux faire presque tout seulement avec leur ID_entite pour les identifier de façon unique.
+		-ecrire :: possible si je part avec le fait que si "titre"(et note) est spécifié, l'entité pointée n'est pas le textePrincipal
+		-déplacer :: possible aussi je crois
+	10. BUG :: si on change l'état DELETED, les entitées pointées par PREV/NEXT de l'entitée retirée ne sont -pas- corrigées ni au retrait, ni à la récupération, à corriger dès que possible
+	11. Tester plus pour savoir si j'ai un bug avec la fonction "miseAJourDonneesEntite" ou si c'est simplement que j'essaie de sauver une fraction avant l'ordi et donc que non seulement le flag "DirtyBit" dans le code JS est toujours vrai mais en plus qu'il n'y as rien à changer, aucune erreur et donc que je devrais changer le code pour NE PAS renvoyer d'erreur quand "rows_affected" == 0...
+	12. changer EFFACER comme suit :  si on recoit un idEntite, c'est un quoi,etc... si on recoit un idRoman, c'est le textePrincipal/Roman table roman_details
 
 ====
 
@@ -32,8 +32,8 @@ To Do:
 - [ ] lire à propos de et implémenter mdp encryptés? voir http://glynrob.com/javascript/client-side-hashing-and-encryption/
 - [ ] encryption des données usager?
 - [ ] lire les APIs de G+ et F pour le login
-- [ ] fichier XHR + code JS pour query de validité usager (usr+pwd)
-- [ ] fichier XHR + code JS pour query de disponiblité nom usager, à moins de fusionner avec "validité" et d'utiliser les codes de retour ex:
+- [x] fichier XHR + code JS pour query de validité usager (usr+pwd)
+- [x] fichier XHR + code JS pour query de disponiblité nom usager, à moins de fusionner avec "validité" et d'utiliser les codes de retour ex:
  * 0=usager inexistant (usager libre ou nom mal tapé),
  * 1=usager existant (usager indisponible ou nom bien tapé),
  * 2=mot de passe invalide,
@@ -44,6 +44,9 @@ To Do:
 
 ####Page selectionProjet ::
 - [x] fonction qui retourne les projets existants de l'usager en notation JSON (parce que plus efficace que ma façon de "parser" du TP de HTML5 et avant!!)
+- [x] vérifier sinon coder la fonction qui retourne tout les romans de l'usager
+	* fait mais manque intégration dans "hub_client.php"
+
 
 ####Page creationProjet ::
 - [x] est-ce qu'on veux qu'il soit possible de suspendre l'assistant et reprendre au même endroit?
@@ -59,6 +62,9 @@ To Do:
 - [x] fonction pour créer le Roman dans les tables roman_details et roman_texte
 - [ ] fonction qui encode les texte, doit être globale et utilisable par n'importe quel fichier (création + édition)
 - [ ] fonction qui DÉcode les texte, doit être globale et utilisable par n'importe quel fichier
+- [x] faire la page des questions avec ce que Thomas as créé en page et en data
+- [x] fonction sauvegardertexte pas finie, manque les params
+- [x] changer la fonction afficherAttente, elle doit maintenant : 1. occulter le FORM et le BUTTON de 'next'; 2. afficher un DIV ou P dédié et placé -avant- le FORM; 3. créer une fonction opposée? L'idée est de pouvoir cacher le FORM durant la recomposition de son contenu indépendamment; 4. lui donner aussi un param pour le message! si pas là, mettre un défaut :)
 
 ####Page editionProjet
 - [x] décider si mettre "roman.contenu" dans fichier texte séparé au lieu de MySQL? <-- pê exagéré pour la démo??
@@ -73,9 +79,10 @@ To Do:
 - [x] fonction XHR pour enregistrer le document
 - [ ] lire plus sur le mécanisme de drag&drop pour savoir comment aborder le réordonnement des entitées --> http://www.html5rocks.com/en/tutorials/dnd/basics/ --> Modernizr --> pas compliqué juste 30-40 lignes de JS
 - [x] permettre de dragger une "note" sur le document et ça fait copy-paste?
- * retiré
+  * retiré
 - [x] permettre de dragger un personnage, un lieu ou un "autres" sur le document et ça copie le nom + lien?
- * retiré
+  * retiré
+ - [x] bug : s'il n'y as aucune entrée dans la table romans_details mais que celle correspondant dans romans_texte existe, agit comme s'il ne manquait rien, donc changer le code pour tout passer par romans_details, surtout que c'est elle qui décide si un roman est deleted ou non; en fait le bug persiste avec les entitées! oui bon, dans le cas des entitées, en principe une fois le code bien écrit il sera impossible de les charger ^_^'...
 =====
 
 char / varchar :: max 255

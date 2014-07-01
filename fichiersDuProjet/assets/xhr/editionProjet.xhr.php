@@ -1,15 +1,5 @@
 <?php
 /*
-
-TODO:
-	9. retirer le besoin pour 'typeEntite' partout où c'est possible, surtout considérant que, tant qu'on parle des entitées, on peux faire presque tout seulement avec leur ID_entite pour les identifier de façon unique.
-		-ecrire :: possible si je part avec le fait que si "titre"(et note) est spécifié, l'entité pointée n'est pas le textePrincipal
-		-déplacer :: possible aussi je crois
-	10. BUG :: si on change l'état DELETED, les entitées pointées par PREV/NEXT de l'entitée retirée ne sont -pas- corrigées ni au retrait, ni à la récupération, à corriger dès que possible
-	11. Tester plus pour savoir si j'ai un bug avec la fonction "miseAJourDonneesEntite" ou si c'est simplement que j'essaie de sauver une fraction avant l'ordi et donc que non seulement le flag "DirtyBit" dans le code JS est toujours vrai mais en plus qu'il n'y as rien à changer, aucune erreur et donc que je devrais changer le code pour NE PAS renvoyer d'erreur quand "rows_affected" == 0...
-	12. changer EFFACER comme suit :  si on recoit un idEntite, c'est un quoi,etc... si on recoit un idRoman, c'est le textePrincipal/Roman table roman_details
-*/
-/*
 ---Pour oper = lire
 entrées::
 -typeEntite doit être l'un de : quoi, ou, comment, pourquoi, qui, quand, textePrincipal

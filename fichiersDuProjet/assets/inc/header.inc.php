@@ -1,6 +1,12 @@
 <?php
+session_start();
 $sNomDeCettePage = substr($_SERVER['SCRIPT_NAME'], (strrpos($_SERVER['SCRIPT_NAME'],'/')+1));
 $sNomDeCettePage = substr($sNomDeCettePage, 0, (strpos($sNomDeCettePage,'.')));
+
+#$rootDomaine = "http://createur-romans/fichiersDuProjet/";
+#$rootDomaine = "/fichiersDuProjet/";
+#$rootDomaine = "";
+$rootDomaine = ($sNomDeCettePage == 'index')?'':"/fichiersDuProjet/";
 
 require_once "menus.inc.php";
 ?>
@@ -14,8 +20,8 @@ require_once "menus.inc.php";
 		<meta name="keywords" content="roman, assistant, page blanche, aide à l'écriture, scrivener, evernote, gratuit, composer" />
 		<link rel="stylesheet" href="../assets/css/styles.css" media="only screen" />
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-		<script src="../assets/xhr/xhrFunctions.js"></script>
-		<script src="../assets/js/functions.js"></script>
+		<script src="<?php echo $rootDomaine; ?>assets/xhr/xhrFunctions.js"></script>
+		<script src="<?php echo $rootDomaine; ?>assets/js/functions.js"></script>
 		<script>
 		"use strict";
 		/*window.addEventListener("load", function(){ // J'utilise un listener pour éviter de marcher sur les platebandes de jQuery
@@ -28,13 +34,20 @@ require_once "menus.inc.php";
 			case 'index':
 				break;
 		}*/
-		echo "var idRoman = $idRoman;", PHP_EOL
+		if($sNomDeCettePage != 'index'){
+			if(isset($_SESSION['usager'])){
+				$idRoman = (isset($_SESSION[$_SESSION['usager']]['idRoman']))?$_SESSION[$_SESSION['usager']]['idRoman']:0;
+				echo "var idRoman = $idRoman;", PHP_EOL;
+			}else{
+				echo 'document.location.href="' . $rootDomaine . 'index.php"';
+			}
+		}
 		?>
 		</script>
 		<!-- Fichier JS spécifique à la page -->
 		<?php
-			if(file_exists('../assets/js/'.$sNomDeCettePage.'.js')){
-				echo '<script src="../assets/js/',$sNomDeCettePage,'.js"></script>',PHP_EOL;
+			if(file_exists($rootDomaine . 'assets/js/'.$sNomDeCettePage.'.js')){
+				echo '<script src="' . $rootDomaine . 'assets/js/',$sNomDeCettePage,'.js"></script>',PHP_EOL;
 			}
 		?>
 	</head>

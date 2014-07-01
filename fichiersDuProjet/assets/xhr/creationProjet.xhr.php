@@ -146,10 +146,10 @@ function creerLeRoman($db){
 	/*
 		Pousser dans la BD tout les détails pour le nouveau Roman
 	*/
-	$resultat = $_POST['titreRoman'] = real_escape_string($_POST['titreRoman'], $db);
-	if(mb_substr($resultat, 0, 2, "UTF-8") == "0¬") {
-		return $resultat; // S'il y as erreur ici, c'est que $db n'est pas une BD ouverte
-	}
+	$_POST['titreRoman'] = real_escape_string($_POST['titreRoman'], $db);
+	#if(mb_substr($_POST['titreRoman'], 0, 2, "UTF-8") == "0¬") {
+	#	return $_POST['titreRoman']; // S'il y as erreur ici, c'est que $db n'est pas une BD ouverte
+	#}
 
 	if(false !== $resultat){
 		// Démarrer une TRANSACTION pour pouvoir reculer avec un ROLLBACK si nécessaire et ne pas laisser d'orphelins
