@@ -1,25 +1,4 @@
 <?php
-/*
-
-TODO:
-- [] tout réécrire/corriger pour répondre aux besoins des fonctions
-- [ ] écrire la fonction de création d'usager
-- [ ] écrire la fonction de lecture usager, voir en fait la requête plus bas (sous "page index")
-- [ ] fichier XHR + code JS pour query de validité usager (usr+pwd)
-- [ ] fichier XHR + code JS pour query de disponiblité nom usager, à moins de fusionner avec "validité" et d'utiliser les codes de retour ex:
- * 0=usager inexistant (usager libre ou nom mal tapé),
- * 1=usager existant (usager indisponible ou nom bien tapé),
- * 2=mot de passe invalide,
- * 3=mot de passe OK (-doit- sous-entendre usager existant) ; suppose que le champs PWD peux être vide (pour pouvoir demander si usager existe sans donner d'erreur de MdP) et si c'est le cas la validation du PWD n'est pas faite donc pas de code 2 erroné
-
- après réflection, ici aussi je vais faire 4 fonctions : lire, insérer, effacer et actualiser
-
-
-
-
-
-*/
-
 require_once "../inc/db_access.inc.php";
 require_once "../inc/library01.inc.php";
 
@@ -66,8 +45,17 @@ switch($_POST['oper']){
 		$resultat = insererUsager($db);
 		break;
 
-	case 'actualiser': 	# UPDATE
+	#case 'actualiser': 	# UPDATE
 	case 'effacer':
+		if(!isset($_POST['etat'])) { $_POST['etat'] = 1; }
+		if(is_numeric($_POST['etat'])){
+			$_POST['etat']+=0;
+			if($_POST['etat'] !=1) $_POST['etat']=0;
+		}else{
+			$_POST['etat'] = strtolower($_POST['etat']);
+			$_POST['etat'] = ($_POST['etat'] == "true" || $_POST['etat'] == "vrai")?1:0;
+		}
+		$resultat = miseAJourUsager($db);
 		break;
 
 	default: $resultat = '0¬"' . $_POST["oper"] . '" unknown value for parameter "oper"';
@@ -182,32 +170,31 @@ function insererUsager($db){
 	return $resultat;
 }
 
-/*
 function miseAJourUsager($db){
 	$resultat = false;
-
-	if($_POST[''] == ''){
-			$_POST['titre'] = real_escape_string($_POST['titre'], $db);
-			$_POST['contenu'] = real_escape_string($_POST['contenu'], $db);
-			$_POST['note'] = real_escape_string($_POST['note'], $db);
-		}else if(isset($_POST['etat'])){ // ont veux "effacer" l'entitee, on prend "etat" pour permettre de changer TRUE/FALSE sans une 2eme fonction
+	$query = 'UPDATE usagers SET ';
+	if(isset($_POST['etat'])){ // ont veux "effacer" l'usager
 			$query .= 'deleted = ' . $_POST['etat'];
-		}// à moins d'erreur dans le code plus haut, je n'ai pas besoin d'un ELSE ultime
+	/*}elseif($_POST[''] == ''){
+		$_POST['titre'] = real_escape_string($_POST['titre'], $db);
+		$_POST['contenu'] = real_escape_string($_POST['contenu'], $db);
+		$_POST['note'] = real_escape_string($_POST['note'], $db);*/
+	}#else // à moins d'erreur dans le code plus haut, je n'ai pas besoin d'un ELSE ultime
 
-	if($resultat === false){
-		$result = $db->query ($query);
-		if(false !== $result){
-			if($db->affected_rows){
-				$resultat = "1¬[" . __FUNCTION__ . "] UPDATE successful\n\n '$query'";
-			}else{
-				$resultat = "0¬[" . __FUNCTION__ . "] UPDATE didn't occur (most probably because there was nothing to change)\n\n $query";
-			}
+	$query .= " WHERE pseudo = '{$_POST['usager']}';";
+
+	$result = $db->query ($query);
+	if(false !== $result){
+		if($db->affected_rows){
+			$resultat = "1¬[" . __FUNCTION__ . "] UPDATE successful\n\n '$query'";
 		}else{
-			$resultat = "0¬[" . __FUNCTION__ . "] An error occured during an UPDATE operation.\n\n" . $db->error . "\n\n $query";
+			$resultat = "0¬[" . __FUNCTION__ . "] UPDATE didn't occur (most probably because there was nothing to change)\n\n $query";
 		}
+	}else{
+		$resultat = "0¬[" . __FUNCTION__ . "] An error occured during an UPDATE operation.\n\n" . $db->error . "\n\n $query";
 	}
+
 	return $resultat;
 }
-*/
 
 /* == EOF == */
