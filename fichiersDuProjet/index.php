@@ -30,7 +30,7 @@ Mettre ici le corps de la page Index<br /><br />
 <input type="text" id="registerName" placeholder="Votre nom" pattern="[^\<\>]{1,40}" title="de 1 à 40 caractères" />
 <input type="text" id="registerNick" required="required" placeholder="Nom d'usager" pattern="[0-9A-Za-z]{4,20}" title="de 4 à 20 charactères sans accents" data-nomLibre="false" />
 <input type="password" id="registerPwd" required="required" placeholder="Mot de passe" pattern="[^\<\>]{8,20}" title="de 8 à 20 caractères" />
-<input type="password" id="registerPwdConf" required="required" placeholder="Confirmez le mot de passe"  pattern="[^\<\>]{8,20}" title="de 8 à 20 caractères" />
+<input type="password" id="registerPwdConf" required="required" placeholder="Confirmez le mot de passe" pattern="[^\<\>]{8,20}" title="de 8 à 20 caractères" />
 <button type="submit">Créer un compte</button>
 </form>
 <?php

@@ -23,9 +23,19 @@ TODO:
 require_once "../inc/db_access.inc.php";
 require_once "../inc/library01.inc.php";
 
-if(!isset($_POST['oper'])){
+if(!isset($_POST['oper']) || !isset($_POST['usager'])){ // oper DOIT être présent
 	// Pour JavaScript : 0/1 : false/true ¬ texte erreur
-	echo '0¬A required parameter (either "oper", "typeEntite" or "idRoman"), is missing';
+	echo '0¬A required parameter (either "oper" or "usager"), is missing';
+	exit();
+}
+
+/*
+	Vérifier tout de suite la validité de $_POST['usager'], inutile d'aller plus loin si transige le regexp,
+	parce que si 'usager' ne répond pas à la regexp utilisée par JS -donc- potentiellement injection!
+*/
+$pseudoMatch = preg_match("/[0-9A-Za-z]{4,20}/", $_POST['usager']);
+if(1 !== $pseudoMatch){
+	echo "0¬4";
 	exit();
 }
 
@@ -45,11 +55,11 @@ switch($_POST['oper']){
 		/*
 			Permet de vérifier la validité de la paire usager/pwd -et- savoir si un nom est pris.
 		*/
-		if(isset($_POST['usager'])){
+		#if(isset($_POST['usager'])){
 			$resultat = lireUsager($db);
-		}else{
-			$resultat = "0¬Missing parameter 'usager'";
-		}
+		#}else{
+		#	$resultat = "0¬Missing parameter 'usager'";
+		#}
 		break;
 
 	case 'inserer': # INSERT
@@ -78,52 +88,95 @@ function lireUsager($db){
 
 		Si ne reçoit pas $_POST['pwd'], alors on ne veux que savoir si le nom est disponible,
 		si c'est le cas, l'usager n'est pas authentifié!
-		
+
 		retour :
-		 0 = user+mdp OK
+		0 = user+mdp OK
 		1 = mdp erroné
 		2 = usager inexistant
-		4 = 'usager' ne répond pas à la regexp utilisée par JS -donc- potentiellement injection!
 	*/
-	$pseudoMatch = preg_match("/[0-9A-Za-z]{4,20}/", $_POST['usager']);
 
-	if(1 === $pseudoMatch){
-		$query = 'SELECT ID_usager, pseudo, motdepasse, nom FROM usagers WHERE pseudo = "' . $_POST['usager'] . '" AND deleted = 0;';
+	$query = 'SELECT ID_usager, pseudo, motdepasse, nom FROM usagers WHERE pseudo = "' . $_POST['usager'] . '" AND deleted = 0;';
 
-		$db_result = $db->query ($query);
-		if(false !== $db_result){
-			$resultat = 0;
+	$db_result = $db->query ($query);
+	if(false !== $db_result){
+		$resultat = 0;
 
-			if($db_result->num_rows > 0){
-				$row = $db_result->fetch_row();
+		if($db_result->num_rows > 0){
+			$row = $db_result->fetch_row();
 
-				if(isset($_POST['pwd'])){
-					$motDePasseMatch = preg_match("/[^\<\>]{8,20}/", $_POST['pwd']);
-					if((1 !== $motDePasseMatch) || ($row[2] !== $_POST['pwd'])){
-						$resultat = 1;
-					}
-				}
-			}else{
-				$resultat = 2; // Pseudo erroné ou introuvable, selon la fct qui recoit le code d'erreur
-			}
-
-			if($resultat != 0){
-				$resultat = "0¬" . $resultat; // 1 = MdP erroné, 2 = usager erroné/pris, 3 = rien de bon
-			}else{
-				if(isset($_POST['pwd'])){ // Sans mot de passe, on log pas complètement l'usager
-					$resultat = "1¬" . $row[0]; // ID usager
-					session_start();
-					$_SESSION['usager'] = $row[0];
-					$_SESSION['nom'] = ($row[3] !== null)?$row[3]:$row[1];
-				}else{
-					$resultat = "1¬0"; // ID usager
+			if(isset($_POST['pwd'])){
+				$motDePasseMatch = preg_match("/[^\<\>]{8,20}/", $_POST['pwd']);
+				if((1 !== $motDePasseMatch) || ($row[2] !== $_POST['pwd'])){
+					$resultat = 1;
 				}
 			}
 		}else{
-			$resultat = "0¬[" . __FUNCTION__ . "] An error occured during a SELECT operation.\n\n" . $db->error . "\n\n $query";
+			$resultat = 2; // Pseudo erroné ou introuvable, selon la fct qui recoit le code d'erreur
+		}
+
+		if($resultat != 0){
+			$resultat = "0¬" . $resultat; // 1 = MdP erroné, 2 = usager erroné/pris, 3 = rien de bon
+		}else{
+			if(isset($_POST['pwd'])){ // Sans mot de passe, on log pas complètement l'usager
+				$resultat = "1¬" . $row[0]; // ID usager
+				session_start();
+				$_SESSION['usager'] = $row[0]; // ID usager
+				$_SESSION['nom'] = ($row[3] !== null)?$row[3]:$row[1]; // Nom sinon Pseudo
+			}else{
+				$resultat = "1¬0"; // ID usager
+			}
 		}
 	}else{
-		$resultat = "0¬4"; // Nom usager ne repond pas a regexp, potentiel injection!
+		$resultat = "0¬[" . __FUNCTION__ . "] An error occured during a SELECT operation.\n\n" . $db->error . "\n\n $query";
+	}
+
+	return $resultat;
+}
+
+function insererUsager($db){
+	/*
+		Insérer un nouvel usager dans la BD
+	*/
+	#$_POST['usager'] = real_escape_string($_POST['usager'], $db);
+
+	$resultat = false;
+
+	$motDePasseMatch = preg_match("/[^\<\>]{8,20}/", $_POST['pwd']);
+	if(1 === $motDePasseMatch){
+		$_POST['pwd'] = real_escape_string($_POST['pwd'], $db);
+		#if(mb_substr($_POST['pwd'], 0, 2, "UTF-8") == "0¬") {
+		#	return $_POST['pwd']; // S'il y as erreur ici, c'est que $db n'est pas une BD ouverte
+		#}
+
+		$query = "INSERT INTO `usagers` (`pseudo`, `motdepasse`%s) VALUES ('{$_POST['usager']}', '{$_POST['pwd']}'%s);";
+
+		if(isset($_POST['nomUsager'])){
+			$nomUsagerMatch = preg_match("/[^\<\>]{1,40}/", $_POST['nomUsager']);
+			if(1 === $nomUsagerMatch){
+				$_POST['nomUsager'] = real_escape_string($_POST['nomUsager'], $db);
+				$query = sprintf($query, ", `nom`", ", '{$_POST['nomUsager']}'");
+			}else{
+				$query = sprintf($query, '', '');
+				unset($_POST['nomUsager']);
+			}
+		}else{
+			$query = sprintf($query, '', '');
+		}
+
+		$resultat = $db->query ($query);
+
+		// Traitement des erreurs!
+		if(false !== $resultat){
+			session_start();
+			$_SESSION['usager'] = $db->insert_id;
+			$_SESSION['nom'] = (isset($_POST['nomUsager']))?$_POST['nomUsager']:$_POST['usager']; // Nom sinon Pseudo
+			$resultat = "1¬" . $_SESSION['usager'];
+		}else{
+			$resultat = "0¬[" . __FUNCTION__ . "] An error occured during an INSERT operation.\n\n" . $db->error . "\n\n $query";
+		}
+
+	}else{
+		$resultat = "0¬1"; // Mot de passe invalide parce qu'il ne répond pas au regexp, injection potentielle!
 	}
 
 	return $resultat;
@@ -156,41 +209,5 @@ function miseAJourUsager($db){
 	return $resultat;
 }
 */
-
-function insererUsager($db){ // pour le moment ne s'appliquerais qu'aux entitées
-	/*
-		Insérer une nouvelle entitée dans la BD
-	*/
-
-		$_POST['titre'] = real_escape_string($_POST['titre'], $db);
-		$_POST['contenu'] = real_escape_string($_POST['contenu'], $db);
-		$_POST['note'] = real_escape_string($_POST['note'], $db);
-
-		$query = 'INSERT INTO entites (ID_roman, ID_prev, ID_next, typeEntite, titre, contenu, note) VALUES (' . $_POST['idRoman'] . ', ' . $ID_prev . ', 0, "' . $_POST['typeEntite'] . '", "' . $_POST['titre'] . '", "' . $_POST['contenu'] . '", "' . $_POST['note'] . '");';
-		$queryType = "n INSERT";
-
-		$resultat = $db->query ($query);
-
-
-		$ID_entite = $db->insert_id;
-
-		$query = 'UPDATE entites SET ID_next = ' . $ID_entite . ' WHERE ID_entite = ' . $ID_prev . ';';
-		$queryType = "n UPDATE";
-
-		$resultat = $db->query ($query);
-
-
-	// Traitement des erreurs!
-	if(false !== $resultat){
-		if($db->affected_rows){
-			$resultat = "1¬[" . __FUNCTION__ . "] INSERT successful. New ID is " . $ID_entite;
-		}else{
-			$resultat = "0¬[" . __FUNCTION__ . "] UPDATE phase didn't occur\n\n $query";
-		}
-	}else{
-		$resultat = "0¬[" . __FUNCTION__ . "] An error occured during a$queryType operation.\n\n" . $db->error . "\n\n $query";
-	}
-	return $resultat;
-}
 
 /* == EOF == */

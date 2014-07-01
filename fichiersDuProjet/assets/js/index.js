@@ -36,7 +36,7 @@ $(function(){
 				$("#form_register>div>span").css({color:"#f00"});
 				$("#form_register>div").css({"background-color":"#fcc", border:"3px inset #f00", padding:"10px", "margin-bottom":"10px"});
 			}else{
-				insererUsager(authentifierUsager, traiterErreurs, $("#registerName").val(), $("#registerNick").val(), $("#registerPwd").val());
+				insererUsager(authentifierUsager, traiterErreurs, $("#registerNick").val(), $("#registerPwd").val(), $("#registerName").val());
 			}
 		}else{
 			$("#form_register>div>span").text("Le nom n'est pas libre!");
@@ -59,6 +59,18 @@ function verifierUsager(fctTraitementPositif, fctTraitementNegatif, pseudo){
 	var XHR_Query = "oper=lire&usager="+pseudo;
 	if(arguments[3] != undefined){
 		XHR_Query += "&pwd="+arguments[3];
+	}
+	console.log(XHR_Query);
+	execXHR_Request("assets/xhr/index.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
+}
+
+function insererUsager(fctTraitementPositif, fctTraitementNegatif, pseudo, motDePasse, nomUsager){
+	/*
+		Lance la requête pour vérifier si pseudo/motdepasse est une bonne combinaison
+	*/
+	var XHR_Query = "oper=inserer&usager="+pseudo+"&pwd="+motDePasse;
+	if(nomUsager.length>0){
+		XHR_Query += "&nomUsager="+nomUsager;
 	}
 	console.log(XHR_Query);
 	execXHR_Request("assets/xhr/index.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
