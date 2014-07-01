@@ -15,9 +15,7 @@ TODO:
  après réflection, ici aussi je vais faire 4 fonctions : lire, insérer, effacer et actualiser
 
 
- 0 = user+mdp OK
- 1 = mdp erroné
- 2 = usager inexistant
+
 
 
 */
@@ -45,7 +43,7 @@ $resultat = false;
 switch($_POST['oper']){
 	case 'lire' : # SELECT
 		/*
-
+			Permet de vérifier la validité de la paire usager/pwd -et- savoir si un nom est pris.
 		*/
 		if(isset($_POST['usager'])){
 			$resultat = lireUsager($db);
@@ -55,6 +53,7 @@ switch($_POST['oper']){
 		break;
 
 	case 'inserer': # INSERT
+		$resultat = insererUsager($db);
 		break;
 
 	case 'actualiser': 	# UPDATE
@@ -77,7 +76,14 @@ function lireUsager($db){
 		Lire de la BD les données de l'usager et retourner leurs validité versus
 		ce qui est été reçu par $_POST
 
-		Si ne reçoit pas  $_POST['pwd'], alors on ne veux que savoir si le nom est disponible
+		Si ne reçoit pas $_POST['pwd'], alors on ne veux que savoir si le nom est disponible,
+		si c'est le cas, l'usager n'est pas authentifié!
+		
+		retour :
+		 0 = user+mdp OK
+		1 = mdp erroné
+		2 = usager inexistant
+		4 = 'usager' ne répond pas à la regexp utilisée par JS -donc- potentiellement injection!
 	*/
 	$pseudoMatch = preg_match("/[0-9A-Za-z]{4,20}/", $_POST['usager']);
 
@@ -94,7 +100,7 @@ function lireUsager($db){
 				if(isset($_POST['pwd'])){
 					$motDePasseMatch = preg_match("/[^\<\>]{8,20}/", $_POST['pwd']);
 					if((1 !== $motDePasseMatch) || ($row[2] !== $_POST['pwd'])){
-						$resultat += 1;
+						$resultat = 1;
 					}
 				}
 			}else{
@@ -104,10 +110,14 @@ function lireUsager($db){
 			if($resultat != 0){
 				$resultat = "0¬" . $resultat; // 1 = MdP erroné, 2 = usager erroné/pris, 3 = rien de bon
 			}else{
-				$resultat = "1¬" . $row[0]; // ID usager
-				session_start();
-				$_SESSION['usager'] = $row[0];
-				$_SESSION['nom'] = ($row[3] !== null)?$row[3]:$row[1];
+				if(isset($_POST['pwd'])){ // Sans mot de passe, on log pas complètement l'usager
+					$resultat = "1¬" . $row[0]; // ID usager
+					session_start();
+					$_SESSION['usager'] = $row[0];
+					$_SESSION['nom'] = ($row[3] !== null)?$row[3]:$row[1];
+				}else{
+					$resultat = "1¬0"; // ID usager
+				}
 			}
 		}else{
 			$resultat = "0¬[" . __FUNCTION__ . "] An error occured during a SELECT operation.\n\n" . $db->error . "\n\n $query";
@@ -146,11 +156,11 @@ function miseAJourUsager($db){
 	return $resultat;
 }
 */
-/*
+
 function insererUsager($db){ // pour le moment ne s'appliquerais qu'aux entitées
-	/ *
+	/*
 		Insérer une nouvelle entitée dans la BD
-	* /
+	*/
 
 		$_POST['titre'] = real_escape_string($_POST['titre'], $db);
 		$_POST['contenu'] = real_escape_string($_POST['contenu'], $db);
@@ -182,5 +192,5 @@ function insererUsager($db){ // pour le moment ne s'appliquerais qu'aux entitée
 	}
 	return $resultat;
 }
-*/
+
 /* == EOF == */
