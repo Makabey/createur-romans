@@ -8,7 +8,7 @@ To Do:
 - [x] vérifier sinon coder la fonction qui retourne tout les romans de l'usager
 	* fait mais manque intégration dans "hub_client.php"
 - [ ] écrire la fonction de création d'usager
-- [ ] écrire la fonction de lecture usager, voir en fait la requête plus bas (sous "page index")
+- [x] écrire la fonction de lecture usager, voir en fait la requête plus bas (sous "page index")
 - [x] page de test pour formulaire + table pour le supporter
 - [ ] Changer la sauvegarde pour qu'elle s'effectue si le dirtyBit est ON -et- qu'on as plus tapé depuis x secondes. Autre possibilitée, detecter si le "web storage" est permis/disponible et si OUI alors sauve localement aux 15 secondes et aux 300 secs sur le web si on ne le force pas par l'interface (bouton)
 - [x] faire la page des questions avec ce que Thomas as créé en page et en data
@@ -32,8 +32,8 @@ To Do:
 - [ ] lire à propos de et implémenter mdp encryptés? voir http://glynrob.com/javascript/client-side-hashing-and-encryption/
 - [ ] encryption des données usager?
 - [ ] lire les APIs de G+ et F pour le login
-- [ ] fichier XHR + code JS pour query de validité usager (usr+pwd)
-- [ ] fichier XHR + code JS pour query de disponiblité nom usager, à moins de fusionner avec "validité" et d'utiliser les codes de retour ex:
+- [x] fichier XHR + code JS pour query de validité usager (usr+pwd)
+- [x] fichier XHR + code JS pour query de disponiblité nom usager, à moins de fusionner avec "validité" et d'utiliser les codes de retour ex:
  * 0=usager inexistant (usager libre ou nom mal tapé),
  * 1=usager existant (usager indisponible ou nom bien tapé),
  * 2=mot de passe invalide,

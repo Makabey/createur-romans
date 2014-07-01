@@ -5,7 +5,8 @@ $sNomDeCettePage = substr($sNomDeCettePage, 0, (strpos($sNomDeCettePage,'.')));
 
 #$rootDomaine = "http://createur-romans/fichiersDuProjet/";
 #$rootDomaine = "/fichiersDuProjet/";
-$rootDomaine = "";
+#$rootDomaine = "";
+$rootDomaine = ($sNomDeCettePage == 'index')?'':"/fichiersDuProjet/";
 
 require_once "menus.inc.php";
 ?>
@@ -34,8 +35,12 @@ require_once "menus.inc.php";
 				break;
 		}*/
 		if($sNomDeCettePage != 'index'){
-			$idRoman = (isset($_SESSION[$_SESSION['usager']]['idRoman']))?$_SESSION[$_SESSION['usager']]['idRoman']:0;
-			echo "var idRoman = $idRoman;", PHP_EOL;
+			if(isset($_SESSION['usager'])){
+				$idRoman = (isset($_SESSION[$_SESSION['usager']]['idRoman']))?$_SESSION[$_SESSION['usager']]['idRoman']:0;
+				echo "var idRoman = $idRoman;", PHP_EOL;
+			}else{
+				echo 'document.location.href="' . $rootDomaine . 'index.php"';
+			}
 		}
 		?>
 		</script>
