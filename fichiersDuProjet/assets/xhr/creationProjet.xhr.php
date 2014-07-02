@@ -151,13 +151,13 @@ function creerLeRoman($db){
 	#	return $_POST['titreRoman']; // S'il y as erreur ici, c'est que $db n'est pas une BD ouverte
 	#}
 
-	if(false !== $resultat){
+	#if(false !== $resultat){
 		// Démarrer une TRANSACTION pour pouvoir reculer avec un ROLLBACK si nécessaire et ne pas laisser d'orphelins
 		// Normalement je devrais regarder l'aide pour LOCK TABLE et l'appliquer, mais je vais garder ça pour un peu plus tard
 		$typeQuery = " TRANSACTION";
 		$query = "START TRANSACTION;";
 		$resultat = $db->query ($query);
-	}
+	#}
 
 	// Créer le roman
 	if(false !== $resultat){

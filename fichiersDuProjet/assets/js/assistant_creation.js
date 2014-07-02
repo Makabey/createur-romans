@@ -4,7 +4,7 @@
 **********************/
 var gblChoixUsager = new Array(); // retenir les choix de l'usager et accessoirement quelques donnees
 var gblParentDesBalises = "form_question>fieldset"; // Balise que l'on doit manipuler pour changer l'interface
-var idUsager = 1; // valeur forcée en attendant de la lire par PHP; (auquel cas cette variable ira dans "header.inc.php")
+//var idUsager = 1; // valeur forcée en attendant de la lire par PHP; (auquel cas cette variable ira dans "header.inc.php")
 var etapeAssistant = 0; // À quelle étape de la création nous sommes
 var iCmpt=0; // Compteur, global;
 

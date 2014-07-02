@@ -16,7 +16,8 @@
 /**********************
 	VALEURS LUES DE php (une fois qu'on aura l'authentification)
 **********************/
-var idUsager = 1;
+//var idUsager = 1;
+if(idRoman<1)idRoman=1; // en attendant d'avoir tout fini et pour aller plus vite pour la partie "brancher tlm sur une BD"
 
 /**********************
 	CONFIGURATION
