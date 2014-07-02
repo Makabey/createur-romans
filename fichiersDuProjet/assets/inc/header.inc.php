@@ -2,6 +2,12 @@
 session_start();
 $sNomDeCettePage = substr($_SERVER['SCRIPT_NAME'], (strrpos($_SERVER['SCRIPT_NAME'],'/')+1));
 $sNomDeCettePage = substr($sNomDeCettePage, 0, (strpos($sNomDeCettePage,'.')));
+
+if(($sNomDeCettePage != 'index') && (!isset($_SESSION['usager']))){
+	header("Location:/fichiersDuProjet/index.php");
+	exit();
+}
+
 $rootDomaine = ($sNomDeCettePage == 'index')?'':"/fichiersDuProjet/";
 ?>
 <!DOCTYPE html>
@@ -17,9 +23,9 @@ $rootDomaine = ($sNomDeCettePage == 'index')?'':"/fichiersDuProjet/";
 		<script src="<?php echo $rootDomaine; ?>assets/xhr/xhrFunctions.js"></script>
 		<script src="<?php echo $rootDomaine; ?>assets/js/functions.js"></script>
 		<!-- Bootstrap core CSS -->
-		<link href="assets/css/bootstrap.min.css" rel="stylesheet">
+		<link href="<?php echo $rootDomaine; ?>assets/css/bootstrap.min.css" rel="stylesheet">
 		<!-- Custom css -->
-		<link href="assets/css/theme.css" rel="stylesheet">
+		<link href="<?php echo $rootDomaine; ?>assets/css/theme.css" rel="stylesheet">
 
 		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 		<!--[if lt IE 9]>
@@ -42,18 +48,22 @@ $rootDomaine = ($sNomDeCettePage == 'index')?'':"/fichiersDuProjet/";
 				if(isset($_SESSION['usager'])){
 					$usager = $_SESSION['usager'];
 					$idRoman = (isset($_SESSION[$usager]['idRoman']))?$_SESSION[$usager]['idRoman']:0;
+					echo "var idUsager = $usager;", PHP_EOL;
+					
+					if(isset($_GET['idRoman']))$idRoman = $_GET['idRoman']; // pour tests seulement
+					
 					echo "var idRoman = $idRoman;", PHP_EOL;
 				}else{
-					echo 'document.location.href="' . $rootDomaine . 'index.php"';
+					echo 'document.location.href="' . $rootDomaine . 'index.php"'; // Si $_SESSION['usager'] ne contient rien, c'est qu'on essaie d'accèder à une page sans se logguer
 				}
 			}
 			?>
 		</script>
 		<!-- Fichier JS spécifique à la page -->
 		<?php
-			if(file_exists($rootDomaine . 'assets/js/'.$sNomDeCettePage.'.js')){
+			#if(file_exists($rootDomaine . 'assets/js/'.$sNomDeCettePage.'.js')){
 				echo '<script src="' . $rootDomaine . 'assets/js/',$sNomDeCettePage,'.js"></script>',PHP_EOL;
-			}
+			#}
 		?>
 	</head>
 	<body id="<?php echo $sNomDeCettePage; ?>">
@@ -82,7 +92,7 @@ $rootDomaine = ($sNomDeCettePage == 'index')?'':"/fichiersDuProjet/";
 						</form>
 						<?php }else{ ?>
 						<p>Bienvenue <?php echo $_SESSION['nom']; ?></p>
-						<a href="pages/logout.php">Se déconnecter</a>
+						<a href="<?php echo $rootDomaine; ?>pages/logout.php">Se déconnecter</a>
 						<?php } ?>
 					</div><!--/.navbar-collapse -->
 				</div>
