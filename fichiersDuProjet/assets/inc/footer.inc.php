@@ -3,7 +3,7 @@
 	<footer role="footer">
 		<div id="footer">
 		  <div class="container">
-			<p class="text-muted">Création: Éric Robert, Thomas A. Séguin et Olivier Berthier</p>
+			<p class="text-muted">Création: Eric Robert, Thomas A. Séguin et Olivier Berthier</p>
 		  </div>
 		</div>
 	</footer>
