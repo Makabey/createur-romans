@@ -53,7 +53,7 @@ $(function(){
 		var typeEntite = "qui";
 		var containerEntites = balises_entites_base + typeEntite;
 		lireEntites(afficherEntites, traiterErreurs, idRoman, typeEntite, containerEntites);
-	});*/
+	});
 
 	$("#btn_saveEntite").click(function(){
 		var typeEntite = "pourquoi";
@@ -87,7 +87,7 @@ $(function(){
 		var idEntite = 11;
 		var etatDeleted = false;
 		effacerEntite(deplacerEntiteRetour, traiterErreurs, idRoman, typeEntite, idEntite, etatDeleted);
-	});
+	});*/
 
 	if(idRoman > 0){
 		$("#balise_MainText").hide();
@@ -109,6 +109,7 @@ function lireEntites(fctTraitementPositif, fctTraitementNegatif, idRoman, typeEn
 	execXHR_Request("../assets/xhr/editionProjet.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
 
+/*
 function modifierEntite(fctTraitementPositif, fctTraitementNegatif, idRoman, typeEntite, idEntite, titre, contenu, noteEntite){
 	var XHR_Query = "oper=ecrire&typeEntite="+typeEntite+"&idRoman="+idRoman+"&titre="+titre+"&contenu="+contenu+"&note="+noteEntite+"&idEntite="+idEntite;
 	execXHR_Request("../assets/xhr/editionProjet.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
@@ -120,9 +121,9 @@ function insererEntite(fctTraitementPositif, fctTraitementNegatif, idRoman, type
 }
 
 function deplacerEntite(fctTraitementPositif, fctTraitementNegatif, idRoman, typeEntite, idEntite, id_prev, id_next){
-	/*
+	/ *
 		nvTypeEntite : optionnel, si donné déplacera l'entité vers ce nouveau type
-	*/
+	* /
 	var nvTypeEntite = (arguments[7])?arguments[7]:null; // dernier parametre, si pas là forcer "null"; facon JS de le faire! :: parametre/argument optionel :: http://www.openjs.com/articles/optional_function_arguments.php
 	var XHR_Query ="oper=deplacer&typeEntite="+typeEntite+"&idRoman="+idRoman+"&prev="+id_prev+"&next="+id_next+"&idEntite="+idEntite;
 
@@ -138,6 +139,7 @@ function effacerEntite(fctTraitementPositif, fctTraitementNegatif, idRoman, type
 	var XHR_Query = "oper=effacer&typeEntite="+typeEntite+"&idRoman="+idRoman+"&idEntite="+idEntite+"&etat="+etatDeleted;
 	execXHR_Request("../assets/xhr/editionProjet.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
+*/
 
 function chargerRoman(fctTraitementPositif, fctTraitementNegatif, idRoman){
 	var XHR_Query = "oper=lire&typeEntite=textePrincipal&idRoman="+idRoman;
@@ -163,6 +165,7 @@ function sauvegarderTexte(fctTraitementPositif, fctTraitementNegatif, idRoman, n
 	type de la requête, que ce soit par un message de confirmation ou la manipulation des
 	données de retour.)
 **********************/
+/*
 function insererEntiteRetour(donnees){
 	console.log("[insererEntiteRetour] Retour = ' "+donnees+" '");
 }
@@ -174,6 +177,7 @@ function deplacerEntiteRetour(donnees){
 function MaJ_EntiteRetour(donnees){
 	console.log("[MaJ_EntiteRetour] Retour = ' "+donnees+" '");
 }
+*/
 
 function afficherEntites(donnees){
 	/*
