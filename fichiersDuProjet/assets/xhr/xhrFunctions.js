@@ -31,7 +31,7 @@ function execXHR_Request(urlAuthentify, queryString, fct_callBack, fct_callError
 					if(typeof fct_callBack === 'function'){
 						fct_callBack(retour);
 					}else{
-						console.log("execXHR_Request = TRUE, mais l'objet de traitement passée n'est pas une fonction.");
+						console.log("execXHR_Request = TRUE, mais l'objet de traitement passé n'est pas une fonction.");
 					}
 				}else{
 					if(typeof fct_callError === 'function'){
@@ -41,7 +41,7 @@ function execXHR_Request(urlAuthentify, queryString, fct_callBack, fct_callError
 							fct_callError(xhrAnswer[0]);
 						}
 					}else{
-						console.log("execXHR_Request = FALSE, mais l'objet de traitement passée n'est pas une fonction.");
+						console.log("execXHR_Request = FALSE, mais l'objet de traitement passé n'est pas une fonction.");
 					}
 				}
 			}

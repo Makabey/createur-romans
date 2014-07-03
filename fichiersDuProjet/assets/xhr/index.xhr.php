@@ -82,7 +82,6 @@ function lireUsager($db){
 		1 = mdp erroné
 		2 = usager inexistant
 	*/
-
 	$query = 'SELECT ID_usager, pseudo, motdepasse, nom FROM usagers WHERE pseudo = "' . $_POST['usager'] . '" AND deleted = 0;';
 
 	$db_result = $db->query ($query);
@@ -125,16 +124,11 @@ function insererUsager($db){
 	/*
 		Insérer un nouvel usager dans la BD
 	*/
-	#$_POST['usager'] = real_escape_string($_POST['usager'], $db);
-
 	$resultat = false;
 
 	$motDePasseMatch = preg_match("/[^\<\>]{8,20}/", $_POST['pwd']);
 	if(1 === $motDePasseMatch){
 		$_POST['pwd'] = real_escape_string($_POST['pwd'], $db);
-		#if(mb_substr($_POST['pwd'], 0, 2, "UTF-8") == "0¬") {
-		#	return $_POST['pwd']; // S'il y as erreur ici, c'est que $db n'est pas une BD ouverte
-		#}
 
 		$query = "INSERT INTO `usagers` (`pseudo`, `motdepasse`%s) VALUES ('{$_POST['usager']}', '{$_POST['pwd']}'%s);";
 
@@ -174,12 +168,8 @@ function miseAJourUsager($db){
 	$resultat = false;
 	$query = 'UPDATE usagers SET ';
 	if(isset($_POST['etat'])){ // ont veux "effacer" l'usager
-			$query .= 'deleted = ' . $_POST['etat'];
-	/*}elseif($_POST[''] == ''){
-		$_POST['titre'] = real_escape_string($_POST['titre'], $db);
-		$_POST['contenu'] = real_escape_string($_POST['contenu'], $db);
-		$_POST['note'] = real_escape_string($_POST['note'], $db);*/
-	}#else // à moins d'erreur dans le code plus haut, je n'ai pas besoin d'un ELSE ultime
+		$query .= 'deleted = ' . $_POST['etat'];
+	}
 
 	$query .= " WHERE pseudo = '{$_POST['usager']}';";
 
