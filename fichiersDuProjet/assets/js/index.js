@@ -2,8 +2,6 @@
 /**********************
 	Variables globales
 **********************/
-//var idUsager = 1; // <<-- passer par WebStorage! :) sinon session PHP :/
-//var iCmpt=0; // Compteur, global;
 
 /**********************
 	EVENT HANDLERS
@@ -60,7 +58,7 @@ function verifierUsager(fctTraitementPositif, fctTraitementNegatif, pseudo){
 	if(arguments[3] != undefined){
 		XHR_Query += "&pwd="+arguments[3];
 	}
-	console.log(XHR_Query);
+	//console.log(XHR_Query);
 	execXHR_Request("assets/xhr/index.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
 
@@ -72,7 +70,7 @@ function insererUsager(fctTraitementPositif, fctTraitementNegatif, pseudo, motDe
 	if(nomUsager.length>0){
 		XHR_Query += "&nomUsager="+nomUsager;
 	}
-	console.log(XHR_Query);
+	//console.log(XHR_Query);
 	execXHR_Request("assets/xhr/index.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
 
@@ -94,8 +92,8 @@ function authentifierUsager(){ //donnees){
 	*/
 	//donnees = donnees.split('¤');
 	//alert(donnees[1]);
-	console.log(arguments[0]);
-	document.location.href = "index.php";
+	//console.log(arguments[0]);
+	document.location.href = "index.php"; // Je pourrais probablement, tant qu'à avoir PHP qui crée/écrit dans la $_SESSION, une redirection avant d'arriver ici mais j'ai décidé que ce n'était pas "propre". Dans le sens que les requêtes XHR devraient se borner à de l'échange d'information. Je sais, la manipulation de $_SESSION contredit un peu cette règle mais comme ce n'est pas visuel, je laisse passer.
 }
 
 function NomUsagerLibre(){
