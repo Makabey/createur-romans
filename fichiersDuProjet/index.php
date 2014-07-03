@@ -12,7 +12,7 @@ require "assets/inc/header.inc.php";
 					<source src="assets/videos/movie.webm" type="video/webm">
 					<source src="assets/videos/movie.ogg" type="video/ogg">
 					<source src="assets/videos/movie.mp4" type="video/mp4">
-					Your browser does not support the video tag.
+					Votre fureteur ne supporte pas la balise video.
 				</video>
 			</div>
 		</div>
@@ -27,6 +27,8 @@ require "assets/inc/header.inc.php";
 			<button class="btn btn-lg btn-primary btn-block" type="submit">S'inscrire</button>
 		</form>
 
-		<br /><br /><br />(<a href="../exemple_page_index/hub_client.php">Page sélection de Roman</a> -- <a href="pages/assistant_creation.php">Page assistant de Création</a> -- <a href="pages/demo_mode_edition.php">Page édition du Roman</a>)<br />
+		<br /><br /><br />(<a href="pages/assistant_creation.php">Page assistant de Création</a>)<br />
 
-<?php require "assets/inc/footer.inc.php"; ?>
+<?php
+require "assets/inc/footer.inc.php";
+?>

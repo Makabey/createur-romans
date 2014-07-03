@@ -1,7 +1,7 @@
 <?php
 $sPageTitle = "(demo) mode Édition | ";
 
-$idRoman = (isset($_GET['idRoman']))?$_GET['idRoman']:1;
+#$idRoman = (isset($_GET['idRoman']))?$_GET['idRoman']:1;
 
 include "../assets/inc/header.inc.php";
 ?>

@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-unset($_SESSION['usager']);
+unset($_SESSION['pseudo']);
 
 header("Location:/fichiersDuProjet/index.php");
 exit();

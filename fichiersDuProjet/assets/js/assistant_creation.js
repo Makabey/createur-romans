@@ -4,7 +4,7 @@
 **********************/
 var gblChoixUsager = new Array(); // retenir les choix de l'usager et accessoirement quelques donnees
 var gblParentDesBalises = "form_question>fieldset"; // Balise que l'on doit manipuler pour changer l'interface
-//var idUsager = 1; // valeur forcée en attendant de la lire par PHP; (auquel cas cette variable ira dans "header.inc.php")
+var idUsager = 1; // valeur forcée en attendant de la lire par PHP; (auquel cas cette variable ira dans "header.inc.php")
 var etapeAssistant = 0; // À quelle étape de la création nous sommes
 var iCmpt=0; // Compteur, global;
 
@@ -143,7 +143,7 @@ function afficherFormulaire(){
 	/*
 		Occulter la balise d'attente et afficher le FORM qui permet
 		à l'usager de faire ses choix
-		
+
 		C'est une fonction pour éviter de changer les 3-4 endroits où c'est utilisé
 	*/
 	$("#"+gblParentDesBalises).show();
@@ -193,7 +193,12 @@ function afficherSynopsisEtDemandeNomRoman(donnees){
 			synopsis_afficher += '; '+gblChoixUsager['questions'][iCmpt]['description'];
 		}
 		synopsis_afficher += '</dd>'
-		gblChoixUsager['synopsis'] += '='+gblChoixUsager['questions'][iCmpt]['titre'] +' :\n\t-'+gblChoixUsager['questions'][iCmpt]['reponse']+'\n\t-'+gblChoixUsager['questions'][iCmpt]['description']+'\n\n';
+		gblChoixUsager['synopsis'] += '='+gblChoixUsager['questions'][iCmpt]['titre'] +' :¤'+gblChoixUsager['questions'][iCmpt]['reponse'];
+		if(gblChoixUsager['questions'][iCmpt]['description'].length > 0){
+			gblChoixUsager['synopsis'] += '¤'+gblChoixUsager['questions'][iCmpt]['description'];
+		}
+
+		gblChoixUsager['synopsis'] += '¯'; //'\n\n';
 	}
 	synopsis_afficher += '</dl></div>';
 	synopsis_afficher += '<div><label for="titreRoman">Quel est le titre de votre roman?</label>';
@@ -322,7 +327,7 @@ function traiterErreurs(msgErreur){
 	/*
 		Voir appels à "execXHR_Request",
 		Sert à traiter l'erreur recue.
-		
+
 		Il n'y as que cette fonction parce que je n'ai pas eût un besoin de traitement autre
 	*/
 

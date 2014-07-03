@@ -23,12 +23,12 @@ TODO:
 ====
 
 ####Page index (au moins) ::
-- [ ] rendre plus gracieux la manipulation des erreurs MySQL, surtout pour le bénéfice de XHR
+- [x] rendre plus gracieux la manipulation des erreurs MySQL, surtout pour le bénéfice de XHR
 - [x] créer la structure logique des tables
-- [ ] créer des scénarios avec données fictives pour voir si types des champs sont erronés ou si champs manquant
+- [x] créer des scénarios avec données fictives pour voir si types des champs sont erronés ou si champs manquant
 - [x] créer les tables et exporter un .SQL vers GH
-- [ ] lire à propos de et prévoir XSS
-- [ ] lire à propos de et prévoir SQL injection
+- [x] lire à propos de et prévoir XSS
+- [x] lire à propos de et prévoir SQL injection
 - [ ] lire à propos de et implémenter mdp encryptés? voir http://glynrob.com/javascript/client-side-hashing-and-encryption/
 - [ ] encryption des données usager?
 - [ ] lire les APIs de G+ et F pour le login
@@ -60,7 +60,7 @@ TODO:
 - [x] fonction avec jQuery pour créer les balises nécessaire pour afficher les questions
 - [ ] fonction qui enregistre tout
 - [x] fonction pour créer le Roman dans les tables roman_details et roman_texte
-- [ ] fonction qui encode les texte, doit être globale et utilisable par n'importe quel fichier (création + édition)
+- [x] fonction qui encode les texte, doit être globale et utilisable par n'importe quel fichier (création + édition)
 - [ ] fonction qui DÉcode les texte, doit être globale et utilisable par n'importe quel fichier
 - [x] faire la page des questions avec ce que Thomas as créé en page et en data
 - [x] fonction sauvegardertexte pas finie, manque les params
@@ -83,7 +83,8 @@ TODO:
 - [x] permettre de dragger un personnage, un lieu ou un "autres" sur le document et ça copie le nom + lien?
   * retiré
  - [x] bug : s'il n'y as aucune entrée dans la table romans_details mais que celle correspondant dans romans_texte existe, agit comme s'il ne manquait rien, donc changer le code pour tout passer par romans_details, surtout que c'est elle qui décide si un roman est deleted ou non; en fait le bug persiste avec les entitées! oui bon, dans le cas des entitées, en principe une fois le code bien écrit il sera impossible de les charger ^_^'...
-=====
+
+ =====
 
 char / varchar :: max 255
 blob (case sensitive Text) / text :: max 2^8 (note: les espaces en début et fin ne sont pas trimmés)

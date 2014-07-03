@@ -4,11 +4,10 @@
 entrées::
 -typeEntite doit être l'un de : quoi, ou, comment, pourquoi, qui, quand, textePrincipal
 -ID_roman doit etre un chiffre
--target doit être le ID d'une balise qui recevra tout le contenu récupéré, p-ê trouver un moyen pour ne pas avoir à le passer ici, la nécessitée est née de mon obstination à ne pas vouloir laisser trainer une variable globale contenant la valeur ou le hardcoder dans la fonction de réception laquelle ne pourrais traiter alors qu'une seule valeur parmis "quoi, ou, comment, pourquoi, qui, quand", la solution étant probablement 5 variations de la fonction et de la duplication inutile de code DONC une autre solution serait une fonction capable de savoir où elle en est et rappeller la fonction XHR pour passer d'un onglet (quoi, ou, comment, pourquoi, qui, quand) à l'autre....
 
 sorties::
 -pour textePrincipal, seulement le texte
--pour les autres, à l'index #0 on as le target, càd le ID de la balise qui doit recevoir le code/l'affichage, le type de l'entite principalement pour différentier les ID des DIVs contenant la fiche de l'entite et "first" contenant le ID_entite de celle qui est la première parce que son ID_prev=0, le reste sont les données désirées et on peux donc partir de "first" pour suivre les fiches et les afficher dans l'ordre dicté.
+-pour les autres, à l'index #0 on as le type de l'entite principalement pour différentier les ID des DIVs contenant la fiche de l'entite et "first" contenant le ID_entite de celle qui est la première parce que son ID_prev=0, le reste sont les données désirées et on peux donc partir de "first" pour suivre les fiches et les afficher dans l'ordre dicté.
 
 ============================
 ---Pour oper = ecrire
@@ -93,11 +92,11 @@ switch($_POST['oper']){
 			On as besoin d'un ID pour la balise qui recevra tout le contenu, en principe, ne devrais
 			pas être passé mais bon, on peux corriger plus tard
 		*/
-		if(('textePrincipal' != $_POST['typeEntite']) && !isset($_POST['target'])){
-			$resultat = '0¬Parameter "target" is required';
-		}else{
+		#if(('textePrincipal' != $_POST['typeEntite']) && !isset($_POST['target'])){
+		#	$resultat = '0¬Parameter "target" is required';
+		#}else{
 			$resultat = lireDonneesEntite($db);
-		}
+		#}
 		break;
 
 	case 'ecrire':
@@ -169,10 +168,11 @@ function lireDonneesEntite($db){
 		Lire de la BD, selon la valeur de $_POST['typeEntite'], les données soit du Texte lui-même soit de l'une des sections d'entitées
 	*/
 	$arrChamps_entites = array('ID_prev', 'ID_next', 'titre', 'contenu', 'note');
+	$arrChamps_roman = array('contenu', 'synopsis', 'notes_globales', 'titre');
 	$resultat = false;
 
 	if($_POST['typeEntite'] == 'textePrincipal' ){
-		$query = "SELECT `roman_texte`.`contenu` FROM `roman_texte`, `roman_details` WHERE `roman_texte`.`ID_roman` = `roman_details`.`ID_roman` AND `roman_details`.`ID_roman` = " . $_POST['idRoman'] . " AND `roman_details`.`deleted` = 0;";
+		$query = "SELECT `roman_texte`.`contenu`, `roman_texte`.`synopsis`, `roman_texte`.`notes_globales`, `roman_details`.`titre` FROM `roman_texte`, `roman_details` WHERE `roman_texte`.`ID_roman` = `roman_details`.`ID_roman` AND `roman_details`.`ID_roman` = " . $_POST['idRoman'] . " AND `roman_details`.`deleted` = 0;";
 		$mode=1;
 	}else{ // L'une des autres entitées : ou, quand, etc...
 		$query = 'SELECT ID_entite, ' . implode(', ', $arrChamps_entites) . ' FROM entites WHERE ID_roman = ' . $_POST['idRoman'] . ' AND typeEntite = "' . $_POST['typeEntite'] . '" AND deleted = 0 ORDER BY ID_prev ASC;';
@@ -183,10 +183,10 @@ function lireDonneesEntite($db){
 	if(false !== $result){
 		if($mode == 1){
 			/* On veux le texte ? Faire une simple lecture */
-			$resultat = $result->fetch_row();
+			$resultat = array_combine($arrChamps_roman, $result->fetch_row());
 		}elseif($mode == 2){
 			$resultat[0]['typeEntite'] = $_POST['typeEntite'];
-			$resultat[0]['target'] = $_POST['target'];
+			#$resultat[0]['target'] = $_POST['target'];
 			$resultat[0]['first'] = null;
 
 			while ($row = $result->fetch_row()){
