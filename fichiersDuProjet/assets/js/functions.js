@@ -1,6 +1,11 @@
-/*
+/**********************
+	Variables globales
+**********************/
+var baseURL = "http://createur-romans/fichiersDuProjet/";  // à changer quand le site sera en ligne
+
+/**********************
 	Fonctions communes à toutes les pages
-*/
+**********************/
 "use strict";
 
 function lireListeRomansUsager(fctTraitementPositif, fctTraitementNegatif, ID_usager){

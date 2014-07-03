@@ -107,8 +107,9 @@ function lireUsager($db){
 			if(isset($_POST['pwd'])){ // Sans mot de passe, on log pas complètement l'usager
 				$resultat = "1¬" . $row[0]; // ID usager
 				session_start();
-				$_SESSION['usager'] = $row[0]; // ID usager
-				$_SESSION['nom'] = ($row[3] !== null)?$row[3]:$row[1]; // Nom sinon Pseudo
+				$_SESSION['pseudo'] = $row[1];
+				$_SESSION[$row[1]]['idUsager'] = $row[0]; // ID usager
+				$_SESSION[$row[1]]['nom'] = ($row[3] !== null)?$row[3]:$row[1]; // Nom sinon Pseudo
 			}else{
 				$resultat = "1¬0"; // ID usager
 			}
@@ -150,9 +151,10 @@ function insererUsager($db){
 		// Traitement des erreurs!
 		if(false !== $resultat){
 			session_start();
-			$_SESSION['usager'] = $db->insert_id;
-			$_SESSION['nom'] = (isset($_POST['nomUsager']))?$_POST['nomUsager']:$_POST['usager']; // Nom sinon Pseudo
-			$resultat = "1¬" . $_SESSION['usager'];
+			$pseudo = $_SESSION['pseudo'];
+			$_SESSION[$pseudo]['idUsager'] = $db->insert_id;
+			$_SESSION[$pseudo]['nom'] = (isset($_POST['nomUsager']))?$_POST['nomUsager']:$_POST['usager']; // Nom sinon Pseudo
+			$resultat = "1¬" . $pseudo;
 		}else{
 			$resultat = "0¬[" . __FUNCTION__ . "] An error occured during an INSERT operation.\n\n" . $db->error . "\n\n $query";
 		}

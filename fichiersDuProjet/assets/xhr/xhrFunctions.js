@@ -24,9 +24,9 @@ function execXHR_Request(urlAuthentify, queryString, fct_callBack, fct_callError
 				xhrAnswer = xhr.responseText.split('¬');
 				var retour = (xhrAnswer.length > 1)?xhrAnswer[1]:xhrAnswer[0];
 				// NE PAS éliminer les trois ligne de CONSOLE qui suivent! Seulement commenter!!
-				/*console.log("[xhrFunctions] " + xhr.responseText);
+				console.log("[xhrFunctions] " + xhr.responseText);
 				console.log("[xhrFunctions] " + xhrAnswer);
-				console.log("[xhrFunctions] " + retour);*/
+				console.log("[xhrFunctions] " + retour); // */
 				if(xhrAnswer[0][0] == "1" ){ // TRUE, pas d'erreur
 					if(typeof fct_callBack === 'function'){
 						fct_callBack(retour);

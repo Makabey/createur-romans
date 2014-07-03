@@ -119,6 +119,7 @@ function lireListeRomans($db){
 		Lire les détails des Romans pour "idUsager", ce qui comprend : leur ID, genre, titre, date de creation, date de dernière édition et le synopsis
 	*/
 	$arrChamps_Romans = array('ID_roman', 'ID_genre', 'titre', 'date_creation', 'date_dnrEdition');
+	$tmp = array();
 
 	$query = "SELECT `roman_details`.`" . implode('`, `roman_details`.`', $arrChamps_Romans) . "`, `roman_texte`.`synopsis` FROM roman_details, roman_texte WHERE roman_details.ID_roman = roman_texte.ID_roman AND roman_details.ID_usager = '{$_POST['idUsager']}' AND roman_details.deleted = 0 ORDER BY roman_details.date_dnrEdition DESC;";
 
