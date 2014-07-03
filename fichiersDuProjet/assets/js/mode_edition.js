@@ -200,10 +200,15 @@ function afficherEntites(donnees){
 			donnees[curIndex]['note'] = (donnees[curIndex]['note'] === null)?'':donnees[curIndex]['note'];
 			contenu += donnees[curIndex]['note'] + '</div></div>';*/
 
-			contenu += '<div  class="aide-memoire" data-idprev="'+donnees[curIndex]['ID_prev']+'" data-idnext="'+donnees[curIndex]['ID_next']+'">';
+			contenu += '<div  class="aide-memoire" ';
+			//contenu += 'data-idprev="'+donnees[curIndex]['ID_prev']+'" data-idnext="'+donnees[curIndex]['ID_next']+'" ';
+			contenu += 'data-idself="'+curIndex+'">';
 			contenu += '	<div class="aide-memoire-headings"><span>'+donnees[curIndex]['titre']+'</span></div>';
 			contenu += '	<div class="aide-memoire-content">';
-			contenu += '		<span>'+donnees[curIndex]['contenu']+'</span>';
+			contenu += '		<span>(contenu -&gt;) '+donnees[curIndex]['contenu']+'</span>';
+			contenu += '	</div>';
+			contenu += '	<div class="aide-memoire-notes">';
+			contenu += '		<span>(notes -&gt;) '+donnees[curIndex]['note']+'</span>';
 			contenu += '	</div>';
 			contenu += '</div>';
 
