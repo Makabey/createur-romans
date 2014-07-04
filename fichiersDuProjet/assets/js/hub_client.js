@@ -19,7 +19,7 @@ $(function(){
 		if(nvID_roman === 0){
 			window.location.replace(baseURL+"pages/assistant_creation.php");
 		}else{
-			execXHR_Request("../assets/xhr/config.xhr.php", XHR_Query, chargerTexte, traiterErreurs);
+			execXHR_Request("../assets/xhr/hub_client.xhr.php", XHR_Query, chargerTexte, traiterErreurs);
 		}
 	});
 
@@ -60,13 +60,13 @@ function genererUnBoutonCharger(donnees){
 	synopsis = synopsis.replace(/¤/g, "\n\t-");
 	synopsis = synopsis.replace(/¯/g, "\n\n");
 	synopsis = synopsis.replace(/"/g, "&quot;");
-	
-	synopsis_court = donnees['synopsis'];	
+
+	synopsis_court = donnees['synopsis'];
 	synopsis_court = synopsis_court.replace(/:¤/g, ": ");
 	synopsis_court = synopsis_court.replace(/¤/g, ", ");
 	synopsis_court = synopsis_court.replace(/¯/g, "; ");
 	synopsis_court = synopsis_court.replace(/"/g, "&quot;");
-	
+
 	if(synopsis_court.length > 240){
 		synopsis_court = synopsis_court.substring(0, 239) + "...";
 	}

@@ -1,7 +1,7 @@
 /**********************
 	Variables globales
 **********************/
-var baseURL = "http://createur-romans/fichiersDuProjet/";  // à changer quand le site sera en ligne
+var baseURL = "http://createur-romans/fichiersDuProjet/"; // à changer quand le site sera en ligne
 
 /**********************
 	Fonctions communes à toutes les pages
@@ -15,7 +15,7 @@ function lireListeRomansUsager(fctTraitementPositif, fctTraitementNegatif, ID_us
 		Appellée dans "assistant_creation.js" et devras l'etre aussi dans " 'hub_client.php' "
 	*/
 	var XHR_Query = "oper=lireListeRomans&idUsager=" + ID_usager;
-	execXHR_Request("../assets/xhr/creationProjet.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
+	execXHR_Request("../assets/xhr/assistant_creation.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
 
 function strStripHTML(str){

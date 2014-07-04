@@ -19,12 +19,12 @@
 			'bouton_fonction => vide/NULL, ne sert pas pour les 'select'
 
 ===chronologie des fonctions:
-	-xhrFunctions.js::execXHR_Request ( genres Littéraire [creationProjet.xhr.php => db_access.php])
+	-xhrFunctions.js::execXHR_Request ( genres Littéraire [assistant_creation.xhr.php => db_access.php])
 	-attente du retour XHR
 	-appel à "afficherGenres"
 	-attente de réponse de l'usager
 	-appel à '$("#button_nextQuestion").click'
-	-xhrFunctions.js::execXHR_Request ( questions selon GL sélectionné [creationProjet.xhr.php => db_access.php])
+	-xhrFunctions.js::execXHR_Request ( questions selon GL sélectionné [assistant_creation.xhr.php => db_access.php])
 	-attente du retour XHR
 	-appel à "afficherQuestions"
 	-attente de réponse de l'usager
@@ -104,7 +104,7 @@ function traiterErreurs(msgErreur){
 */
 function afficherQuestions(donnees){
 	/*
-		Traite le retour de execXHR_Request("../assets/xhr/creationProjet.xhr.php", XHR_Query, afficherQuestions, traiterErreurs);
+		Traite le retour de execXHR_Request("../assets/xhr/assistant_creation.xhr.php", XHR_Query, afficherQuestions, traiterErreurs);
 
 		Quand rencontre "text" crée une balise input::text et pour select, un select::option
 
@@ -157,7 +157,7 @@ function afficherQuestions(donnees){
 
 function afficherQuestions2(donnees){
 	/*
-		Traite le retour de execXHR_Request("../assets/xhr/creationProjet.xhr.php", XHR_Query, afficherQuestions, traiterErreurs);
+		Traite le retour de execXHR_Request("../assets/xhr/assistant_creation.xhr.php", XHR_Query, afficherQuestions, traiterErreurs);
 
 		Quand rencontre "text" crée une balise input::text et pour select, un select::option
 
@@ -285,12 +285,12 @@ function generer_nom(min_chars, max_chars, word_count){
 */
 function lireGenresLitteraires(fctTraitementPositif, fctTraitementNegatif){
 	var XHR_Query = "oper=lireGenres";
-	execXHR_Request("../assets/xhr/creationProjet.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
+	execXHR_Request("../assets/xhr/assistant_creation.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
 
 function lireQuestionsGenreLitteraire(fctTraitementPositif, fctTraitementNegatif, genreLitteraire){
 	var XHR_Query = "oper=lireQuestions&genre=" + genreLitteraire;
-	execXHR_Request("../assets/xhr/creationProjet.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
+	execXHR_Request("../assets/xhr/assistant_creation.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
 
 /* == EOF == */
