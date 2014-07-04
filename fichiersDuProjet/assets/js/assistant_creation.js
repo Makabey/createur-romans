@@ -172,7 +172,8 @@ function felicitationSurCreation(donnees){
 	*/
 	donnees = donnees.split('¤');
 	alert(donnees[1]);
-	document.location.href="mode_edition.php";
+	//document.location.href="mode_edition.php";
+	window.location.replace(baseURL+"pages/mode_edition.php");
 }
 
 function afficherSynopsisEtDemandeNomRoman(donnees){
@@ -206,7 +207,7 @@ function afficherSynopsisEtDemandeNomRoman(donnees){
 	}
 	synopsis_afficher += '</dl></div>';
 	synopsis_afficher += '<div><label for="titreRoman">Quel est le titre de votre roman?</label>';
-	synopsis_afficher += '<input type="text" id="titreRoman" required="required" placeholder="Titre court et évocateur"';
+	synopsis_afficher += '<input type="text" id="titreRoman" required="required" placeholder="Court titre évocateur"';
 
 	// variable "maintenant" et son utilisation sont optionnel et primairement pour tests
 	//var maintenant = new Date();

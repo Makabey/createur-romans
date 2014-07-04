@@ -33,10 +33,50 @@ $(function(){
 		$("#"+balise_MainText).data("dirtyBit", true);
 	});
 
-	$("#btn_save").click(function(){
-		/*
+	$(".col-md-4>ul>li").click(function(){
+		var typeEntite;
+		//console.log('click');
+		if(!$(this).hasClass("active")){
+			$(this).parent().children(".active").removeClass("active");
+			$(this).addClass("active");
+			typeEntite = $(this).text();
+			typeEntite = typeEntite.toLowerCase();
+			typeEntite = typeEntite.replace('ù', 'u');
+			//if(gblEntites[typeEntite].length > 0){
+			if(gblEntites[typeEntite] !== undefined){
+				if(gblEntites[typeEntite][0]['first'] > 0){
+					console.log(typeEntite + " as au moins 1 membre");
+					//afficherEntites(gblEntites[typeEntite], false);
+				}else{
+					console.log(typeEntite + " as déjà été lu mais est vide!");
+				}
+				afficherEntites(gblEntites[typeEntite], false);
+			}else{
+				console.log(typeEntite + " est vide");
+				lireEntites(afficherEntites, traiterErreurs, idRoman, typeEntite);
+			}
+		//}else{
+		//	console.log("L'onglet est deja active");
+		}
+	});
+
+	$("#"+balises_entites_base).on('dblclick', 'div.aide-memoire', function(){
+		console.log("aide-memoire :: click! ("+$(this).data("idself")+")");
+		if($(this).data("idself") !== 0){
+			$(this).find("span").attr("contenteditable", "true");
+		}else{
+			alert("Vous ne pouvez pas éditer cette entitée.");
+		}
+	});
+	$("#"+balises_entites_base).on('blur', 'div.aide-memoire', function(){
+		console.log("[aide-memoire] OnBlur!!");
+		// comme l'event se déclenche même quand je clique un enfant, je dois trouver une autre solution ou comprendre comment comparer disons "target" avec les enfants et si c'en est pas un alors enlever les attr editable. Le fait que on veux mettre un bouton à mon sens ne change rien au fait que si on clique ailleurs, on devrait considérer l'édition finie! 
+	});
+
+	/*$("#btn_save").click(function(){
+		/ *
 			Permet de forcer la sauvegarde du texte Principal -SI- le contenu as été modifié
-		*/
+		* /
 		if($("#"+balise_MainText).data("dirtyBit") === true){
 			clearTimeout(gbl_DelaiSauvegarde_TextePrincipal);
 			sauvegarderTextePrincipal(balise_MainText);
@@ -44,7 +84,7 @@ $(function(){
 		}else{
 			console.log("btn_save / DirtyBit :: False");
 		}
-	});
+	});*/
 
 	/*$("#btn_lireEntites").click(function(){
 		/ *
@@ -186,14 +226,18 @@ function afficherEntites(donnees){
 		Fait principalement de la génération de balise et de la copie de contenu/propriétés à partir du tableau "donnees"
 	*/
 	//	Préparer les données
-	donnees = JSON.parse(donnees); // contraire :: JSON.stringify(array);
+	//if(arguments[1] !== undefined){
+	if(arguments[1] === undefined){
+		donnees = JSON.parse(donnees); // contraire :: JSON.stringify(array);
+		gblEntites[donnees[0]['typeEntite']] = donnees;
+		console.log("[afficherEntites] j'ai chargé les entites");
+	}
+
 	//console.log(donnees);
 	var contenu='';
 	var curIndex = donnees[0]['first'];
-	var typeEntite = donnees[0]['typeEntite'];
-	var baliseParent = "#"+balises_entites_base; //+typeEntite; //donnees[0]['target'];
-
-	gblEntites[typeEntite] = donnees;
+	//var typeEntite = donnees[0]['typeEntite'];
+	//var baliseParent = "#"+balises_entites_base; //+typeEntite; //donnees[0]['target'];
 
 	if(curIndex !== null){
 		// 	Créer l'interface dans le parent donnees[0]['target']
@@ -214,14 +258,23 @@ function afficherEntites(donnees){
 			contenu += '	<div class="aide-memoire-notes">';
 			contenu += '		<span>(notes -&gt;) '+donnees[curIndex]['note']+'</span>';
 			contenu += '	</div>';
-			contenu += '</div>';
+			contenu += "</div>\n\n";
 
 			curIndex = donnees[curIndex]['ID_next'];
 		}while(curIndex != 0);
 
-		$(baliseParent).html(contenu);
+		//$(baliseParent).html(contenu);
+		$("#"+balises_entites_base).html(contenu);
 	}else{
-		alert("Aucune entitée attachée à ce Roman!");
+		console.log("[afficherEntites] Aucune entitée de ce type attachée à ce Roman!");
+		//console.log(donnees);
+		//gblEntites[donnees[0]['typeEntite']][0]['first'] = 0;
+		//console.log(gblEntites);
+		contenu += '<div class="aide-memoire" ';
+		contenu += 'data-idself="0">';
+		contenu += '	<div class="aide-memoire-headings"><span>Aucune entitées pour ce type.</span></div>';
+		contenu += "</div>\n\n";
+		$("#"+balises_entites_base).html(contenu);
 	}
 }
 

@@ -54,10 +54,10 @@ Remplacer tout le contenu.
 	margin:10px;
 }
 
-p[contenteditable="true"]{ /*  on peux détecter quand une balise est éditable */
+/*p[contenteditable="true"]{ / *  on peux détecter quand une balise est éditable * /
 	background-color:#030;
 }
 #container_entites p:hover{
 	color:#0e0;
-}
+}*/
 /* == EOF == */
