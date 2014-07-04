@@ -10,6 +10,24 @@ To Do:
 - [x] menage code mort!!!
 - [x] tout re-commenter
 - [x] page de test pour formulaire + table pour le supporter
+-autosave texte principal, lancer intervalle, si var1 et var2 sont 0 alors ne rien faire;  si on tape (keyup) var1++; si qd intervalle arrive var1 et var2 différents alors var2=var1; si var1==var2 et tous deux !== 0 alors sauver et var1 et var2 === 0
+-Onglets entités
+=phase 1: onclick aller prendre parent, du parent dire aux enfants de perdere classe "active", donne a enfant cliquer classe active
+=phase 2: tjrs onclick détecter si texte balise <a>== $(this)>a.text si oui on as cliquer celui qui est actif ou juste lire si as classe actif, si oui ne rien faire
+=phase 3: onclick si onglet différent tester si ds var globale on as les données qpour le nouvel onglet sinon charger les données
+-scinder code pour récupérer les entitées entre fct qui lit les données et fct qui génère les balises
+-onglet fct qui lit, si pour un type il y as 0 entrées ds la BD alors "first" ==0 pour savoir que au moins as été lu... malgré que si l'entrée array existe, c'est qu'on as au moins essayé de lire...
+-copier ce qui est pertinent du code pour les onglets entités vers les onglet textePrincipal et Notes globales
+-changer création Roman ds BD pour enregistrer le synopsis aussi dans champs notes
+-créer fct qui ajoute des boutons pour modifier les entitées et fct onblur qui fait ESC/restaure le texte à partir de la mémoire. Btns poppent... non btns sont ajouté à la création, pê ajouter une couche de DIV (si overflow hidden pas suffisant ou que visuellement ça fct pas)? laisser les gars faire mieux
+-ajouter mini-toolbar pour faire l'ajout d'entitées
+-ajouter mini-toolbar aux entitées pour edit (ou commence avec un dbl-click?) et delete
+-ne pas faire le truc d'inspiration!
+-ne pas oublier le drag'n'drop, voir où mettre le fameux icône
+-pour le probleme de note "deleted", sur restauration on la replace à la toute fin? càd que son prev devient celui qui as next=0 et elle as elle-même next==0
+-entitées et romans deleted, comment proposer la liste? mettre une sorte de poubelle?
+
+============================================
 
 Pour "editionProjet.xhr.php" :
 TODO:
