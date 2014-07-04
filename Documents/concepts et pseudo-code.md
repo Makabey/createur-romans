@@ -26,6 +26,7 @@ To Do:
 -ne pas oublier le drag'n'drop, voir où mettre le fameux icône
 -pour le probleme de note "deleted", sur restauration on la replace à la toute fin? càd que son prev devient celui qui as next=0 et elle as elle-même next==0
 -entitées et romans deleted, comment proposer la liste? mettre une sorte de poubelle?
+-nouvelle page admin, affiche sur chaque ligne : nom roman, nom usager, genre littéraire, bouton DELETE
 
 ============================================
 

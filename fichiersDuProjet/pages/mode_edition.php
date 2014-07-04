@@ -7,8 +7,8 @@ require "../assets/inc/header.inc.php";
 		<h2 class="titre-roman">Titre de l'oeuvre</h2>
 		<div class="col-md-8 custom-box-content">
 			<ul class="nav nav-tabs custom-ul">
-			  <li class="active"><a href="#">Composition</a></li>
-			  <li class=""><a href="#">Notes</a></li>
+				<li class="active"><a href="#">Composition</a></li>
+				<li class=""><a href="#">Notes</a></li>
 			</ul>
 			<div class="wrap-composition">
 				<textarea id="main_write" class=""></textarea>

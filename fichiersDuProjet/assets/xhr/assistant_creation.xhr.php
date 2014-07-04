@@ -256,6 +256,9 @@ function creerLeRoman($db){
 		$query="COMMIT;";
 		$resultat = $db->query ($query);
 		if(false !== $resultat){
+			session_start();
+			$pseudo = $_SESSION['pseudo'];
+			$_SESSION[$pseudo]['idRoman'] = $ID_roman;
 			$_POST['titreRoman'] = str_replace('\\', '', $_POST['titreRoman']);
 			$resultat = "1¬$ID_roman ¤Le roman \"{$_POST['titreRoman']}\" ainsi que ses ".count($typesEntiteQuestions)." premières entitées, as été créé.";
 		}else{

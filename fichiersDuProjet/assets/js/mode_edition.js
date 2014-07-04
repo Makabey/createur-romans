@@ -106,18 +106,18 @@ $(function(){
 **********************/
 function lireEntites(fctTraitementPositif, fctTraitementNegatif, idRoman, typeEntite){//, containerEntites){
 	var XHR_Query = "oper=lire&typeEntite="+typeEntite+"&idRoman="+idRoman;//+"&target="+containerEntites;
-	execXHR_Request("../assets/xhr/editionProjet.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
+	execXHR_Request("../assets/xhr/mode_edition.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
 
 /*
 function modifierEntite(fctTraitementPositif, fctTraitementNegatif, idRoman, typeEntite, idEntite, titre, contenu, noteEntite){
 	var XHR_Query = "oper=ecrire&typeEntite="+typeEntite+"&idRoman="+idRoman+"&titre="+titre+"&contenu="+contenu+"&note="+noteEntite+"&idEntite="+idEntite;
-	execXHR_Request("../assets/xhr/editionProjet.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
+	execXHR_Request("../assets/xhr/mode_edition.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
 
 function insererEntite(fctTraitementPositif, fctTraitementNegatif, idRoman, typeEntite, titre, contenu, noteEntite){
 	var XHR_Query = "oper=inserer&typeEntite="+typeEntite+"&idRoman="+idRoman+"&titre="+titre+"&contenu="+contenu+"&note="+noteEntite;
-	execXHR_Request("../assets/xhr/editionProjet.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
+	execXHR_Request("../assets/xhr/mode_edition.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
 
 function deplacerEntite(fctTraitementPositif, fctTraitementNegatif, idRoman, typeEntite, idEntite, id_prev, id_next){
@@ -131,25 +131,25 @@ function deplacerEntite(fctTraitementPositif, fctTraitementNegatif, idRoman, typ
 		XHR_Query += "&nvTypeEntite="+nvTypeEntite
 	}
 
-	execXHR_Request("../assets/xhr/editionProjet.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
+	execXHR_Request("../assets/xhr/mode_edition.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
 
 function effacerEntite(fctTraitementPositif, fctTraitementNegatif, idRoman, typeEntite, idEntite){
 	var etatDeleted = (arguments[5] != undefined)?arguments[5]:1; // argument optionel
 	var XHR_Query = "oper=effacer&typeEntite="+typeEntite+"&idRoman="+idRoman+"&idEntite="+idEntite+"&etat="+etatDeleted;
-	execXHR_Request("../assets/xhr/editionProjet.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
+	execXHR_Request("../assets/xhr/mode_edition.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
 */
 
 function chargerRoman(fctTraitementPositif, fctTraitementNegatif, idRoman){
 	var XHR_Query = "oper=lire&typeEntite=textePrincipal&idRoman="+idRoman;
-	execXHR_Request("../assets/xhr/editionProjet.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
+	execXHR_Request("../assets/xhr/mode_edition.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
 
 function sauvegarderTexte(fctTraitementPositif, fctTraitementNegatif, idRoman, nouveauTexte){
 	var nouveauTexte = encodeURIComponent (nouveauTexte);
 	var XHR_Query = "oper=ecrire&typeEntite=textePrincipal&idRoman="+idRoman+"&contenu="+nouveauTexte;
-	execXHR_Request("../assets/xhr/editionProjet.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
+	execXHR_Request("../assets/xhr/mode_edition.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
 
 
@@ -204,7 +204,7 @@ function afficherEntites(donnees){
 			donnees[curIndex]['note'] = (donnees[curIndex]['note'] === null)?'':donnees[curIndex]['note'];
 			contenu += donnees[curIndex]['note'] + '</div></div>';*/
 
-			contenu += '<div  class="aide-memoire" ';
+			contenu += '<div class="aide-memoire" ';
 			//contenu += 'data-idprev="'+donnees[curIndex]['ID_prev']+'" data-idnext="'+donnees[curIndex]['ID_next']+'" ';
 			contenu += 'data-idself="'+curIndex+'">';
 			contenu += '	<div class="aide-memoire-headings"><span>'+donnees[curIndex]['titre']+'</span></div>';

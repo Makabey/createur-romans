@@ -23,25 +23,31 @@ $rootDomaine = ($sNomDeCettePage == "index")?"":"/fichiersDuProjet/";
 		<meta name="author" content="Thomas A. Séguin, Olivier Berthier, Eric Robert</p>" />
 		<meta name="description" content="Effacez le syndrome de la page blanche avec notre assistant. Sélectionnez un genre, répondez à quelques questions et vous voilà avec un paragraphe suggèrant le fil de votre prochaine oeuvre." />
 		<meta name="keywords" content="roman, assistant, page blanche, aide à l'écriture, scrivener, evernote, gratuit, composer" />
-		<link rel="shortcut icon" href="../../assets/ico/favicon.ico" />
-		<link rel="stylesheet" href="<?php echo $rootDomaine; ?>assets/css/styles.css" media="only screen" />
+		<link rel="shortcut icon" href="<?php echo $rootDomaine; ?>assets/ico/favicon.ico" />
 		<!-- Bootstrap core CSS -->
 		<link href="<?php echo $rootDomaine; ?>assets/css/bootstrap.min.css" rel="stylesheet">
 		<!-- Custom css -->
-		<link href="<?php echo $rootDomaine; ?>assets/css/theme.css" rel="stylesheet">
+		<link rel="stylesheet" href="<?php echo $rootDomaine; ?>assets/css/styles.css" media="only screen" />
+		<link rel="stylesheet" href="<?php echo $rootDomaine; ?>assets/css/theme.css">
+		<link rel="stylesheet" href="<?php echo $rootDomaine; ?>assets/css/custom-style.css">
+
+
+
+
+
 	</head>
 	<body class="<?php echo $sNomDeCettePage; ?>">
 		<header role="banner">
 			<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 				<div class="container">
 					<div class="navbar-header">
-					  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+					 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
 						<span class="sr-only">Toggle navigation</span>
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
-					  </button>
-					  <a class="navbar-brand" href="#"><img src="<?php echo $rootDomaine; ?>assets/images/logo.png" alt="créateur roman, bienvenue" />Créateur Roman</a>
+						</button>
+						<a class="navbar-brand" href="#"><img src="<?php echo $rootDomaine; ?>assets/images/logo.png" alt="créateur roman, bienvenue" />Créateur Roman</a>
 					</div>
 					<div class="navbar-collapse collapse">
 						<?php if(!isset($_SESSION['pseudo'])){ ?>

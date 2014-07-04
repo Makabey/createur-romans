@@ -4,7 +4,7 @@
 **********************/
 var gblChoixUsager = new Array(); // retenir les choix de l'usager et accessoirement quelques donnees
 var gblParentDesBalises = "form_question>fieldset"; // Balise que l'on doit manipuler pour changer l'interface
-var idUsager = 1; // valeur forcée en attendant de la lire par PHP; (auquel cas cette variable ira dans "header.inc.php")
+//var idUsager = 1; // valeur forcée en attendant de la lire par PHP; (auquel cas cette variable ira dans "header.inc.php")
 var etapeAssistant = 0; // À quelle étape de la création nous sommes
 var iCmpt=0; // Compteur, global;
 
@@ -90,6 +90,10 @@ $(function(){
 			concentrer sur la sauvegarde
 		*/
 	});
+
+	// Au lancement de la page, tout de suite charger les genres littéraires...
+	afficherAttente();
+	lireGenresLitteraires_Noms(afficherGenres, traiterErreurs);
 });
 
 
@@ -102,7 +106,7 @@ function lireGenresLitteraires_Noms(fctTraitementPositif, fctTraitementNegatif){
 		Une fois accompli, la fonction "fctTraitementPositif" (qui peux porter n'importe quel nom) est appellée.
 	*/
 	var XHR_Query = "oper=lireGenres";
-	execXHR_Request("../assets/xhr/creationProjet.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
+	execXHR_Request("../assets/xhr/assistant_creation.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
 
 function lireGenresLitteraires_Questions(fctTraitementPositif, fctTraitementNegatif, genreLitteraire){
@@ -111,7 +115,7 @@ function lireGenresLitteraires_Questions(fctTraitementPositif, fctTraitementNega
 		Une fois accompli, la fonction "fctTraitementPositif" (qui peux porter n'importe quel nom) est appellée.
 	*/
 	var XHR_Query = "oper=lireQuestions&genre=" + genreLitteraire;
-	execXHR_Request("../assets/xhr/creationProjet.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
+	execXHR_Request("../assets/xhr/assistant_creation.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
 
 function creerLeRoman(fctTraitementPositif, fctTraitementNegatif, queryString){
@@ -119,7 +123,7 @@ function creerLeRoman(fctTraitementPositif, fctTraitementNegatif, queryString){
 		Lance la requête pour créer le Roman, ce qui sous-entend: détails, texte et entitees
 	*/
 	var XHR_Query = "oper=creerLeRoman&" + queryString;
-	execXHR_Request("../assets/xhr/creationProjet.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
+	execXHR_Request("../assets/xhr/assistant_creation.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
 
 
@@ -168,7 +172,7 @@ function felicitationSurCreation(donnees){
 	*/
 	donnees = donnees.split('¤');
 	alert(donnees[1]);
-	document.location.href="demo_mode_edition.php?idRoman="+donnees[0];
+	document.location.href="mode_edition.php";
 }
 
 function afficherSynopsisEtDemandeNomRoman(donnees){
@@ -202,11 +206,11 @@ function afficherSynopsisEtDemandeNomRoman(donnees){
 	}
 	synopsis_afficher += '</dl></div>';
 	synopsis_afficher += '<div><label for="titreRoman">Quel est le titre de votre roman?</label>';
-	synopsis_afficher += '<input type="text" id="titreRoman" required="required"';
+	synopsis_afficher += '<input type="text" id="titreRoman" required="required" placeholder="Titre court et évocateur"';
 
 	// variable "maintenant" et son utilisation sont optionnel et primairement pour tests
-	var maintenant = new Date();
-	synopsis_afficher += ' value = "test - \''+maintenant+'\'"';
+	//var maintenant = new Date();
+	//synopsis_afficher += ' value = "test - \''+maintenant+'\'"';
 
 	// Analyse des données reçues et création du DATALIST si applicable
 	gblChoixUsager['romans'] = (donnees.length)?JSON.parse(donnees):'';
@@ -281,7 +285,7 @@ function afficherQuestions(donnees){
 		contenu = '<div><label for="questions'+iCmpt_lignes+'">'+donnees[iCmpt_lignes]['texte']+'</label>';
 		if(donnees[iCmpt_lignes]['type_input'] == "text"){
 			contenu += '<input type="text" name="questions[]" id="question'+iCmpt_lignes;
-			if (donnees[iCmpt_lignes]['suggestions'] != null){
+			if (donnees[iCmpt_lignes]['suggestions'] !== null){
 				donnees[iCmpt_lignes]['suggestions'] = donnees[iCmpt_lignes]['suggestions'] .split('¤');
 				if(donnees[iCmpt_lignes]['suggestions'][0].length>0){
 					contenu += '" placeholder="'+donnees[iCmpt_lignes]['suggestions'][0];
@@ -294,7 +298,7 @@ function afficherQuestions(donnees){
 					}
 				}
 			}
-			contenu += '" value="test';
+			contenu += '" placeholder="Tapez ou cliquez pour suggestions.';
 			contenu += '" required="required" />';
 			if(contenuDataList.length != ''){
 				contenu += '<datalist id="datalist_question'+iCmpt_lignes+'">'+contenuDataList+'</datalist>';
@@ -307,12 +311,13 @@ function afficherQuestions(donnees){
 			}
 			contenu += '</select>';
 		}
+
 		if(donnees[iCmpt_lignes]['bouton_fonction'] != null){
 			donnees[iCmpt_lignes]['bouton_fonction'] = donnees[iCmpt_lignes]['bouton_fonction'].split('¤');
 			contenu += '<button type="button" class="bouton_question" data-fonction="'+donnees[iCmpt_lignes]['bouton_fonction'][0]+'" data-question="'+iCmpt_lignes+'">'+donnees[iCmpt_lignes]['bouton_fonction'][1]+'</button>';
 		}
 		//contenu += "<span>"+(iCmpt_lignes+1)+"/"+donnees.length+"</span>"; // numéroter les questions
-		contenu += '<textarea id="description'+iCmpt_lignes+'" placeholder="entrez une courte description"></textarea>';
+		contenu += '<textarea id="description'+iCmpt_lignes+'" placeholder="Entrez une courte description si désiré."></textarea>';
 		contenu += "</div>";
 		$("#"+gblParentDesBalises).append(contenu);
 	}

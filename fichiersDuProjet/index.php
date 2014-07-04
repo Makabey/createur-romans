@@ -27,8 +27,6 @@ require "assets/inc/header.inc.php";
 			<button class="btn btn-lg btn-primary btn-block" type="submit">S'inscrire</button>
 		</form>
 
-		<br /><br /><br />(<a href="pages/assistant_creation.php">Page assistant de Création</a>)<br />
-
 <?php
 require "assets/inc/footer.inc.php";
 ?>

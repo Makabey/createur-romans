@@ -86,12 +86,12 @@
  6 <font color='#888a85'>=&gt;</font> <small>string</small> <font color='#cc0000'>'synopsis'</font> <i>(length=8)</i>
 </pre><br />
 <font size='1'><table class='xdebug-error xe-warning' dir='ltr' border='1' cellspacing='0' cellpadding='1'>
-<tr><th align='left' bgcolor='#f57900' colspan="5"><span style='background-color: #cc0000; color: #fce94f; font-size: x-large;'>( ! )</span> Warning: array_combine(): Both parameters should have an equal number of elements in C:\Internet\wamp\www\createur-romans\fichiersDuProjet\assets\xhr\creationProjet.xhr.php on line <i>133</i></th></tr>
+<tr><th align='left' bgcolor='#f57900' colspan="5"><span style='background-color: #cc0000; color: #fce94f; font-size: x-large;'>( ! )</span> Warning: array_combine(): Both parameters should have an equal number of elements in C:\Internet\wamp\www\createur-romans\fichiersDuProjet\assets\xhr\assistant_creation.xhr.php on line <i>133</i></th></tr>
 <tr><th align='left' bgcolor='#e9b96e' colspan='5'>Call Stack</th></tr>
 <tr><th align='center' bgcolor='#eeeeec'>#</th><th align='left' bgcolor='#eeeeec'>Time</th><th align='left' bgcolor='#eeeeec'>Memory</th><th align='left' bgcolor='#eeeeec'>Function</th><th align='left' bgcolor='#eeeeec'>Location</th></tr>
-<tr><td bgcolor='#eeeeec' align='center'>1</td><td bgcolor='#eeeeec' align='center'>0.0020</td><td bgcolor='#eeeeec' align='right'>294144</td><td bgcolor='#eeeeec'>{main}( )</td><td title='C:\Internet\wamp\www\createur-romans\fichiersDuProjet\assets\xhr\creationProjet.xhr.php' bgcolor='#eeeeec'>..\creationProjet.xhr.php<b>:</b>0</td></tr>
-<tr><td bgcolor='#eeeeec' align='center'>2</td><td bgcolor='#eeeeec' align='center'>0.1060</td><td bgcolor='#eeeeec' align='right'>329416</td><td bgcolor='#eeeeec'>lireListeRomans( )</td><td title='C:\Internet\wamp\www\createur-romans\fichiersDuProjet\assets\xhr\creationProjet.xhr.php' bgcolor='#eeeeec'>..\creationProjet.xhr.php<b>:</b>46</td></tr>
+<tr><td bgcolor='#eeeeec' align='center'>1</td><td bgcolor='#eeeeec' align='center'>0.0020</td><td bgcolor='#eeeeec' align='right'>294144</td><td bgcolor='#eeeeec'>{main}( )</td><td title='C:\Internet\wamp\www\createur-romans\fichiersDuProjet\assets\xhr\assistant_creation.xhr.php' bgcolor='#eeeeec'>..\assistant_creation.xhr.php<b>:</b>0</td></tr>
+<tr><td bgcolor='#eeeeec' align='center'>2</td><td bgcolor='#eeeeec' align='center'>0.1060</td><td bgcolor='#eeeeec' align='right'>329416</td><td bgcolor='#eeeeec'>lireListeRomans( )</td><td title='C:\Internet\wamp\www\createur-romans\fichiersDuProjet\assets\xhr\assistant_creation.xhr.php' bgcolor='#eeeeec'>..\assistant_creation.xhr.php<b>:</b>46</td></tr>
 <tr><td bgcolor='#eeeeec' align='center'>3</td><td bgcolor='#eeeeec' align='center'>0.1150</td><td bgcolor='#eeeeec' align='right'>337896</td><td bgcolor='#eeeeec'><a href='http://www.php.net/function.array-combine' target='_new'>array_combine</a>
-( )</td><td title='C:\Internet\wamp\www\createur-romans\fichiersDuProjet\assets\xhr\creationProjet.xhr.php' bgcolor='#eeeeec'>..\creationProjet.xhr.php<b>:</b>133</td></tr>
+( )</td><td title='C:\Internet\wamp\www\createur-romans\fichiersDuProjet\assets\xhr\assistant_creation.xhr.php' bgcolor='#eeeeec'>..\assistant_creation.xhr.php<b>:</b>133</td></tr>
 </table></font>
 1 -->

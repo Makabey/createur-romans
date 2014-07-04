@@ -17,7 +17,7 @@ body > .container {
 code {
 	font-size: 80%;
 }
-/* 
+/*
  * Sticky footer
  ** LIRE COMMENTAIRES **
  * Peu importe le contenu de la page, le footer sera toujours au bas de la page et meme s'il n'y a pas de contenu, il sera au bas de l'écran.
@@ -33,10 +33,10 @@ code {
 
 
 /*
- * BEGIN ACCUEIL 
+ * BEGIN ACCUEIL
  * ----------------------------------------
  */
- 
+
 .container > .titre{
 	display: inline-block;
 	width: 50%;
@@ -75,7 +75,7 @@ code {
 	font-size: 16px;
 }
 .form-signin .form-control:focus {
-  z-index: 2;
+	z-index: 2;
 }
 .form-signin input:nth-of-type(2),
 .form-signin input:nth-of-type(3) {
@@ -92,25 +92,25 @@ code {
 	border-top-left-radius: 0;
 	border-top-right-radius: 0;
 }
-/* 
+/*
  * END ACCUEIL
  */
- 
- 
-/* 
- * BEGIN HUB CLIENT 
+
+
+/*
+ * BEGIN HUB CLIENT
  * -----------------------------------------
  */
 
 .hub_client html,
 .hub_client body {
-  overflow-x: hidden; /* Prevent scroll on narrow devices */
+	overflow-x: hidden; /* Prevent scroll on narrow devices */
 }
 .hub_client body {
-  padding-top: 70px;
+	padding-top: 70px;
 }
 .hub_client footer {
-  padding: 30px 0;
+	padding: 30px 0;
 }
 .hub_client .container > div > div{
 	width: 100%;
@@ -142,11 +142,11 @@ code {
 	text-align: center;
 }
 
-/* 
- * END HUB CLIENT 
+/*
+ * END HUB CLIENT
  */
- 
-/* 
+
+/*
  * BEGIN MODE EDITION
  * -----------------------------------------
  */
@@ -267,64 +267,64 @@ code {
 	min-width: 300px;
 	margin-bottom: 20px;
 }
-/* 
- * END EDITION CLIENT 
+/*
+ * END EDITION CLIENT
  */
 
 /*
  * BEGIN MEDIA QUERIES
  * --------------------------------------------------
  */
- 
+
 /* BEGIN of Off Canvas */
 /* Cache le form login dans un bouton Toggle qui affiche/cache le form quand le max-width est inférieur à 767px */
 @media screen and (max-width: 767px) {
-  .row-offcanvas {
-    position: relative;
-    -webkit-transition: all .25s ease-out;
-       -moz-transition: all .25s ease-out;
-            transition: all .25s ease-out;
-  }
+	.row-offcanvas {
+		position: relative;
+		-webkit-transition: all .25s ease-out;
+		 -moz-transition: all .25s ease-out;
+		transition: all .25s ease-out;
+	}
 
-  .row-offcanvas-right {
-    right: 0;
-  }
+	.row-offcanvas-right {
+		right: 0;
+	}
 
-  .row-offcanvas-left {
-    left: 0;
-  }
+	.row-offcanvas-left {
+		left: 0;
+	}
 
-  .row-offcanvas-right
-  .sidebar-offcanvas {
-    right: -50%; /* 6 columns */
-  }
+	.row-offcanvas-right
+	.sidebar-offcanvas {
+		right: -50%; /* 6 columns */
+	}
 
-  .row-offcanvas-left
-  .sidebar-offcanvas {
-    left: -50%; /* 6 columns */
-  }
+	.row-offcanvas-left
+	.sidebar-offcanvas {
+		left: -50%; /* 6 columns */
+	}
 
-  .row-offcanvas-right.active {
-    right: 50%; /* 6 columns */
-  }
+	.row-offcanvas-right.active {
+		right: 50%; /* 6 columns */
+	}
 
-  .row-offcanvas-left.active {
-    left: 50%; /* 6 columns */
-  }
+	.row-offcanvas-left.active {
+		left: 50%; /* 6 columns */
+	}
 
-  .sidebar-offcanvas {
-    position: absolute;
-    top: 0;
-    width: 50%; /* 6 columns */
-  }
+	.sidebar-offcanvas {
+		position: absolute;
+		top: 0;
+		width: 50%; /* 6 columns */
+	}
 }
 /* END of Off Canvas */
- 
- 
-/* 
+
+
+/*
  * BEGIN MEDIA Q. FOR ACCUEIL
  */
- 
+
 @media (max-width: 678px) {
 .container > .titre{
 		width: 100%;
@@ -341,7 +341,7 @@ code {
 	}
 }
 @media (min-width: 768px) {
-	  .container > .titre{
+		.container > .titre{
 		width: 50%;
 		min-width: 265px;
 	}
@@ -353,10 +353,10 @@ code {
 		width: 300px;
 	}
 }
-/* 
+/*
  * END ACCUEIL MEDIA SCREEN
  */
- 
-/* 
+
+/*
  * END MEDIA QUERIES
  */
