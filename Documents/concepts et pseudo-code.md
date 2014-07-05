@@ -2,23 +2,28 @@
 ####Contient tâches, idées, concepts, questions et "ToDo"
 
 To Do:
-- [ ] Changer la sauvegarde pour qu'elle s'effectue si le dirtyBit est ON -et- qu'on as pas tapé depuis x secondes. Autre possibilitée, detecter si le "web storage" est permis/disponible et si OUI alors sauve localement aux 15 secondes et aux 300 secs sur le web si on ne le force pas par l'interface (bouton)
-- [ ] petit bug : le bouton "lire entitées" de la page Édition ne lit pas tout les entitées, un peu normal, il faut autant de requêtes que de types, pour la démo je pourrais le faire (tout les appels)
+-[] autosave texte principal, solution 1: lancer intervalle, si var1 et var2 sont 0 alors ne rien faire;  si on tape (keyup) var1++; si qd intervalle arrive var1 et var2 différents alors var2=var1; si var1==var2 et tous deux !== 0 alors sauvegarder et var1 et var2 === 0
+-[] autosave texte principal, solution 2: pour la sauvegarde, il faudrait changer pour qu'il y ais ces variables (booleennes):
+	= mainText_DirtyBit_GUI si on as modifié le texte présentement à l'écran, remplace data-dirtybit
+	= mainText_DirtyBit_Disk_Texte si on as copié le texte en mémoire mais qu'il n'as pas été enregistré ds la BD
+	= mainText_DirtyBit_Disk_Notes si on as copié les notes en mémoire mais qu'elles n'ont pas été enregistrées ds la BD
+-[] autosave texte principal, solution 3: autosave, autre idée : un timeinterval aux secondes, onKeyUp on enregistre la date en timestamp, une autre variable enregistre le timestamp de la dernière sauvegarde; si le temps au moment du timeInterval entre les deux timeStamps >= disons 7 secondes, alors on tue l'intervalle puis on copie ds la BD le texte et au retour de l'opération XHR, on copie le timestamp courant vers le "dernier timestamp"(de sauvegarde)
+-[] autre idée : au lieu d'utiliser une variable "globale" pour retenir le texte et les notes (applicable aussi aux "entitées" dans un deuxième temps), utiliser le "web storage", si indisponible alors seulement là utiliser une var globale!
+- [x] petit bug : le bouton "lire entitées" de la page Édition ne lit pas tout les entitées, un peu normal, il faut autant de requêtes que de types, pour la démo je pourrais le faire (tout les appels)
 - [ ] bug : le retour de "execXHR_Request" elle-même n'est pas traité, c'est à dire que si la fonction retourne purement FALSE (le fureteur du client ne supporte pas XHR), cette erreur n'est traité (je crois) par aucun de mes "wrappers".
 -[ ] pour editionProjet.xhr.php>>oper=deplacer, voir ce que j'ai fait avec assistant_creation.xhr.php>>creerLeRoman pour ce qui est de la multi-mise à jour en une seule requête
 - [x] bug : encodage pas au point ou cest pcq jai pas updater page edition avec les ameliorations de creation... hum ... ??? O_o spécifiquement les guillemets
 - [x] menage code mort!!!
 - [x] tout re-commenter
 - [x] page de test pour formulaire + table pour le supporter
--autosave texte principal, lancer intervalle, si var1 et var2 sont 0 alors ne rien faire;  si on tape (keyup) var1++; si qd intervalle arrive var1 et var2 différents alors var2=var1; si var1==var2 et tous deux !== 0 alors sauver et var1 et var2 === 0
 -[x]Onglets entités
 	-[x] phase 1: onclick aller prendre parent, du parent dire aux enfants de perdre classe "active", donne a enfant cliquer classe active
 	-[x] phase 2: tjrs onclick détecter si texte balise <a>== $(this)>a.text si oui on as cliquer celui qui est actif ou juste lire si as classe actif, si oui ne rien faire
 	-[x] phase 3: onclick si onglet différent tester si ds var globale on as les données pour le nouvel onglet sinon charger les données
 -[x]scinder code pour récupérer les entitées entre fct qui lit les données et fct qui génère les balises
 -[x]onglet fct qui lit, si pour un type il y as 0 entrées ds la BD alors "first" ==0 pour savoir que au moins as été lu... malgré que si l'entrée array existe, c'est qu'on as au moins essayé de lire...
--[] copier ce qui est pertinent du code pour les onglets entités vers les onglet textePrincipal et Notes globales
--[] changer création Roman ds BD pour enregistrer le synopsis aussi dans champs notes
+-[x] copier ce qui est pertinent du code pour les onglets entités vers les onglet textePrincipal et Notes globales
+-[x] changer création Roman ds BD pour enregistrer le synopsis aussi dans champs notes
 -[] créer fct qui ajoute des boutons pour modifier les entitées et fct onblur qui fait ESC/restaure le texte à partir de la mémoire. Btns poppent... non btns sont ajouté à la création, pê ajouter une couche de DIV (si overflow hidden pas suffisant ou que visuellement ça fct pas)? laisser les gars faire mieux
 	-[] {entitées} faire la copie des span vers la mémoire quand l'usager clique le bouton [accepter] -et- vers la BD
 	-[] {entitées} faire la copie de la mémoire vers les span quand l'usager clique le bouton [annuler]

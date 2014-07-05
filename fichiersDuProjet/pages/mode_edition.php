@@ -38,7 +38,34 @@ require "../assets/inc/header.inc.php";
 			</ul>
 			<!--<span class="en-tete-aide-memoire">Vos personnages</span>-->
 			<div class="wrap-aide-memoire" id="contenantEntites">
-				<p><img src="../assets/images/wait_circle2.png" class="waitCircle" alt="Attendez..." /><span>Chargement des entités</span></p>
+				<!--<p><img src="../assets/images/wait_circle2.png" class="waitCircle" alt="Attendez..." /><span>Chargement des entités</span></p>-->
+				<div class="aide-memoire-toolbar" style="text-align:center; position:relative; border:1px solid lightgrey; margin:5px;">
+<img style="width:48px;" src="../assets/images/toolbars/list.png">
+<img style="width:48px; position:absolute; right:5px;" src="../assets/images/toolbars/pencil_add.png">
+</div>
+		<div class="aide-memoire" data-idself="50">
+<div class="aide-memoire-headings" style="position:relative;">
+<span>Endroit</span>
+<img style="left:3px; position:absolute; top:3px; width:36px;" src="../assets/images/toolbars/contract2_pencil.png">
+<img style="right:3px; position:absolute; top:3px; width:36px;" src="../assets/images/toolbars/trash_can_add.png">
+</div>
+<div class="aide-memoire-content">
+<span>(contenu ->) une grande ville</span>
+</div>
+<div class="aide-memoire-notes">
+<span>(notes ->) </span>
+</div>
+<div class="aide-memoire-boutons-edition">
+<button data-btntype="save" type="button">
+<img style="width:48px;" src="../assets/images/toolbars/checkmark_pencil.png">
+Sauvegarder
+</button>
+<button data-btntype="cancel" type="button">
+<img style="width:48px;" src="../assets/images/toolbars/close_pencil.png">
+Annuler
+</button>
+</div>
+</div>		
 			</div>
 		</div>
 <?php

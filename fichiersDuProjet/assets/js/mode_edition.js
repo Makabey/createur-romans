@@ -33,6 +33,32 @@ $(function(){
 		$("#"+balise_MainText).data("dirtyBit", true);
 	});
 
+	$(".col-md-8>ul>li").click(function(){
+		if(!$(this).hasClass("active")){
+			$(this).parent().children(".active").removeClass("active");
+			$(this).addClass("active");
+			
+			console.log(gblRoman['contenu']);
+			console.log(gblRoman['notes_globales']);
+			
+			if($(this).text() == "Composition"){
+				if($("#"+balise_MainText).data("dirtyBit") === true){
+					gblRoman['notes_globales'] = $("#"+balise_MainText).val();
+					console.log(gblRoman['notes_globales']);
+					$("#"+balise_MainText).data("dirtyBit", false);
+				}
+				$("#"+balise_MainText).val(gblRoman['contenu']);
+			}else{
+				if($("#"+balise_MainText).data("dirtyBit") === true){
+					gblRoman['contenu'] = $("#"+balise_MainText).val();
+					console.log(gblRoman['contenu']);
+					$("#"+balise_MainText).data("dirtyBit", false);
+				}
+				$("#"+balise_MainText).val(gblRoman['notes_globales']);
+			}
+		}
+	});
+	
 	$(".col-md-4>ul>li").click(function(){
 		var typeEntite;
 		//console.log('click');
@@ -132,9 +158,8 @@ $(function(){
 	if(idRoman > 0){
 		$("#balise_MainText").hide();
 		chargerRoman(afficherRoman, traiterErreurs, idRoman);
-		//var typeEntite = "qui";
-		//var containerEntites = balises_entites_base; // + typeEntite;
-		lireEntites(afficherEntites, traiterErreurs, idRoman, "qui");//typeEntite);//, containerEntites);
+		//désactiver en attendant modifications au CSS pour les boutons >> 
+		//lireEntites(afficherEntites, traiterErreurs, idRoman, "qui");
 	}else{
 		window.location.replace(baseURL+"index.php");
 	}
@@ -187,8 +212,10 @@ function chargerRoman(fctTraitementPositif, fctTraitementNegatif, idRoman){
 }
 
 function sauvegarderTexte(fctTraitementPositif, fctTraitementNegatif, idRoman, nouveauTexte){
+	// pour arguments[4], valeurs attendues soit "textePrincipal" ou "notesGlobales"
 	var nouveauTexte = encodeURIComponent (nouveauTexte);
-	var XHR_Query = "oper=ecrire&typeEntite=textePrincipal&idRoman="+idRoman+"&contenu="+nouveauTexte;
+	var entiteASauvegarder = (arguments[4] !== undefined)?arguments[4]:"textePrincipal";
+	var XHR_Query = "oper=ecrire&typeEntite="+entiteASauvegarder+"&idRoman="+idRoman+"&contenu="+nouveauTexte;
 	execXHR_Request("../assets/xhr/mode_edition.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
 
@@ -239,6 +266,8 @@ function afficherEntites(donnees){
 	//var typeEntite = donnees[0]['typeEntite'];
 	//var baliseParent = "#"+balises_entites_base; //+typeEntite; //donnees[0]['target'];
 
+	contenu += '<div class="aide-memoire-toolbar" style="text-align:center; position:relative; border:1px solid lightgrey; margin:5px;"><img src="../assets/images/toolbars/list.png" style="width:48px;" alt="drag and drop" /><img src="../assets/images/toolbars/pencil_add.png" style="width:48px; position:absolute; right:5px;" alt="ajouter une entitée" /></div>';
+	
 	if(curIndex !== null){
 		// 	Créer l'interface dans le parent donnees[0]['target']
 		do{
@@ -251,12 +280,20 @@ function afficherEntites(donnees){
 			contenu += '<div class="aide-memoire" ';
 			//contenu += 'data-idprev="'+donnees[curIndex]['ID_prev']+'" data-idnext="'+donnees[curIndex]['ID_next']+'" ';
 			contenu += 'data-idself="'+curIndex+'">';
-			contenu += '	<div class="aide-memoire-headings"><span>'+donnees[curIndex]['titre']+'</span></div>';
+			contenu += '	<div class="aide-memoire-headings" style="position:relative;"><span>'+donnees[curIndex]['titre']+'</span><img src="../assets/images/toolbars/contract2_pencil.png" style="left:3px; position:absolute; top:3px; width:36px;" alt="Éditer cette entitée" /><img src="../assets/images/toolbars/trash_can_add.png" style="right:3px; position:absolute; top:3px; width:36px;" "Effacer cette entitée" /></div>';
 			contenu += '	<div class="aide-memoire-content">';
 			contenu += '		<span>(contenu -&gt;) '+donnees[curIndex]['contenu']+'</span>';
 			contenu += '	</div>';
 			contenu += '	<div class="aide-memoire-notes">';
-			contenu += '		<span>(notes -&gt;) '+donnees[curIndex]['note']+'</span>';
+			contenu += '		<span>(notes -&gt;) ';
+			if(donnees[curIndex]['note'] !== null){
+				contenu += donnees[curIndex]['note'];
+				}
+			contenu += '</span>';
+			contenu += '	</div>';
+			contenu += '	<div class="aide-memoire-boutons-edition">';
+			contenu += '		<button type="button" data-btntype="save"><img src="../assets/images/toolbars/checkmark_pencil.png" style="width:48px;" alt="Accepter les changements" />Sauvegarder</button>';
+			contenu += '		<button type="button" data-btntype="cancel"><img src="../assets/images/toolbars/close_pencil.png" style="width:48px;" alt="Annuler les changements" />Annuler</button>';
 			contenu += '	</div>';
 			contenu += "</div>\n\n";
 
@@ -281,11 +318,11 @@ function afficherEntites(donnees){
 function afficherRoman(donnees){
 	//$("#balise_attendez").hide();
 	gblRoman = JSON.parse(donnees); // contraire :: JSON.stringify(array);
-	console.log(gblRoman);
+	//console.log(gblRoman);
 	if(gblRoman.length !== 0){
 		$("#"+balise_MainText).text(gblRoman['contenu']);
 		$("h2").text(gblRoman['titre']);
-		gbl_DelaiSauvegarde_TextePrincipal = setTimeout('sauvegarderTextePrincipal("'+balise_MainText+'")', iFrequenceSauvegarde_TextePrincipal);
+		//gbl_DelaiSauvegarde_TextePrincipal = setTimeout('sauvegarderTextePrincipal("'+balise_MainText+'")', iFrequenceSauvegarde_TextePrincipal);
 	}else{
 		$("#"+balise_MainText).text("[Cet usager n'as aucun Roman ou il y as eût une erreur de BD.]");
 	}
@@ -299,7 +336,7 @@ function sauvegarderTextePrincipal(id_balise){
 		L'état de $("#"+balise_MainText).data("dirtyBit") en décide
 	*/
 
-	$("#temoin_activite").css("background-color", ($("#temoin_activite").css("background-color") == "rgb(255, 255, 0)")?"blue":"yellow");
+	//$("#temoin_activite").css("background-color", ($("#temoin_activite").css("background-color") == "rgb(255, 255, 0)")?"blue":"yellow");
 
 	if($("#"+balise_MainText).data("dirtyBit") === true){
 		sauvegarderTexte(lancerDelaiSauvegardeTextePrincipal, traiterErreurs, idRoman, $("#"+id_balise).val());
