@@ -172,7 +172,8 @@ function felicitationSurCreation(donnees){
 	*/
 	donnees = donnees.split('¤');
 	alert(donnees[1]);
-	document.location.href="mode_edition.php";
+	//document.location.href="mode_edition.php";
+	window.location.replace(baseURL+"pages/mode_edition.php");
 }
 
 function afficherSynopsisEtDemandeNomRoman(donnees){
@@ -206,7 +207,7 @@ function afficherSynopsisEtDemandeNomRoman(donnees){
 	}
 	synopsis_afficher += '</dl></div>';
 	synopsis_afficher += '<div><label for="titreRoman">Quel est le titre de votre roman?</label>';
-	synopsis_afficher += '<input type="text" id="titreRoman" required="required" placeholder="Titre court et évocateur"';
+	synopsis_afficher += '<input type="text" id="titreRoman" required="required" placeholder="Court titre évocateur"';
 
 	// variable "maintenant" et son utilisation sont optionnel et primairement pour tests
 	//var maintenant = new Date();
@@ -218,7 +219,7 @@ function afficherSynopsisEtDemandeNomRoman(donnees){
 		synopsis_afficher += ' list="listeNomsRomans"';
 		contenuDataList += '<datalist id="listeNomsRomans">';
 		for(iCmpt=0;iCmpt<gblChoixUsager['romans'].length;iCmpt++){
-			contenuDataList += '<option value="'+gblChoixUsager['romans'][iCmpt]['titre']+'">';
+			contenuDataList += '<option>'+gblChoixUsager['romans'][iCmpt]['titre']+'</option>';
 		}
 		contenuDataList += '</datalist>';
 	}
@@ -282,7 +283,7 @@ function afficherQuestions(donnees){
 		gblChoixUsager['questions'][iCmpt_lignes] = new Array();
 		gblChoixUsager['questions'][iCmpt_lignes]['titre'] = donnees[iCmpt_lignes]['forme_synopsis'];
 		contenuDataList = '';
-		contenu = '<div><label for="questions'+iCmpt_lignes+'">'+donnees[iCmpt_lignes]['texte']+'</label>';
+		contenu = '<div><label for="question'+iCmpt_lignes+'">'+donnees[iCmpt_lignes]['texte']+'</label>';
 		if(donnees[iCmpt_lignes]['type_input'] == "text"){
 			contenu += '<input type="text" name="questions[]" id="question'+iCmpt_lignes;
 			if (donnees[iCmpt_lignes]['suggestions'] !== null){
@@ -294,7 +295,7 @@ function afficherQuestions(donnees){
 				if(donnees[iCmpt_lignes]['suggestions'].length>1){
 					contenu += '" list = "datalist_question'+iCmpt_lignes;
 					for(iCmpt_Options=1; iCmpt_Options<donnees[iCmpt_lignes]['suggestions'].length; iCmpt_Options++){
-						contenuDataList += '<option value="'+donnees[iCmpt_lignes]['suggestions'][iCmpt_Options]+'">';
+						contenuDataList += '<option>'+donnees[iCmpt_lignes]['suggestions'][iCmpt_Options]+'</option>';
 					}
 				}
 			}

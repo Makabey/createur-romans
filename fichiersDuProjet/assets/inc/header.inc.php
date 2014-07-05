@@ -2,7 +2,7 @@
 session_start();
 $sNomDeCettePage = substr($_SERVER["SCRIPT_NAME"], (strrpos($_SERVER["SCRIPT_NAME"],"/")+1));
 $sNomDeCettePage = substr($sNomDeCettePage, 0, (strpos($sNomDeCettePage,".")));
-
+/*
 if(($sNomDeCettePage != "index") && (!isset($_SESSION['pseudo']))){
 	header("Location:/fichiersDuProjet/index.php");
 	exit();
@@ -10,7 +10,7 @@ if(($sNomDeCettePage != "index") && (!isset($_SESSION['pseudo']))){
 	header("Location:/fichiersDuProjet/pages/hub_client.php");
 	exit();
 }
-
+*/
 $rootDomaine = ($sNomDeCettePage == "index")?"":"/fichiersDuProjet/";
 ?>
 <!DOCTYPE html>
@@ -30,18 +30,13 @@ $rootDomaine = ($sNomDeCettePage == "index")?"":"/fichiersDuProjet/";
 		<link rel="stylesheet" href="<?php echo $rootDomaine; ?>assets/css/styles.css" media="only screen" />
 		<link rel="stylesheet" href="<?php echo $rootDomaine; ?>assets/css/theme.css">
 		<link rel="stylesheet" href="<?php echo $rootDomaine; ?>assets/css/custom-style.css">
-
-
-
-
-
 	</head>
 	<body class="<?php echo $sNomDeCettePage; ?>">
 		<header role="banner">
 			<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 				<div class="container">
 					<div class="navbar-header">
-					 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
 						<span class="sr-only">Toggle navigation</span>
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>

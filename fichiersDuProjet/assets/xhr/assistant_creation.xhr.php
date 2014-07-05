@@ -173,7 +173,12 @@ function creerLeRoman($db){
 		$ID_roman = $db->insert_id; // Lire le nouvel ID (dernier AUTONUM généré)
 
 		$_POST['synopsis'] = real_escape_string($_POST['synopsis'], $db);
-		$query = "INSERT INTO `roman_texte` (`ID_roman`, `synopsis`, `contenu`) VALUES ($ID_roman, '{$_POST['synopsis']}', 'Bienvenue dans votre roman! Quel sera le commencement de votre histoire? :)');";
+
+		$sub_search = array(":¤", "¤", "¯");
+		$sub_replace = array(": ", "; ", "\n");
+		$notes_globales = str_replace($sub_search, $sub_replace, $_POST['synopsis']);
+
+		$query = "INSERT INTO `roman_texte` (`ID_roman`, `synopsis`, `contenu`, `notes_globales`) VALUES ($ID_roman, '{$_POST['synopsis']}', 'Bienvenue dans votre roman! Quel sera le commencement de votre histoire? :)', '$notes_globales');";
 
 		$typeQuery = "n INSERT";
 		$resultat = $db->query ($query);
@@ -210,14 +215,15 @@ function creerLeRoman($db){
 			$val[1] = real_escape_string($val[1], $db); // le titre de cette entitée
 			$_POST['question'.$key][0] = real_escape_string($_POST['question'.$key][0], $db); // le contenu, ce que l'usager as tapé
 
-			$query = "INSERT INTO `entites` (`ID_roman`, `ID_prev`, `typeEntite`, `titre`, `contenu`%s) VALUES ($ID_roman, $PrevID, '$currEntite', '{$val[1]}', '{$_POST['question'.$key][0]}'%s);";
-
 			if($_POST['question'.$key][1] !== ''){ // la note que l'usager as tapé, si quelque chose
 				$_POST['question'.$key][1] = real_escape_string($_POST['question'.$key][1], $db);
-				$query = sprintf($query, ", `note`", ", '{$_POST['question'.$key][1]}'");
-			}else{
-				$query = sprintf($query, '', '');
+			//	$query = sprintf($query, ", `note`", ", '{$_POST['question'.$key][1]}'");
+				$_POST['question'.$key][0] .= '; ' . $_POST['question'.$key][1];
+			//}else{
+			//	$query = sprintf($query, '', '');
 			}
+
+			$query = "INSERT INTO `entites` (`ID_roman`, `ID_prev`, `typeEntite`, `titre`, `contenu`) VALUES ($ID_roman, $PrevID, '$currEntite', '{$val[1]}', '{$_POST['question'.$key][0]}');";
 
 			$resultat = $db->query ($query);
 
