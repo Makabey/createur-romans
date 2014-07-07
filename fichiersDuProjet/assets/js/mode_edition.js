@@ -19,7 +19,9 @@
 var gbl_DelaiSauvegarde_TextePrincipal = null; // SI on voulais arrêter le cycle d'enregistrement, il suffirais d'utiliser clearTimeout(gbl_DelaiSauvegarde_TextePrincipal);
 var iFrequenceSauvegarde_TextePrincipal = 5000; // 5 secs, mériterais probablement une valeur entre 60 et 300 secs
 var balise_MainText = "main_write";
-var balises_entites_base = "contenantEntites";
+//var balises_entites_base = "contenantEntites";
+//var balises_entites_base = "edition-boite-entites>div";
+var balises_entites_base = "edition-boite-entites";
 var gblRoman;
 var gblEntites = new Array();
 
@@ -59,14 +61,46 @@ $(function(){
 		}
 	});
 
-	$(".col-md-4>ul>li").click(function(){
-		/*var typeEntite;
+	$("#"+balises_entites_base+">ul>li").click(function(){
+		TraiterClickOnglets($(this));
+	});
+
+	$("#"+balises_entites_base+">ul>li>ul>li").click(function(){
+		TraiterClickOnglets($(this));
+	});
+
+	//$(""#"+balises_entites_base .aide-memoire-toolbar>img:first-of-type").click(function(){
+	//$("#"+balises_entites_base).on('click', '.aide-memoire-toolbar>img:first-of-type', function(){
+	$("#"+balises_entites_base).on('click', '.aide-memoire-toolbar .glyphicon-pencil', function(){
+		console.log("click -- dragNdrop");
+	});
+
+	$("#"+balises_entites_base).on('click', '.aide-memoire-toolbar .glyphicon-list', function(){
+		console.log("click -- ajouter");
+	});
+
+	$("#"+balises_entites_base).on('click', '.aide-memoire-headings>img:first-of-type', function(){
+		console.log("click -- editer");
+	});
+
+	$("#"+balises_entites_base).on('click', '.aide-memoire-headings>img:nth-of-type(2)', function(){
+		var idSelf = $(this).parents(".aide-memoire").data("idself");
+		console.log("click -- effacer (" + idSelf +")");
+	});
+
+	function TraiterClickOnglets(ceci){
+		/*
+			Pour les onglets des entitées, s'occupe de relier l'event click au code XHR
+		*/
+		var typeEntite;
 		var posSpace;
 		//console.log('click');
-		if(!$(this).hasClass("active")){
-			$(this).parent().children(".active").removeClass("active");
-			$(this).addClass("active");
-			typeEntite = $(this).text();
+		if(!ceci.hasClass("active") && !ceci.hasClass("dropdown")){
+			//ceci.parents(".col-md-4 ul").find(".active").removeClass("active");
+			//ceci.parents("#maincontent>div:nth-child(2)>ul").find(".active").removeClass("active");
+			ceci.parents("#"+balises_entites_base+">ul").find(".active").removeClass("active");
+			ceci.addClass("active");
+			typeEntite = ceci.text();
 			posSpace = typeEntite.indexOf(" ");
 			if(posSpace > 0){
 				typeEntite = typeEntite.substring(0, posSpace);
@@ -76,68 +110,10 @@ $(function(){
 			typeEntite = typeEntite.toLowerCase();
 			typeEntite = typeEntite.replace('ù', 'u');
 			typeEntite = typeEntite.replace('é', 'e');
-			if(typeEntite == "delit") { return; }
-			//if(gblEntites[typeEntite].length > 0){
-			if(gblEntites[typeEntite] !== undefined){
-				if(gblEntites[typeEntite][0]['first'] > 0){
-					console.log(typeEntite + " as au moins 1 membre");
-					//afficherEntites(gblEntites[typeEntite], false);
-				}else{
-					console.log(typeEntite + " as déjà été lu mais est vide!");
-				}
-				afficherEntites(gblEntites[typeEntite], false);
-			}else{
-				console.log(typeEntite + " est vide");
-				lireEntites(afficherEntites, traiterErreurs, idRoman, typeEntite);
+			if(typeEntite == "delit") {
+				// Si c'est le bouton "Délit", ignorer l'évènement
+				return;
 			}
-		//}else{
-		//	console.log("L'onglet est deja active");
-		}*/
-		TraiterClickOnglets($(this));
-	});
-	$(".col-md-4>ul>li>ul>li").click(function(){
-		TraiterClickOnglets($(this));
-	});
-
-	//$(".col-md-4 .aide-memoire-toolbar>img:first-of-type").click(function(){
-	$(".col-md-4").on('click', '.aide-memoire-toolbar>img:first-of-type', function(){
-		console.log("click -- dragNdrop");
-	});
-
-	$(".col-md-4").on('click', '.aide-memoire-toolbar>img:nth-of-type(2)', function(){
-		console.log("click -- ajouter");
-	});
-
-	$(".col-md-4").on('click', '.aide-memoire-headings>img:first-of-type', function(){
-		console.log("click -- editer");
-	});
-
-	$(".col-md-4").on('click', '.aide-memoire-headings>img:nth-of-type(2)', function(){
-		var idSelf = $(this).parents(".aide-memoire").data("idself");
-		console.log("click -- effacer (" + idSelf +")");
-	});
-
-	function TraiterClickOnglets(ceci){
-		/*
-			S'occupe de relier l'event click au code XHR pour les onglets des entitées
-		*/
-		var typeEntite;
-		var posSpace;
-		//console.log('click');
-		if(!ceci.hasClass("active")){
-			ceci.parent().children(".active").removeClass("active");
-			ceci.addClass("active");
-			typeEntite = ceci.text();
-			posSpace = typeEntite.indexOf(" ");
-			if(posSpace > 0){
-				typeEntite = typeEntite.substring(0, posSpace);
-			}
-			//console.log(typeEntite);
-			//return;
-			typeEntite = typeEntite.toLowerCase();
-			typeEntite = typeEntite.replace('ù', 'u');
-			typeEntite = typeEntite.replace('é', 'e');
-			if(typeEntite == "delit") { return; }
 			//if(gblEntites[typeEntite].length > 0){
 			if(gblEntites[typeEntite] !== undefined){
 				/*if(gblEntites[typeEntite][0]['first'] > 0){
@@ -155,7 +131,7 @@ $(function(){
 		}
 	}
 
-	$("#"+balises_entites_base).on('dblclick', 'div.aide-memoire', function(){
+	/*$("#"+balises_entites_base).on('dblclick', 'div.aide-memoire', function(){
 		console.log("aide-memoire :: click! ("+$(this).data("idself")+")");
 		if($(this).data("idself") !== 0){
 			$(this).find("span").attr("contenteditable", "true");
@@ -166,7 +142,7 @@ $(function(){
 	$("#"+balises_entites_base).on('blur', 'div.aide-memoire', function(){
 		console.log("[aide-memoire] OnBlur!!");
 		// comme l'event se déclenche même quand je clique un enfant, je dois trouver une autre solution ou comprendre comment comparer disons "target" avec les enfants et si c'en est pas un alors enlever les attr editable. Le fait que on veux mettre un bouton à mon sens ne change rien au fait que si on clique ailleurs, on devrait considérer l'édition finie!
-	});
+	});*/
 
 	/*$("#btn_save").click(function(){
 		/ *
@@ -228,7 +204,7 @@ $(function(){
 		$("#balise_MainText").hide();
 		chargerRoman(afficherRoman, traiterErreurs, idRoman);
 		//désactiver en attendant modifications au CSS pour les boutons >>
-		//lireEntites(afficherEntites, traiterErreurs, idRoman, "qui");
+		lireEntites(afficherEntites, traiterErreurs, idRoman, "qui");
 	}else{
 		window.location.replace(baseURL+"index.php");
 	}
@@ -334,23 +310,16 @@ function afficherEntites(donnees){
 	var curIndex = donnees[0]['first'];
 	//var typeEntite = donnees[0]['typeEntite'];
 	//var baliseParent = "#"+balises_entites_base; //+typeEntite; //donnees[0]['target'];
+	var entiteOnglet = $("#"+balises_entites_base).find("ul .active").text();
 
+	//contenu += '<div class="aide-memoire-toolbar"><span class="toolbar-title">'+donnees[0]['typeEntite']+'</span><img src="../assets/images/toolbars/list.png" alt="drag and drop" /><img src="../assets/images/toolbars/pencil_add.png" /></div>';
+	contenu += '<div class="aide-memoire-toolbar"><span class="toolbar-title">'+entiteOnglet+'</span><span class="glyphicon glyphicon-pencil"></span><span class="glyphicon glyphicon-list"></span></div>';
 
-	contenu += '<div class="aide-memoire-toolbar"><span class="toolbar-title">'+donnees[0]['typeEntite']+'</span><img src="../assets/images/toolbars/list.png" alt="drag and drop" /><img src="../assets/images/toolbars/pencil_add.png" /></div>';
-	
 
 	if(curIndex !== null){
 		// 	Créer l'interface dans le parent donnees[0]['target']
 		do{
-			/*contenu +='<div data-idprev="'+donnees[curIndex]['ID_prev']+'" data-idnext="'+donnees[curIndex]['ID_next'];
-			contenu += '" id="contenantEntite_'+typeEntite+'_'+curIndex+'"><div><h4>'+donnees[curIndex]['titre']+"</h4></div>";
-			contenu += '<div><p data-idparent="'+curIndex+'">'+donnees[curIndex]['contenu']+'</p></div><div>';
-			donnees[curIndex]['note'] = (donnees[curIndex]['note'] === null)?'':donnees[curIndex]['note'];
-			contenu += donnees[curIndex]['note'] + '</div></div>';*/
-
-			contenu += '<div class="aide-memoire" ';
-			//contenu += 'data-idprev="'+donnees[curIndex]['ID_prev']+'" data-idnext="'+donnees[curIndex]['ID_next']+'" ';
-			contenu += 'data-idself="'+curIndex+'">';
+			contenu += '<div class="aide-memoire" data-idself="'+curIndex+'">';
 
 			contenu += '	<div class="aide-memoire-headings"><span>'+donnees[curIndex]['titre']+'</span><img src="../assets/images/toolbars/contract2_pencil.png" alt="Éditer cette entitée" /><img src="../assets/images/toolbars/trash_can_add.png" alt="Effacer cette entitée" /></div>';
 
@@ -374,7 +343,7 @@ function afficherEntites(donnees){
 		}while(curIndex != 0);
 
 		//$(baliseParent).html(contenu);
-		$("#"+balises_entites_base).html(contenu);
+		//$("#"+balises_entites_base).html(contenu);
 	}else{
 		console.log("[afficherEntites] Aucune entitée de ce type attachée à ce Roman!");
 		//console.log(donnees);
@@ -384,8 +353,9 @@ function afficherEntites(donnees){
 		contenu += 'data-idself="0">';
 		contenu += '	<div class="aide-memoire-headings"><span>Aucune entitées pour ce type.</span></div>';
 		contenu += "</div>\n\n";
-		$("#"+balises_entites_base).html(contenu);
+		//$("#"+balises_entites_base).html(contenu);
 	}
+	$("#"+balises_entites_base+">div").html(contenu);
 }
 
 function afficherRoman(donnees){
