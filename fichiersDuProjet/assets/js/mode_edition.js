@@ -223,13 +223,15 @@ function lireEntites(fctTraitementPositif, fctTraitementNegatif, idRoman, typeEn
 function modifierEntite(fctTraitementPositif, fctTraitementNegatif, idRoman, typeEntite, idEntite, titre, contenu, noteEntite){
 	var XHR_Query = "oper=ecrire&typeEntite="+typeEntite+"&idRoman="+idRoman+"&titre="+titre+"&contenu="+contenu+"&note="+noteEntite+"&idEntite="+idEntite;
 	execXHR_Request("../assets/xhr/mode_edition.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
-}
+}*/
 
+
+//possiblement autre param avec le numeroe a utiliser pour inserer?
 function insererEntite(fctTraitementPositif, fctTraitementNegatif, idRoman, typeEntite, titre, contenu, noteEntite){
 	var XHR_Query = "oper=inserer&typeEntite="+typeEntite+"&idRoman="+idRoman+"&titre="+titre+"&contenu="+contenu+"&note="+noteEntite;
 	execXHR_Request("../assets/xhr/mode_edition.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
-
+/*
 function deplacerEntite(fctTraitementPositif, fctTraitementNegatif, idRoman, typeEntite, idEntite, id_prev, id_next){
 	/ *
 		nvTypeEntite : optionnel, si donné déplacera l'entité vers ce nouveau type
@@ -277,11 +279,11 @@ function sauvegarderTexte(fctTraitementPositif, fctTraitementNegatif, idRoman, n
 	type de la requête, que ce soit par un message de confirmation ou la manipulation des
 	données de retour.)
 **********************/
-/*
+
 function insererEntiteRetour(donnees){
 	console.log("[insererEntiteRetour] Retour = ' "+donnees+" '");
 }
-
+/*
 function deplacerEntiteRetour(donnees){
 	console.log("[deplacerEntiteRetour] Retour = ' "+donnees+" '");
 }
@@ -296,6 +298,9 @@ function afficherEntites(donnees){
 		Affiche les entitées contenues dans "donnees"
 
 		Fait principalement de la génération de balise et de la copie de contenu/propriétés à partir du tableau "donnees"
+		
+		donnees : les donnees à traiter
+		s'il y as un second parametre : indique qu'il ne faut pas pré-traiter les données avec JSON
 	*/
 	//	Préparer les données
 	//if(arguments[1] !== undefined){
@@ -318,8 +323,9 @@ function afficherEntites(donnees){
 
 	if(curIndex !== null){
 		// 	Créer l'interface dans le parent donnees[0]['target']
+		$("#"+balises_entites_base).html('');
 		do{
-			contenu += '<div class="aide-memoire" data-idself="'+curIndex+'">';
+			/*contenu += '<div class="aide-memoire" data-idself="'+curIndex+'">';
 
 			contenu += '	<div class="aide-memoire-headings"><span>'+donnees[curIndex]['titre']+'</span><img src="../assets/images/toolbars/contract2_pencil.png" alt="Éditer cette entitée" /><img src="../assets/images/toolbars/trash_can_add.png" alt="Effacer cette entitée" /></div>';
 
@@ -337,8 +343,9 @@ function afficherEntites(donnees){
 			contenu += '		<button type="button" data-btntype="save"><img src="../assets/images/toolbars/checkmark_pencil.png" alt="Accepter les changements" />Sauvegarder</button>';
 			contenu += '		<button type="button" data-btntype="cancel"><img src="../assets/images/toolbars/close_pencil.png" alt="Annuler les changements" />Annuler</button>';
 			contenu += '	</div>';
-			contenu += "</div>\n\n";
+			contenu += "</div>\n\n";*/
 
+			$("#"+balises_entites_base).append(construireCodeEntite(curIndex, donnees[curIndex]));
 			curIndex = donnees[curIndex]['ID_next'];
 		}while(curIndex != 0);
 
@@ -353,9 +360,40 @@ function afficherEntites(donnees){
 		contenu += 'data-idself="0">';
 		contenu += '	<div class="aide-memoire-headings"><span>Aucune entitées pour ce type.</span></div>';
 		contenu += "</div>\n\n";
-		//$("#"+balises_entites_base).html(contenu);
+		$("#"+balises_entites_base).html(contenu);
 	}
-	$("#"+balises_entites_base+">div").html(contenu);
+	//$("#"+balises_entites_base+">div").html(contenu);
+}
+
+function construireCodeEntite(){
+	/*
+		Normalement cette fonction recoit 1 paramêtre qui doit être un array contenant les détails de l'entité pour laquelle les balises doivent être construites
+	*/
+	if(arguments[0] === undefined){
+		var donnees = {'titre':"Tapez votre titre ici", 'contenu':"Entrez votre texte ici", 'note':"Les notes vont ici"};
+	}
+		contenu += '<div class="aide-memoire" data-idself="'+curIndex+'">';
+
+		contenu += '	<div class="aide-memoire-headings"><span>'+donnees['titre']+'</span><img src="../assets/images/toolbars/contract2_pencil.png" alt="Éditer cette entitée" /><img src="../assets/images/toolbars/trash_can_add.png" alt="Effacer cette entitée" /></div>';
+
+		contenu += '	<div class="aide-memoire-content">';
+		contenu += '		<span>(contenu -&gt;) '+donnees['contenu']+'</span>';
+		contenu += '	</div>';
+		contenu += '	<div class="aide-memoire-notes">';
+		contenu += '		<span>(notes -&gt;) ';
+		if(donnees['note'] !== null){
+			contenu += donnees['note'];
+			}
+		contenu += '</span>';
+		contenu += '	</div>';
+		contenu += '	<div class="aide-memoire-boutons-edition">';
+		contenu += '		<button type="button" data-btntype="save"><img src="../assets/images/toolbars/checkmark_pencil.png" alt="Accepter les changements" />Sauvegarder</button>';
+		contenu += '		<button type="button" data-btntype="cancel"><img src="../assets/images/toolbars/close_pencil.png" alt="Annuler les changements" />Annuler</button>';
+		contenu += '	</div>';
+		contenu += "</div>\n\n";
+
+		//curIndex = donnees[curIndex]['ID_next'];
+	
 }
 
 function afficherRoman(donnees){

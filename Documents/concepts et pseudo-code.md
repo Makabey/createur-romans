@@ -2,7 +2,7 @@
 ####Contient tâches, idées, concepts, questions et "ToDo"
 
 To Do:
-- [] Une fois le CSS fini pour les toolbars de la page Edition, ne pas oublier de restaurer le code dana header.inc (~ln 5), mode_edition.js (~ln210 >> lireEntites) et enlever dans mode_edition.php le code direct en recopiant les changements dans mode_edition.js (~ln331 afficherEntite)
+- [x] Une fois le CSS fini pour les toolbars de la page Edition, ne pas oublier de restaurer le code dana header.inc (~ln 5), mode_edition.js (~ln210 >> lireEntites) et enlever dans mode_edition.php le code direct en recopiant les changements dans mode_edition.js (~ln331 afficherEntite)
 - [] autosave texte principal, solution 1: lancer intervalle, si var1 et var2 sont 0 alors ne rien faire;  si on tape (keyup) var1++; si qd intervalle arrive var1 et var2 différents alors var2=var1; si var1==var2 et tous deux !== 0 alors sauvegarder et var1 et var2 === 0
 - [] autosave texte principal, solution 2: pour la sauvegarde, il faudrait changer pour qu'il y ais ces variables (booleennes):
 	= mainText_DirtyBit_GUI si on as modifié le texte présentement à l'écran, remplace data-dirtybit
@@ -36,6 +36,28 @@ To Do:
 - [] pour le probleme de note "deleted", sur restauration on la replace à la toute fin? càd que son prev devient celui qui as next==0 et elle hérite elle-même de next=0
 - [] entitées et romans deleted, comment proposer la liste? mettre une sorte de poubelle?
 - [] nouvelle page admin, affiche sur chaque ligne : nom roman, nom usager, genre littéraire, état DELETED, bouton DELETE (ou pour les deux derniers, bouton del/undel)
+
+
+possibilite 1: 
+-demander a sql next autonum
+(
+$result = mysql_query("SHOW TABLE STATUS LIKE 'table_name'");
+$row = mysql_fetch_array($result);
+$nextId = $row['Auto_increment']; 
+)
+-au retour creer interface
+-si (usager) accepter (création) alors copie vers memoire et copie vers db qui devrait donner le bon next autonum
+
+possibliter 2:
+-creer interface avec 'id' (comme 'class' mais 'id', ex "entite_temporaire") particulier
+-envoyer contenu vers BD
+-recuperer ID (ds retour de la fct de creation BD)
+-effacer interface avec ce 'id'
+-creer avec le bon ID (dans 'data-idself', celui de la BD)
+-ajouter a array en memoire
+
+possibliliter 3:
+-faire comme #2 sauf sans 'id' particulier et avec jQ pointer le dnr enfant "entite" et le tuer pour le recréer une fois que la BD as répondu
 
 ============================================
 

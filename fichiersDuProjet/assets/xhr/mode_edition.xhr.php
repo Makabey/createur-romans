@@ -197,6 +197,9 @@ function lireDonneesEntite($db){
 				if($resultat[0]['first'] === null){
 					$resultat[0]['first'] = $ID_entite;
 				}
+				if($row[1] === 0){ // ID_next
+					$resultat[0]['last'] = $ID_entite;
+				}
 				$resultat[$ID_entite] = array_combine($arrChamps_entites, $row);
 			}
 		}
@@ -287,7 +290,7 @@ function insererEntite($db){ // pour le moment ne s'appliquerais qu'aux entitée
 		$resultat = $db->query ($query);
 	}
 
-	// Mettre à jour l'entité qui avec auparavent ID_next=0 pour mettre le ID de la nouvelle entitée
+	// Mettre à jour l'entité qui avais auparavent ID_next=0 pour mettre le ID de la nouvelle entitée
 	if(false !== $resultat){
 		$ID_entite = $db->insert_id;
 
@@ -300,7 +303,8 @@ function insererEntite($db){ // pour le moment ne s'appliquerais qu'aux entitée
 	// Traitement des erreurs!
 	if(false !== $resultat){
 		if($db->affected_rows){
-			$resultat = "1¬[" . __FUNCTION__ . "] INSERT successful. New ID is " . $ID_entite;
+			#$resultat = "1¬[" . __FUNCTION__ . "] INSERT successful. New ID is " . $ID_entite;
+			$resultat = "1¬" . $ID_entite;
 		}else{
 			$resultat = "0¬[" . __FUNCTION__ . "] UPDATE phase didn't occur\n\n $query";
 		}
