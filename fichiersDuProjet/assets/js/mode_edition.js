@@ -266,7 +266,7 @@ function afficherEntites(donnees){
 	//var typeEntite = donnees[0]['typeEntite'];
 	//var baliseParent = "#"+balises_entites_base; //+typeEntite; //donnees[0]['target'];
 
-	contenu += '<div class="aide-memoire-toolbar" style="text-align:center; position:relative; border:1px solid lightgrey; margin:5px;"><img src="../assets/images/toolbars/list.png" style="width:48px;" alt="drag and drop" /><img src="../assets/images/toolbars/pencil_add.png" style="width:48px; position:absolute; right:5px;" alt="ajouter une entitée" /></div>';
+	contenu += '<div class="aide-memoire-toolbar"><span class="toolbar-title">'+donnees[0]['typeEntite']+'</span><img src="../assets/images/toolbars/list.png" alt="drag and drop" /><img src="../assets/images/toolbars/pencil_add.png" /></div>';
 	
 	if(curIndex !== null){
 		// 	Créer l'interface dans le parent donnees[0]['target']
@@ -280,7 +280,7 @@ function afficherEntites(donnees){
 			contenu += '<div class="aide-memoire" ';
 			//contenu += 'data-idprev="'+donnees[curIndex]['ID_prev']+'" data-idnext="'+donnees[curIndex]['ID_next']+'" ';
 			contenu += 'data-idself="'+curIndex+'">';
-			contenu += '	<div class="aide-memoire-headings" style="position:relative;"><span>'+donnees[curIndex]['titre']+'</span><img src="../assets/images/toolbars/contract2_pencil.png" style="left:3px; position:absolute; top:3px; width:36px;" alt="Éditer cette entitée" /><img src="../assets/images/toolbars/trash_can_add.png" style="right:3px; position:absolute; top:3px; width:36px;" "Effacer cette entitée" /></div>';
+			contenu += '	<div class="aide-memoire-headings"><span>'+donnees[curIndex]['titre']+'</span><img src="../assets/images/toolbars/contract2_pencil.png" alt="Éditer cette entitée" /><img src="../assets/images/toolbars/trash_can_add.png" alt="Effacer cette entitée" /></div>';
 			contenu += '	<div class="aide-memoire-content">';
 			contenu += '		<span>(contenu -&gt;) '+donnees[curIndex]['contenu']+'</span>';
 			contenu += '	</div>';
@@ -292,8 +292,8 @@ function afficherEntites(donnees){
 			contenu += '</span>';
 			contenu += '	</div>';
 			contenu += '	<div class="aide-memoire-boutons-edition">';
-			contenu += '		<button type="button" data-btntype="save"><img src="../assets/images/toolbars/checkmark_pencil.png" style="width:48px;" alt="Accepter les changements" />Sauvegarder</button>';
-			contenu += '		<button type="button" data-btntype="cancel"><img src="../assets/images/toolbars/close_pencil.png" style="width:48px;" alt="Annuler les changements" />Annuler</button>';
+			contenu += '		<button type="button" data-btntype="save"><img src="../assets/images/toolbars/checkmark_pencil.png" alt="Accepter les changements" />Sauvegarder</button>';
+			contenu += '		<button type="button" data-btntype="cancel"><img src="../assets/images/toolbars/close_pencil.png" alt="Annuler les changements" />Annuler</button>';
 			contenu += '	</div>';
 			contenu += "</div>\n\n";
 
