@@ -69,9 +69,12 @@ if($_POST['idRoman'] <= 0){
 	exit();
 }
 
+
 $arrValidEntities = array('quoi', 'ou', 'comment', 'pourquoi', 'qui', 'quand', 'textePrincipal');
 if(!in_array($_POST['typeEntite'], $arrValidEntities)){
-	echo "0¬Invalid value for 'typeEntite'";
+	//if($_POST['typeEntite'] != "delit"){
+		echo "0¬Invalid value for 'typeEntite' ({$_POST['typeEntite']})";
+	//}
 	exit();
 }
 

@@ -42,11 +42,11 @@ Remplacer tout le contenu.
 } 
 
 
-#temoin_activite{
+/*#temoin_activite{
 	height:20px;
 	width:20px;
 	border:1px solid black;
-}
+}*/
 
 #container_entites div{
 	border:1px solid black;

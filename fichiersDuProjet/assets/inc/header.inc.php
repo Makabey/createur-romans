@@ -11,7 +11,8 @@ if(($sNomDeCettePage != "index") && (!isset($_SESSION['pseudo']))){
 	exit();
 }
 */
-$rootDomaine = ($sNomDeCettePage == "index")?"":"/fichiersDuProjet/";
+#$rootDomaine = ($sNomDeCettePage == "index")?"":"/fichiersDuProjet/";
+$rootDomaine = ($sNomDeCettePage == "index")?"":"http://localhost/GitHub/createur-romans/fichiersDuProjet/";
 ?>
 <!DOCTYPE html>
 <html lang="fr" xmlns="http://www.w3.org/1999/xhtml">
@@ -27,7 +28,7 @@ $rootDomaine = ($sNomDeCettePage == "index")?"":"/fichiersDuProjet/";
 		<!-- Bootstrap core CSS -->
 		<link href="<?php echo $rootDomaine; ?>assets/css/bootstrap.min.css" rel="stylesheet">
 		<!-- Custom css -->
-		<link rel="stylesheet" href="<?php echo $rootDomaine; ?>assets/css/styles.css" media="only screen" />
+		<!-- <link rel="stylesheet" href="<?php #echo $rootDomaine; ?>assets/css/styles.css" media="only screen" /> -->
 		<link rel="stylesheet" href="<?php echo $rootDomaine; ?>assets/css/theme.css">
 		<link rel="stylesheet" href="<?php echo $rootDomaine; ?>assets/css/custom-style.css">
 	</head>

@@ -151,6 +151,7 @@ function insererUsager($db){
 		// Traitement des erreurs!
 		if(false !== $resultat){
 			session_start();
+			$_SESSION['pseudo'] = $_POST['usager'];
 			$pseudo = $_SESSION['pseudo'];
 			$_SESSION[$pseudo]['idUsager'] = $db->insert_id;
 			$_SESSION[$pseudo]['nom'] = (isset($_POST['nomUsager']))?$_POST['nomUsager']:$_POST['usager']; // Nom sinon Pseudo
