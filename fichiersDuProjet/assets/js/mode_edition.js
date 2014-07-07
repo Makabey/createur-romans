@@ -37,37 +37,46 @@ $(function(){
 		if(!$(this).hasClass("active")){
 			$(this).parent().children(".active").removeClass("active");
 			$(this).addClass("active");
-			
-			console.log(gblRoman['contenu']);
-			console.log(gblRoman['notes_globales']);
-			
+
+			//console.log(gblRoman['contenu']);
+			//console.log(gblRoman['notes_globales']);
+
 			if($(this).text() == "Composition"){
 				if($("#"+balise_MainText).data("dirtyBit") === true){
 					gblRoman['notes_globales'] = $("#"+balise_MainText).val();
-					console.log(gblRoman['notes_globales']);
+					//console.log(gblRoman['notes_globales']);
 					$("#"+balise_MainText).data("dirtyBit", false);
 				}
 				$("#"+balise_MainText).val(gblRoman['contenu']);
 			}else{
 				if($("#"+balise_MainText).data("dirtyBit") === true){
 					gblRoman['contenu'] = $("#"+balise_MainText).val();
-					console.log(gblRoman['contenu']);
+					//console.log(gblRoman['contenu']);
 					$("#"+balise_MainText).data("dirtyBit", false);
 				}
 				$("#"+balise_MainText).val(gblRoman['notes_globales']);
 			}
 		}
 	});
-	
+
 	$(".col-md-4>ul>li").click(function(){
-		var typeEntite;
+		/*var typeEntite;
+		var posSpace;
 		//console.log('click');
 		if(!$(this).hasClass("active")){
 			$(this).parent().children(".active").removeClass("active");
 			$(this).addClass("active");
 			typeEntite = $(this).text();
+			posSpace = typeEntite.indexOf(" ");
+			if(posSpace > 0){
+				typeEntite = typeEntite.substring(0, posSpace);
+			}
+			console.log(typeEntite);
+			//return;
 			typeEntite = typeEntite.toLowerCase();
 			typeEntite = typeEntite.replace('ù', 'u');
+			typeEntite = typeEntite.replace('é', 'e');
+			if(typeEntite == "delit") { return; }
 			//if(gblEntites[typeEntite].length > 0){
 			if(gblEntites[typeEntite] !== undefined){
 				if(gblEntites[typeEntite][0]['first'] > 0){
@@ -83,8 +92,68 @@ $(function(){
 			}
 		//}else{
 		//	console.log("L'onglet est deja active");
-		}
+		}*/
+		TraiterClickOnglets($(this));
 	});
+	$(".col-md-4>ul>li>ul>li").click(function(){
+		TraiterClickOnglets($(this));
+	});
+
+	//$(".col-md-4 .aide-memoire-toolbar>img:first-of-type").click(function(){
+	$(".col-md-4").on('click', '.aide-memoire-toolbar>img:first-of-type', function(){
+		console.log("click -- dragNdrop");
+	});
+
+	$(".col-md-4").on('click', '.aide-memoire-toolbar>img:nth-of-type(2)', function(){
+		console.log("click -- ajouter");
+	});
+
+	$(".col-md-4").on('click', '.aide-memoire-headings>img:first-of-type', function(){
+		console.log("click -- editer");
+	});
+
+	$(".col-md-4").on('click', '.aide-memoire-headings>img:nth-of-type(2)', function(){
+		var idSelf = $(this).parents(".aide-memoire").data("idself");
+		console.log("click -- effacer (" + idSelf +")");
+	});
+
+	function TraiterClickOnglets(ceci){
+		/*
+			S'occupe de relier l'event click au code XHR pour les onglets des entitées
+		*/
+		var typeEntite;
+		var posSpace;
+		//console.log('click');
+		if(!ceci.hasClass("active")){
+			ceci.parent().children(".active").removeClass("active");
+			ceci.addClass("active");
+			typeEntite = ceci.text();
+			posSpace = typeEntite.indexOf(" ");
+			if(posSpace > 0){
+				typeEntite = typeEntite.substring(0, posSpace);
+			}
+			//console.log(typeEntite);
+			//return;
+			typeEntite = typeEntite.toLowerCase();
+			typeEntite = typeEntite.replace('ù', 'u');
+			typeEntite = typeEntite.replace('é', 'e');
+			if(typeEntite == "delit") { return; }
+			//if(gblEntites[typeEntite].length > 0){
+			if(gblEntites[typeEntite] !== undefined){
+				/*if(gblEntites[typeEntite][0]['first'] > 0){
+					console.log(typeEntite + " as au moins 1 membre");
+				}else{
+					console.log(typeEntite + " as déjà été lu mais est vide!");
+				}*/
+				afficherEntites(gblEntites[typeEntite], false);
+			}else{
+				//console.log(typeEntite + " est vide");
+				lireEntites(afficherEntites, traiterErreurs, idRoman, typeEntite);
+			}
+		//}else{
+		//	console.log("L'onglet est deja active");
+		}
+	}
 
 	$("#"+balises_entites_base).on('dblclick', 'div.aide-memoire', function(){
 		console.log("aide-memoire :: click! ("+$(this).data("idself")+")");
@@ -96,7 +165,7 @@ $(function(){
 	});
 	$("#"+balises_entites_base).on('blur', 'div.aide-memoire', function(){
 		console.log("[aide-memoire] OnBlur!!");
-		// comme l'event se déclenche même quand je clique un enfant, je dois trouver une autre solution ou comprendre comment comparer disons "target" avec les enfants et si c'en est pas un alors enlever les attr editable. Le fait que on veux mettre un bouton à mon sens ne change rien au fait que si on clique ailleurs, on devrait considérer l'édition finie! 
+		// comme l'event se déclenche même quand je clique un enfant, je dois trouver une autre solution ou comprendre comment comparer disons "target" avec les enfants et si c'en est pas un alors enlever les attr editable. Le fait que on veux mettre un bouton à mon sens ne change rien au fait que si on clique ailleurs, on devrait considérer l'édition finie!
 	});
 
 	/*$("#btn_save").click(function(){
@@ -158,7 +227,7 @@ $(function(){
 	if(idRoman > 0){
 		$("#balise_MainText").hide();
 		chargerRoman(afficherRoman, traiterErreurs, idRoman);
-		//désactiver en attendant modifications au CSS pour les boutons >> 
+		//désactiver en attendant modifications au CSS pour les boutons >>
 		//lireEntites(afficherEntites, traiterErreurs, idRoman, "qui");
 	}else{
 		window.location.replace(baseURL+"index.php");
@@ -257,7 +326,7 @@ function afficherEntites(donnees){
 	if(arguments[1] === undefined){
 		donnees = JSON.parse(donnees); // contraire :: JSON.stringify(array);
 		gblEntites[donnees[0]['typeEntite']] = donnees;
-		console.log("[afficherEntites] j'ai chargé les entites");
+		//console.log("[afficherEntites] j'ai chargé les entites");
 	}
 
 	//console.log(donnees);
@@ -267,7 +336,7 @@ function afficherEntites(donnees){
 	//var baliseParent = "#"+balises_entites_base; //+typeEntite; //donnees[0]['target'];
 
 	contenu += '<div class="aide-memoire-toolbar" style="text-align:center; position:relative; border:1px solid lightgrey; margin:5px;"><img src="../assets/images/toolbars/list.png" style="width:48px;" alt="drag and drop" /><img src="../assets/images/toolbars/pencil_add.png" style="width:48px; position:absolute; right:5px;" alt="ajouter une entitée" /></div>';
-	
+
 	if(curIndex !== null){
 		// 	Créer l'interface dans le parent donnees[0]['target']
 		do{
@@ -280,7 +349,7 @@ function afficherEntites(donnees){
 			contenu += '<div class="aide-memoire" ';
 			//contenu += 'data-idprev="'+donnees[curIndex]['ID_prev']+'" data-idnext="'+donnees[curIndex]['ID_next']+'" ';
 			contenu += 'data-idself="'+curIndex+'">';
-			contenu += '	<div class="aide-memoire-headings" style="position:relative;"><span>'+donnees[curIndex]['titre']+'</span><img src="../assets/images/toolbars/contract2_pencil.png" style="left:3px; position:absolute; top:3px; width:36px;" alt="Éditer cette entitée" /><img src="../assets/images/toolbars/trash_can_add.png" style="right:3px; position:absolute; top:3px; width:36px;" "Effacer cette entitée" /></div>';
+			contenu += '	<div class="aide-memoire-headings" style="position:relative;"><span>'+donnees[curIndex]['titre']+'</span><img src="../assets/images/toolbars/contract2_pencil.png" style="left:3px; position:absolute; top:3px; width:36px;" alt="Éditer cette entitée" /><img src="../assets/images/toolbars/trash_can_add.png" style="right:3px; position:absolute; top:3px; width:36px;" alt="Effacer cette entitée" /></div>';
 			contenu += '	<div class="aide-memoire-content">';
 			contenu += '		<span>(contenu -&gt;) '+donnees[curIndex]['contenu']+'</span>';
 			contenu += '	</div>';

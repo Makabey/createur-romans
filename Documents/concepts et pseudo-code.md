@@ -2,16 +2,17 @@
 ####Contient tâches, idées, concepts, questions et "ToDo"
 
 To Do:
--[] autosave texte principal, solution 1: lancer intervalle, si var1 et var2 sont 0 alors ne rien faire;  si on tape (keyup) var1++; si qd intervalle arrive var1 et var2 différents alors var2=var1; si var1==var2 et tous deux !== 0 alors sauvegarder et var1 et var2 === 0
--[] autosave texte principal, solution 2: pour la sauvegarde, il faudrait changer pour qu'il y ais ces variables (booleennes):
+- [] Une fois le CSS fini pour les toolbars de la page Edition, ne pas oublier de restaurer le code dana header.inc (~ln 5), mode_edition.js (~ln210 >> lireEntites) et enlever dans mode_edition.php le code direct en recopiant les changements dans mode_edition.js (~ln331 afficherEntite)
+- [] autosave texte principal, solution 1: lancer intervalle, si var1 et var2 sont 0 alors ne rien faire;  si on tape (keyup) var1++; si qd intervalle arrive var1 et var2 différents alors var2=var1; si var1==var2 et tous deux !== 0 alors sauvegarder et var1 et var2 === 0
+- [] autosave texte principal, solution 2: pour la sauvegarde, il faudrait changer pour qu'il y ais ces variables (booleennes):
 	= mainText_DirtyBit_GUI si on as modifié le texte présentement à l'écran, remplace data-dirtybit
 	= mainText_DirtyBit_Disk_Texte si on as copié le texte en mémoire mais qu'il n'as pas été enregistré ds la BD
 	= mainText_DirtyBit_Disk_Notes si on as copié les notes en mémoire mais qu'elles n'ont pas été enregistrées ds la BD
--[] autosave texte principal, solution 3: autosave, autre idée : un timeinterval aux secondes, onKeyUp on enregistre la date en timestamp, une autre variable enregistre le timestamp de la dernière sauvegarde; si le temps au moment du timeInterval entre les deux timeStamps >= disons 7 secondes, alors on tue l'intervalle puis on copie ds la BD le texte et au retour de l'opération XHR, on copie le timestamp courant vers le "dernier timestamp"(de sauvegarde)
--[] autre idée : au lieu d'utiliser une variable "globale" pour retenir le texte et les notes (applicable aussi aux "entitées" dans un deuxième temps), utiliser le "web storage", si indisponible alors seulement là utiliser une var globale!
+- [] autosave texte principal, solution 3: autosave, autre idée : un timeinterval aux secondes, onKeyUp on enregistre la date en timestamp, une autre variable enregistre le timestamp de la dernière sauvegarde; si le temps au moment du timeInterval entre les deux timeStamps >= disons 7 secondes, alors on tue l'intervalle puis on copie ds la BD le texte et au retour de l'opération XHR, on copie le timestamp courant vers le "dernier timestamp"(de sauvegarde)
+- [] autre idée : au lieu d'utiliser une variable "globale" pour retenir le texte et les notes (applicable aussi aux "entitées" dans un deuxième temps), utiliser le "web storage", si indisponible alors seulement là utiliser une var globale!
 - [x] petit bug : le bouton "lire entitées" de la page Édition ne lit pas tout les entitées, un peu normal, il faut autant de requêtes que de types, pour la démo je pourrais le faire (tout les appels)
 - [ ] bug : le retour de "execXHR_Request" elle-même n'est pas traité, c'est à dire que si la fonction retourne purement FALSE (le fureteur du client ne supporte pas XHR), cette erreur n'est traité (je crois) par aucun de mes "wrappers".
--[ ] pour editionProjet.xhr.php>>oper=deplacer, voir ce que j'ai fait avec assistant_creation.xhr.php>>creerLeRoman pour ce qui est de la multi-mise à jour en une seule requête
+- [ ] (lié au dragNdrop) pour editionProjet.xhr.php>>oper=deplacer, voir ce que j'ai fait avec assistant_creation.xhr.php>>creerLeRoman pour ce qui est de la multi-mise à jour en une seule requête
 - [x] bug : encodage pas au point ou cest pcq jai pas updater page edition avec les ameliorations de creation... hum ... ??? O_o spécifiquement les guillemets
 - [x] menage code mort!!!
 - [x] tout re-commenter
@@ -24,16 +25,17 @@ To Do:
 -[x]onglet fct qui lit, si pour un type il y as 0 entrées ds la BD alors "first" ==0 pour savoir que au moins as été lu... malgré que si l'entrée array existe, c'est qu'on as au moins essayé de lire...
 -[x] copier ce qui est pertinent du code pour les onglets entités vers les onglet textePrincipal et Notes globales
 -[x] changer création Roman ds BD pour enregistrer le synopsis aussi dans champs notes
--[] créer fct qui ajoute des boutons pour modifier les entitées et fct onblur qui fait ESC/restaure le texte à partir de la mémoire. Btns poppent... non btns sont ajouté à la création, pê ajouter une couche de DIV (si overflow hidden pas suffisant ou que visuellement ça fct pas)? laisser les gars faire mieux
-	-[] {entitées} faire la copie des span vers la mémoire quand l'usager clique le bouton [accepter] -et- vers la BD
-	-[] {entitées} faire la copie de la mémoire vers les span quand l'usager clique le bouton [annuler]
+- ~~ [] créer fct qui ajoute des boutons pour modifier les entitées et fct onblur qui fait ESC/restaure le texte à partir de la mémoire. Btns poppent... non ~~
+- [] btns pour modifier les entitées sont ajouté à la création, pê ajouter une couche de DIV (si overflow hidden pas suffisant ou que visuellement ça fct pas)? laisser les gars faire mieux
+	- [] {entitées} faire la copie des span vers la mémoire quand l'usager clique le bouton [accepter] -et- vers la BD
+	- [] {entitées} faire la copie de la mémoire vers les span quand l'usager clique le bouton [annuler]
 -[] ajouter mini-toolbar pour faire l'ajout d'entitées
 -[] ajouter mini-toolbar aux entitées pour edit (ou commence avec un dbl-click?) et delete
 -ne pas faire le truc d'inspiration!
 -ne pas oublier le drag'n'drop, voir où mettre le fameux icône
--pour le probleme de note "deleted", sur restauration on la replace à la toute fin? càd que son prev devient celui qui as next==0 et elle hérite elle-même de next=0
--entitées et romans deleted, comment proposer la liste? mettre une sorte de poubelle?
--nouvelle page admin, affiche sur chaque ligne : nom roman, nom usager, genre littéraire, bouton DELETE
+- [] pour le probleme de note "deleted", sur restauration on la replace à la toute fin? càd que son prev devient celui qui as next==0 et elle hérite elle-même de next=0
+- [] entitées et romans deleted, comment proposer la liste? mettre une sorte de poubelle?
+- [] nouvelle page admin, affiche sur chaque ligne : nom roman, nom usager, genre littéraire, état DELETED, bouton DELETE (ou pour les deux derniers, bouton del/undel)
 
 ============================================
 
@@ -68,6 +70,7 @@ TODO:
 - [x] reprendre assets/inc/header.inc.php et corriger la description et les keywords, autant faire ça correctement pour le SEO ;)
 - [ ] voir http://www.fakenamegenerator.com/faq.php :: http://www.roguebasin.com/index.php?title=Random_name_generation :: http://www.godpatterns.com/2005/09/name-generators-for-npcs-to-populate.html
 
+
 ####Page selectionProjet ::
 - [x] fonction qui retourne les projets existants de l'usager en notation JSON (parce que plus efficace que ma façon de "parser" du TP de HTML5 et avant!!)
 - [x] vérifier sinon coder la fonction qui retourne tout les romans de l'usager
@@ -84,10 +87,10 @@ TODO:
 - [x] fonction qui ne retourne -que- les noms/ID des genres
 - [x] déterminer si pour la lecture des données du genre choisi, une seule fonction retourne tout ou si on as une fonction qui initialise(avec retour de la première question et du nombre total de questions) et une qui demande la suite pour répondre FALSE s'il n'y as rien d'autres ?
 - [x] fonction avec jQuery pour créer les balises nécessaire pour afficher les questions
-- [ ] fonction qui enregistre tout
+- [x] fonction qui enregistre tout
 - [x] fonction pour créer le Roman dans les tables roman_details et roman_texte
 - [x] fonction qui encode les texte, doit être globale et utilisable par n'importe quel fichier (création + édition)
-- [ ] fonction qui DÉcode les texte, doit être globale et utilisable par n'importe quel fichier
+- [x] fonction qui DÉcode les texte, doit être globale et utilisable par n'importe quel fichier
 - [x] faire la page des questions avec ce que Thomas as créé en page et en data
 - [x] fonction sauvegardertexte pas finie, manque les params
 - [x] changer la fonction afficherAttente, elle doit maintenant : 1. occulter le FORM et le BUTTON de 'next'; 2. afficher un DIV ou P dédié et placé -avant- le FORM; 3. créer une fonction opposée? L'idée est de pouvoir cacher le FORM durant la recomposition de son contenu indépendamment; 4. lui donner aussi un param pour le message! si pas là, mettre un défaut :)

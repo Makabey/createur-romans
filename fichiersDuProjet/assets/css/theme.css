@@ -267,7 +267,8 @@ code {
 	min-width: 300px;
 	margin-bottom: 20px;
 }
-
+/*
+// Ajouts Eric
 .mode_edition .custom-ul>li.active{
 	-moz-border-bottom-colors: none;
     -moz-border-left-colors: none;
@@ -290,6 +291,8 @@ code {
     position: relative;
 	cursor:pointer;
 }
+// \Ajouts Eric
+*/
 /*
  * END EDITION CLIENT
  */
@@ -383,3 +386,45 @@ code {
 /*
  * END MEDIA QUERIES
  */
+ 
+ /*
+ * General -- Eric
+ */ 
+ .waitCircle{
+	-o-animation: eternalRotation 1.5s infinite linear;
+	-ms-animation: eternalRotation 1.5s infinite linear;
+	-moz-animation: eternalRotation 1.5s infinite linear;
+	-webkit-animation: eternalRotation 1.5s infinite linear;
+    animation: eternalRotation 1.5s infinite linear;
+	margin-right:10px;
+}
+
+@-o-keyframes eternalRotation {
+    from {-moz-transform:rotate(0deg);}
+    to {-moz-transform:rotate(360deg);}
+} 
+
+@-ms-keyframes eternalRotation {
+    from {-moz-transform:rotate(0deg);}
+    to {-moz-transform:rotate(360deg);}
+} 
+
+@-moz-keyframes eternalRotation {
+    from {-moz-transform:rotate(0deg);}
+    to {-moz-transform:rotate(360deg);}
+} 
+
+@-webkit-keyframes eternalRotation {
+    from {webkit-transform:rotate(0deg);}
+    to {webkit-transform:rotate(360deg);}
+}
+
+/* Standard syntax */
+@keyframes eternalRotation {
+    from {transform:rotate(0deg);}
+    to {transform:rotate(360deg);}
+} 
+/*
+ * General -- Eric / Fin
+ */ 
+ 

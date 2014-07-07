@@ -28,7 +28,7 @@ $rootDomaine = ($sNomDeCettePage == "index")?"":"http://localhost/GitHub/createu
 		<!-- Bootstrap core CSS -->
 		<link href="<?php echo $rootDomaine; ?>assets/css/bootstrap.min.css" rel="stylesheet">
 		<!-- Custom css -->
-		<link rel="stylesheet" href="<?php echo $rootDomaine; ?>assets/css/styles.css" media="only screen" />
+		<!-- <link rel="stylesheet" href="<?php #echo $rootDomaine; ?>assets/css/styles.css" media="only screen" /> -->
 		<link rel="stylesheet" href="<?php echo $rootDomaine; ?>assets/css/theme.css">
 		<link rel="stylesheet" href="<?php echo $rootDomaine; ?>assets/css/custom-style.css">
 	</head>
