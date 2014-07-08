@@ -37,7 +37,7 @@ require "../assets/inc/header.inc.php";
 				</li>
 			</ul>
 			<!--<span class="en-tete-aide-memoire">Vos personnages</span>-->
-			<div class="wrap-aide-memoire" id="contenantEntites1">
+			<div class="wrap-aide-memoire"><!-- id="contenantEntites1"> -->
 				<!-- Tout le code est retourné dans le fichier mode_edition.js ~ln 290 -->
 			</div>
 		</div>

@@ -11,8 +11,8 @@ if(($sNomDeCettePage != "index") && (!isset($_SESSION['pseudo']))){
 	exit();
 }
 
-#$rootDomaine = ($sNomDeCettePage == "index")?"":"/fichiersDuProjet/";
-$rootDomaine = ($sNomDeCettePage == "index")?"":"http://localhost/GitHub/createur-romans/fichiersDuProjet/";
+$rootDomaine = ($sNomDeCettePage == "index")?"":"/fichiersDuProjet/";
+#$rootDomaine = ($sNomDeCettePage == "index")?"":"http://localhost/GitHub/createur-romans/fichiersDuProjet/";
 ?>
 <!DOCTYPE html>
 <html lang="fr" xmlns="http://www.w3.org/1999/xhtml">

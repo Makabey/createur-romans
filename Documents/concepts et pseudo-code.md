@@ -36,28 +36,13 @@ To Do:
 - [] pour le probleme de note "deleted", sur restauration on la replace à la toute fin? càd que son prev devient celui qui as next==0 et elle hérite elle-même de next=0
 - [] entitées et romans deleted, comment proposer la liste? mettre une sorte de poubelle?
 - [] nouvelle page admin, affiche sur chaque ligne : nom roman, nom usager, genre littéraire, état DELETED, bouton DELETE (ou pour les deux derniers, bouton del/undel)
+- [] faire un trim (g/d) des espaces avant d'enregistrer une donnée (titre, texte, nom, etc); ajouter ceci (aussi) à la fonction real_escape_string ?
 
-
-possibilite 1: 
--demander a sql next autonum
-(
-$result = mysql_query("SHOW TABLE STATUS LIKE 'table_name'");
-$row = mysql_fetch_array($result);
-$nextId = $row['Auto_increment']; 
-)
--au retour creer interface
--si (usager) accepter (création) alors copie vers memoire et copie vers db qui devrait donner le bon next autonum
-
-possibliter 2:
--creer interface avec 'id' (comme 'class' mais 'id', ex "entite_temporaire") particulier
--envoyer contenu vers BD
--recuperer ID (ds retour de la fct de creation BD)
--effacer interface avec ce 'id'
--creer avec le bon ID (dans 'data-idself', celui de la BD)
--ajouter a array en memoire
-
-possibliliter 3:
--faire comme #2 sauf sans 'id' particulier et avec jQ pointer le dnr enfant "entite" et le tuer pour le recréer une fois que la BD as répondu
+1. clique "btn +" fait crée interface avec défauts texte et contenteditable
+2. clique btn save fait si data-idself == 0 insert, sinon update
+3. si insert, (on recoit le nouvel ID et ) on cherche dernier enfant de balises_entites_base et il dois avoir data-idself == 0 si oui alors le nouvel ID y est copié et on copie dans la mémoire >> a la fin de l'insertion, ne pas oublier [0]['last'] qu'il faut utiliser pour atteindre en mémoire celui qui as next=0, le corriger en lui donnant le ID de la nouvelle entitée et copier le nouvel ID dans [0]['last']
+4. si clique btn cancel alors tuer dnr enfant de balises_entites_base
+5. manque : si une entitée est en mode édition et on clique 'ajouter', alors bloquer l'opération
 
 ============================================
 

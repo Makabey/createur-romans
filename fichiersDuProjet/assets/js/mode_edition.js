@@ -35,7 +35,8 @@ $(function(){
 		$("#"+balise_MainText).data("dirtyBit", true);
 	});
 
-	$(".col-md-8>ul>li").click(function(){
+	//$(".col-md-8>ul>li").click(function(){
+	$("#edition-boite-textePrincipal>ul>li").click(function(){
 		if(!$(this).hasClass("active")){
 			$(this).parent().children(".active").removeClass("active");
 			$(this).addClass("active");
@@ -69,67 +70,88 @@ $(function(){
 		TraiterClickOnglets($(this));
 	});
 
+	$("#"+balises_entites_base).on('click', '.aide-memoire-boutons-edition button', function(){
+		// Boutons "sauvegarder"/"annuler" des conteneurs "entitées"
+		var idSelf = $(this).parents('.aide-memoire').data('idself');
+		var spanChilds;
+		var typeEntite;
+		var iCmpt;
+		
+		console.log($(this).data("btntype"));
+		if($(this).data("btntype") == "cancel"){
+			if(idSelf == 0){
+				// Si le bouton appartient à une entité dont le idself = 0, donc c'est une nouvelle entitée non-enregistrée
+				console.log("idself=0");
+				$(this).parents('.aide-memoire').remove();
+			}else{
+				// annuler changements
+				console.log("annuler changements");
+				//$("#"+balises_entites_base+">div").find("span[contenteditable='true']").length
+				$(this).parents('.aide-memoire').find("span[contenteditable='true']").removeAttr("contenteditable");
+				spanChilds = $(this).parents('.aide-memoire').find("span");
+				typeEntite = $("#"+balises_entites_base+">ul .active a").text();
+				typeEntite = typeEntite.toLowerCase();
+				typeEntite = typeEntite.replace('ù', 'u');
+				typeEntite = typeEntite.replace('é', 'e');
+				console.log(spanChilds);
+				console.log(gblEntites[typeEntite][idSelf]);
+				for(iCmpt=0;iCmpt<spanChilds.length;iCmpt++){
+					switch(iCmpt){
+						case 0: spanChilds[0].innerHTML = gblEntites[typeEntite][idSelf]['titre']; break;
+						case 1: spanChilds[1].innerHTML = gblEntites[typeEntite][idSelf]['contenu']; break;
+						case 2: spanChilds[2].innerHTML = gblEntites[typeEntite][idSelf]['note']; break;
+					}
+				}
+			}
+		}else{ // save
+			if($(this).parents('.aide-memoire').data('idself') == 0){
+			// si idself=0 alors insérer
+			}else{
+			// sinon mise à jour
+			}
+		}
+	});
+
+
 	//$(""#"+balises_entites_base .aide-memoire-toolbar>img:first-of-type").click(function(){
 	//$("#"+balises_entites_base).on('click', '.aide-memoire-toolbar>img:first-of-type', function(){
-	$("#"+balises_entites_base).on('click', '.aide-memoire-toolbar .glyphicon-pencil', function(){
+	$("#"+balises_entites_base).on('click', '.aide-memoire-toolbar .glyphicon-list', function(){
 		console.log("click -- dragNdrop");
 	});
 
-	$("#"+balises_entites_base).on('click', '.aide-memoire-toolbar .glyphicon-list', function(){
+	$("#"+balises_entites_base).on('click', '.aide-memoire-toolbar .glyphicon-pencil', function(){
 		console.log("click -- ajouter");
+		var contenu = construireCodeEntite(0);
+		//console.log(contenu);
+		
+		// idée : verifier si dnr enfant as id 0, si oui msg erreur et pas de nv entite
+		if($("#"+balises_entites_base+">div>div:last-child").data("idself") == 0){
+			console.log("nouvel enfant déjà en édition!");
+			alert("Erreur!\n\nUne nouvelle entitée est déjà en mode édition!");
+		}else{
+			console.log("je crée un enfant!");
+			$("#"+balises_entites_base+">div").append(contenu);
+		}
 	});
 
 	$("#"+balises_entites_base).on('click', '.aide-memoire-headings>img:first-of-type', function(){
 		console.log("click -- editer");
+		//if($(this).parents('.aide-memoire').data('idself') == 0){
+		//if($(this).parent().children('span').attr('contenteditable') == "true"){
+		console.log($("#"+balises_entites_base+">div").find("span[contenteditable='true']").length);
+		//if($("#"+balises_entites_base).find("span").attr('contenteditable') == "true"){
+		if($("#"+balises_entites_base+">div").find("span[contenteditable='true']").length){
+			console.log("un enfant est déjà en mode édition!");
+			alert("Erreur!\n\nUne entitée est déjà en mode édition!");
+		}else{
+			$(this).parents(".aide-memoire").find("span").attr("contenteditable", "true");
+		}
 	});
 
 	$("#"+balises_entites_base).on('click', '.aide-memoire-headings>img:nth-of-type(2)', function(){
 		var idSelf = $(this).parents(".aide-memoire").data("idself");
 		console.log("click -- effacer (" + idSelf +")");
 	});
-
-	function TraiterClickOnglets(ceci){
-		/*
-			Pour les onglets des entitées, s'occupe de relier l'event click au code XHR
-		*/
-		var typeEntite;
-		var posSpace;
-		//console.log('click');
-		if(!ceci.hasClass("active") && !ceci.hasClass("dropdown")){
-			//ceci.parents(".col-md-4 ul").find(".active").removeClass("active");
-			//ceci.parents("#maincontent>div:nth-child(2)>ul").find(".active").removeClass("active");
-			ceci.parents("#"+balises_entites_base+">ul").find(".active").removeClass("active");
-			ceci.addClass("active");
-			typeEntite = ceci.text();
-			posSpace = typeEntite.indexOf(" ");
-			if(posSpace > 0){
-				typeEntite = typeEntite.substring(0, posSpace);
-			}
-			console.log(typeEntite);
-			//return;
-			typeEntite = typeEntite.toLowerCase();
-			typeEntite = typeEntite.replace('ù', 'u');
-			typeEntite = typeEntite.replace('é', 'e');
-			if(typeEntite == "delit") {
-				// Si c'est le bouton "Délit", ignorer l'évènement
-				return;
-			}
-			//if(gblEntites[typeEntite].length > 0){
-			if(gblEntites[typeEntite] !== undefined){
-				/*if(gblEntites[typeEntite][0]['first'] > 0){
-					console.log(typeEntite + " as au moins 1 membre");
-				}else{
-					console.log(typeEntite + " as déjà été lu mais est vide!");
-				}*/
-				afficherEntites(gblEntites[typeEntite], false);
-			}else{
-				//console.log(typeEntite + " est vide");
-				lireEntites(afficherEntites, traiterErreurs, idRoman, typeEntite);
-			}
-		//}else{
-		//	console.log("L'onglet est deja active");
-		}
-	}
 
 	/*$("#"+balises_entites_base).on('dblclick', 'div.aide-memoire', function(){
 		console.log("aide-memoire :: click! ("+$(this).data("idself")+")");
@@ -225,12 +247,11 @@ function modifierEntite(fctTraitementPositif, fctTraitementNegatif, idRoman, typ
 	execXHR_Request("../assets/xhr/mode_edition.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }*/
 
-
-//possiblement autre param avec le numeroe a utiliser pour inserer?
 function insererEntite(fctTraitementPositif, fctTraitementNegatif, idRoman, typeEntite, titre, contenu, noteEntite){
 	var XHR_Query = "oper=inserer&typeEntite="+typeEntite+"&idRoman="+idRoman+"&titre="+titre+"&contenu="+contenu+"&note="+noteEntite;
 	execXHR_Request("../assets/xhr/mode_edition.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
+
 /*
 function deplacerEntite(fctTraitementPositif, fctTraitementNegatif, idRoman, typeEntite, idEntite, id_prev, id_next){
 	/ *
@@ -271,8 +292,88 @@ function sauvegarderTexte(fctTraitementPositif, fctTraitementNegatif, idRoman, n
 	FONCTIONS GLOBALES
 	=N/A=
 *********************/
+function TraiterClickOnglets(ceci){
+	/*
+		Pour les onglets des entitées, s'occupe de relier l'event click au code XHR
+	*/
+	var typeEntite;
+	var posSpace;
+	//console.log('click');
+	if(!ceci.hasClass("active") && !ceci.hasClass("dropdown")){
+		//ceci.parents(".col-md-4 ul").find(".active").removeClass("active");
+		//ceci.parents("#maincontent>div:nth-child(2)>ul").find(".active").removeClass("active");
+		ceci.parents("#"+balises_entites_base+">ul").find(".active").removeClass("active");
+		ceci.addClass("active");
+		typeEntite = ceci.text();
+		posSpace = typeEntite.indexOf(" ");
+		if(posSpace > 0){
+			typeEntite = typeEntite.substring(0, posSpace);
+		}
+		console.log(typeEntite);
+		//return;
+		typeEntite = typeEntite.toLowerCase();
+		typeEntite = typeEntite.replace('ù', 'u');
+		typeEntite = typeEntite.replace('é', 'e');
+		if(typeEntite == "delit") {
+			// Si c'est le bouton "Délit", ignorer l'évènement
+			return;
+		}
+		//if(gblEntites[typeEntite].length > 0){
+		if(gblEntites[typeEntite] !== undefined){
+			/*if(gblEntites[typeEntite][0]['first'] > 0){
+				console.log(typeEntite + " as au moins 1 membre");
+			}else{
+				console.log(typeEntite + " as déjà été lu mais est vide!");
+			}*/
+			afficherEntites(gblEntites[typeEntite], false);
+		}else{
+			//console.log(typeEntite + " est vide");
+			lireEntites(afficherEntites, traiterErreurs, idRoman, typeEntite);
+		}
+	//}else{
+	//	console.log("L'onglet est deja active");
+	}
+}
 
 
+function construireCodeEntite(curIndex){
+	/*
+		Normalement cette fonction recoit 1 paramêtre qui doit être un array contenant les détails de l'entité pour laquelle les balises doivent être construites
+	*/
+	var donnees;
+	var contenu = '';
+	var editable = '';
+
+	if(arguments[1] === undefined){
+		donnees = {'titre':"Tapez votre titre ici", 'contenu':"Entrez votre texte ici", 'note':"Les notes vont ici"};
+		curIndex = 0;
+		editable = ' contenteditable="true"';
+	}else{
+		donnees= arguments[1];
+	}
+		contenu += '<div class="aide-memoire" data-idself="'+curIndex+'">';
+
+		contenu += '	<div class="aide-memoire-headings"><span'+editable+'>'+donnees['titre']+'</span><img src="../assets/images/toolbars/contract2_pencil.png" alt="Éditer cette entitée" /><img src="../assets/images/toolbars/trash_can_add.png" alt="Effacer cette entitée" /></div>';
+
+		contenu += '	<div class="aide-memoire-content">';
+		contenu += '		<span'+editable+'>(contenu -&gt;) '+donnees['contenu']+'</span>';
+		contenu += '	</div>';
+		contenu += '	<div class="aide-memoire-notes">';
+		contenu += '		<span'+editable+'>(notes -&gt;) ';
+		if(donnees['note'] !== null){
+			contenu += donnees['note'];
+			}
+		contenu += '</span>';
+		contenu += '	</div>';
+		contenu += '	<div class="aide-memoire-boutons-edition">';
+		contenu += '		<button type="button" data-btntype="save"><img src="../assets/images/toolbars/checkmark_pencil.png" alt="Accepter les changements" />Sauvegarder</button>';
+		contenu += '		<button type="button" data-btntype="cancel"><img src="../assets/images/toolbars/close_pencil.png" alt="Annuler les changements" />Annuler</button>';
+		contenu += '	</div>';
+		contenu += "</div>\n\n";
+
+		//curIndex = donnees[curIndex]['ID_next'];
+	return contenu;
+}
 /**********************
 	FONCTIONS DE TRAITEMENT DES RETOURS POSITIFS
 	(C'est à dire, quand la requête XHR s'est complètée correctement. Ici on réagit selon le
@@ -298,7 +399,7 @@ function afficherEntites(donnees){
 		Affiche les entitées contenues dans "donnees"
 
 		Fait principalement de la génération de balise et de la copie de contenu/propriétés à partir du tableau "donnees"
-		
+
 		donnees : les donnees à traiter
 		s'il y as un second parametre : indique qu'il ne faut pas pré-traiter les données avec JSON
 	*/
@@ -307,10 +408,10 @@ function afficherEntites(donnees){
 	if(arguments[1] === undefined){
 		donnees = JSON.parse(donnees); // contraire :: JSON.stringify(array);
 		gblEntites[donnees[0]['typeEntite']] = donnees;
-		//console.log("[afficherEntites] j'ai chargé les entites");
+		console.log("[afficherEntites] j'ai chargé les entites");
 	}
 
-	//console.log(donnees);
+	console.log(donnees);
 	var contenu='';
 	var curIndex = donnees[0]['first'];
 	//var typeEntite = donnees[0]['typeEntite'];
@@ -320,10 +421,9 @@ function afficherEntites(donnees){
 	//contenu += '<div class="aide-memoire-toolbar"><span class="toolbar-title">'+donnees[0]['typeEntite']+'</span><img src="../assets/images/toolbars/list.png" alt="drag and drop" /><img src="../assets/images/toolbars/pencil_add.png" /></div>';
 	contenu += '<div class="aide-memoire-toolbar"><span class="toolbar-title">'+entiteOnglet+'</span><span class="glyphicon glyphicon-pencil"></span><span class="glyphicon glyphicon-list"></span></div>';
 
-
 	if(curIndex !== null){
 		// 	Créer l'interface dans le parent donnees[0]['target']
-		$("#"+balises_entites_base).html('');
+		//$("#"+balises_entites_base).html('');
 		do{
 			/*contenu += '<div class="aide-memoire" data-idself="'+curIndex+'">';
 
@@ -345,7 +445,8 @@ function afficherEntites(donnees){
 			contenu += '	</div>';
 			contenu += "</div>\n\n";*/
 
-			$("#"+balises_entites_base).append(construireCodeEntite(curIndex, donnees[curIndex]));
+			//$("#"+balises_entites_base).append(construireCodeEntite(curIndex, donnees[curIndex]));
+			contenu +=  construireCodeEntite(curIndex, donnees[curIndex]);
 			curIndex = donnees[curIndex]['ID_next'];
 		}while(curIndex != 0);
 
@@ -360,40 +461,9 @@ function afficherEntites(donnees){
 		contenu += 'data-idself="0">';
 		contenu += '	<div class="aide-memoire-headings"><span>Aucune entitées pour ce type.</span></div>';
 		contenu += "</div>\n\n";
-		$("#"+balises_entites_base).html(contenu);
+		//$("#"+balises_entites_base).html(contenu);
 	}
-	//$("#"+balises_entites_base+">div").html(contenu);
-}
-
-function construireCodeEntite(){
-	/*
-		Normalement cette fonction recoit 1 paramêtre qui doit être un array contenant les détails de l'entité pour laquelle les balises doivent être construites
-	*/
-	if(arguments[0] === undefined){
-		var donnees = {'titre':"Tapez votre titre ici", 'contenu':"Entrez votre texte ici", 'note':"Les notes vont ici"};
-	}
-		contenu += '<div class="aide-memoire" data-idself="'+curIndex+'">';
-
-		contenu += '	<div class="aide-memoire-headings"><span>'+donnees['titre']+'</span><img src="../assets/images/toolbars/contract2_pencil.png" alt="Éditer cette entitée" /><img src="../assets/images/toolbars/trash_can_add.png" alt="Effacer cette entitée" /></div>';
-
-		contenu += '	<div class="aide-memoire-content">';
-		contenu += '		<span>(contenu -&gt;) '+donnees['contenu']+'</span>';
-		contenu += '	</div>';
-		contenu += '	<div class="aide-memoire-notes">';
-		contenu += '		<span>(notes -&gt;) ';
-		if(donnees['note'] !== null){
-			contenu += donnees['note'];
-			}
-		contenu += '</span>';
-		contenu += '	</div>';
-		contenu += '	<div class="aide-memoire-boutons-edition">';
-		contenu += '		<button type="button" data-btntype="save"><img src="../assets/images/toolbars/checkmark_pencil.png" alt="Accepter les changements" />Sauvegarder</button>';
-		contenu += '		<button type="button" data-btntype="cancel"><img src="../assets/images/toolbars/close_pencil.png" alt="Annuler les changements" />Annuler</button>';
-		contenu += '	</div>';
-		contenu += "</div>\n\n";
-
-		//curIndex = donnees[curIndex]['ID_next'];
-	
+	$("#"+balises_entites_base+">div").html(contenu);
 }
 
 function afficherRoman(donnees){
