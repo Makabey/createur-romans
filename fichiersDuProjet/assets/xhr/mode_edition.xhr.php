@@ -197,7 +197,7 @@ function lireDonneesEntite($db){
 				if($resultat[0]['first'] === null){
 					$resultat[0]['first'] = $ID_entite;
 				}
-				if($row[1] === 0){ // ID_next
+				if($row[1] == 0){ // ID_next
 					$resultat[0]['last'] = $ID_entite;
 				}
 				$resultat[$ID_entite] = array_combine($arrChamps_entites, $row);
@@ -256,8 +256,8 @@ function miseAJourDonneesEntite($db){
 		if(false !== $result){
 			if($db->affected_rows){
 				$resultat = "1¬[" . __FUNCTION__ . "] UPDATE successful\n\n '$query'";
-			}else{
-				$resultat = "0¬[" . __FUNCTION__ . "] UPDATE didn't occur (most probably because there was nothing to change)\n\n $query";
+			#}else{
+			#	$resultat = "0¬[" . __FUNCTION__ . "] UPDATE didn't occur (most probably because there was nothing to change)\n\n $query";
 			}
 		}else{
 			$resultat = "0¬[" . __FUNCTION__ . "] An error occured during an UPDATE operation.\n\n" . $db->error . "\n\n $query";
@@ -277,8 +277,12 @@ function insererEntite($db){ // pour le moment ne s'appliquerais qu'aux entitée
 	$resultat = $db->query ($query);
 	// Tenter d'insérer une nouvelle entitée
 	if(false !== $resultat){
-		$row = $resultat->fetch_row();
-		$ID_prev = $row[0]+0; // Le "+0" est pour les cas où le nouvel enregistrement est le premier pour un type d'entite, évite de faire un appel à $resultat->num_rows
+		if($resultat->num_rows > 0){
+			$row = $resultat->fetch_row();
+			$ID_prev = $row[0];
+		}else{
+			$ID_prev = 0;
+		}
 
 		$_POST['titre'] = real_escape_string($_POST['titre'], $db);
 		$_POST['contenu'] = real_escape_string($_POST['contenu'], $db);
@@ -294,19 +298,25 @@ function insererEntite($db){ // pour le moment ne s'appliquerais qu'aux entitée
 	if(false !== $resultat){
 		$ID_entite = $db->insert_id;
 
-		$query = 'UPDATE entites SET ID_next = ' . $ID_entite . ' WHERE ID_entite = ' . $ID_prev . ';';
-		$queryType = "n UPDATE";
+		if($ID_prev > 0){
+			$query = 'UPDATE entites SET ID_next = ' . $ID_entite . ' WHERE ID_entite = ' . $ID_prev . ';';
+			$queryType = "n UPDATE";
 
-		$resultat = $db->query ($query);
+			$resultat = $db->query ($query);
+		}
 	}
 
 	// Traitement des erreurs!
 	if(false !== $resultat){
-		if($db->affected_rows){
-			#$resultat = "1¬[" . __FUNCTION__ . "] INSERT successful. New ID is " . $ID_entite;
-			$resultat = "1¬" . $ID_entite;
+		if($ID_prev > 0){
+			if($db->affected_rows){
+				#$resultat = "1¬[" . __FUNCTION__ . "] INSERT successful. New ID is " . $ID_entite;
+				$resultat = "1¬" . $ID_entite;
+			}else{
+				$resultat = "0¬[" . __FUNCTION__ . "] UPDATE phase didn't occur\n\n $query";
+			}
 		}else{
-			$resultat = "0¬[" . __FUNCTION__ . "] UPDATE phase didn't occur\n\n $query";
+			$resultat = "1¬" . $ID_entite;
 		}
 	}else{
 		$resultat = "0¬[" . __FUNCTION__ . "] An error occured during a$queryType operation.\n\n" . $db->error . "\n\n $query";

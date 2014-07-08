@@ -24,6 +24,7 @@ var balise_MainText = "main_write";
 var balises_entites_base = "edition-boite-entites";
 var gblRoman;
 var gblEntites = new Array();
+var gblEntiteEnCoursEdition = -1; // si -1 alors aucune entitée en édition
 
 /**********************
 	EVENT HANDLERS
@@ -63,53 +64,79 @@ $(function(){
 	});
 
 	$("#"+balises_entites_base+">ul>li").click(function(){
-		TraiterClickOnglets($(this));
+		TraiterClickOnglets_Entites($(this));
 	});
 
 	$("#"+balises_entites_base+">ul>li>ul>li").click(function(){
-		TraiterClickOnglets($(this));
+		TraiterClickOnglets_Entites($(this));
 	});
 
 	$("#"+balises_entites_base).on('click', '.aide-memoire-boutons-edition button', function(){
-		// Boutons "sauvegarder"/"annuler" des conteneurs "entitées"
-		var idSelf = $(this).parents('.aide-memoire').data('idself');
+		/*
+			Boutons "sauvegarder"/"annuler" des conteneurs "entitées"
+		*/
+		var idEntite = $(this).parents('.aide-memoire').data('idself');
 		var spanChilds;
 		var typeEntite;
 		var iCmpt;
 		
 		console.log($(this).data("btntype"));
-		if($(this).data("btntype") == "cancel"){
-			if(idSelf == 0){
+		console.log(idEntite);
+		if($(this).data("btntype") == "cancel"){ // BOUTON "ANNULER"
+			if(idEntite == 0){
 				// Si le bouton appartient à une entité dont le idself = 0, donc c'est une nouvelle entitée non-enregistrée
 				console.log("idself=0");
 				$(this).parents('.aide-memoire').remove();
 			}else{
 				// annuler changements
 				console.log("annuler changements");
-				//$("#"+balises_entites_base+">div").find("span[contenteditable='true']").length
-				$(this).parents('.aide-memoire').find("span[contenteditable='true']").removeAttr("contenteditable");
-				spanChilds = $(this).parents('.aide-memoire').find("span");
 				typeEntite = $("#"+balises_entites_base+">ul .active a").text();
 				typeEntite = typeEntite.toLowerCase();
 				typeEntite = typeEntite.replace('ù', 'u');
 				typeEntite = typeEntite.replace('é', 'e');
+				//$("#"+balises_entites_base+">div").find("span[contenteditable='true']").length
+				$(this).parents('.aide-memoire').find("span[contenteditable='true']").removeAttr("contenteditable");
+				spanChilds = $(this).parents('.aide-memoire').find("span");
 				console.log(spanChilds);
-				console.log(gblEntites[typeEntite][idSelf]);
+				console.log(gblEntites[typeEntite][idEntite]);
+				// Restaurer les valeurs selon la mémoire
 				for(iCmpt=0;iCmpt<spanChilds.length;iCmpt++){
 					switch(iCmpt){
-						case 0: spanChilds[0].innerHTML = gblEntites[typeEntite][idSelf]['titre']; break;
-						case 1: spanChilds[1].innerHTML = gblEntites[typeEntite][idSelf]['contenu']; break;
-						case 2: spanChilds[2].innerHTML = gblEntites[typeEntite][idSelf]['note']; break;
+						case 0: spanChilds[0].innerHTML = gblEntites[typeEntite][idEntite]['titre']; break;
+						case 1: spanChilds[1].innerHTML = gblEntites[typeEntite][idEntite]['contenu']; break;
+						case 2: spanChilds[2].innerHTML = gblEntites[typeEntite][idEntite]['note']; break;
 					}
 				}
 			}
-		}else{ // save
-			if($(this).parents('.aide-memoire').data('idself') == 0){
-			// si idself=0 alors insérer
+		//	gblEntiteEnCoursEdition = -1;
+		}else{ // BOUTON "SAUVEGARDER"
+			typeEntite = $("#"+balises_entites_base+">ul .active a").text();
+			typeEntite = typeEntite.toLowerCase();
+			typeEntite = typeEntite.replace('ù', 'u');
+			typeEntite = typeEntite.replace('é', 'e');
+			spanChilds = $(this).parents('.aide-memoire').find("span");
+			//idEntite = 999; // on ne connais pas le ID réel maintenant
+			gblEntites['temp'] = new Array();
+			gblEntites['temp']['titre'] = spanChilds[0].innerHTML;
+			gblEntites['temp']['contenu'] = spanChilds[1].innerHTML;
+			gblEntites['temp']['note'] = spanChilds[2].innerHTML;
+			gblEntites['temp']['typeEntite'] = typeEntite;
+			gblEntites['temp']['idEntite'] = idEntite;
+			console.log(gblEntites['temp']);
+			console.log(typeEntite);
+
+			//if($(this).parents('.aide-memoire').data('idself') == 0){
+			if(idEntite == 0){
+				// si idself=0 alors insérer
+				insererEntite(insererEntiteRetour, traiterErreurs, idRoman, typeEntite, gblEntites['temp']['titre'], gblEntites['temp']['contenu'], gblEntites['temp']['note']);
 			}else{
-			// sinon mise à jour
+				// sinon mise à jour
+				console.log(idEntite);
+				modifierEntite(MaJ_EntiteRetour, traiterErreurs, idRoman, typeEntite, gblEntites['temp']['titre'], gblEntites['temp']['contenu'], gblEntites['temp']['note'], idEntite);
+				console.log(idEntite);
 			}
 		}
+		gblEntiteEnCoursEdition = -1;
 	});
 
 
@@ -120,37 +147,66 @@ $(function(){
 	});
 
 	$("#"+balises_entites_base).on('click', '.aide-memoire-toolbar .glyphicon-pencil', function(){
+		/*
+			Ajout d'une entitée
+		*/
 		console.log("click -- ajouter");
-		var contenu = construireCodeEntite(0);
-		//console.log(contenu);
-		
-		// idée : verifier si dnr enfant as id 0, si oui msg erreur et pas de nv entite
-		if($("#"+balises_entites_base+">div>div:last-child").data("idself") == 0){
-			console.log("nouvel enfant déjà en édition!");
-			alert("Erreur!\n\nUne nouvelle entitée est déjà en mode édition!");
-		}else{
+		var contenu = '';
+		// Vérifie s'il y as ou non une entitée en édition ou si c'est une nouvelle entitée
+		if(gblEntiteEnCoursEdition == -1){
 			console.log("je crée un enfant!");
+			contenu = construireCodeEntite(0);
 			$("#"+balises_entites_base+">div").append(contenu);
+			gblEntiteEnCoursEdition = 0;
+		}else if(gblEntiteEnCoursEdition == 0){
+		//if($("#"+balises_entites_base+">div>div:last-child").data("idself") == 0){
+			alert("Erreur!\n\nUne nouvelle entitée est déjà en mode édition!");
+			console.log("nouvel enfant déjà en édition!");
+		}else{
+			alert("Erreur!\n\nUne entitée est déjà en mode édition");
+			console.log("Un enfant déjà en édition!");
 		}
 	});
 
 	$("#"+balises_entites_base).on('click', '.aide-memoire-headings>img:first-of-type', function(){
+		/*
+			Éditer l'entitée
+		*/
 		console.log("click -- editer");
 		//if($(this).parents('.aide-memoire').data('idself') == 0){
 		//if($(this).parent().children('span').attr('contenteditable') == "true"){
-		console.log($("#"+balises_entites_base+">div").find("span[contenteditable='true']").length);
+		//console.log($("#"+balises_entites_base+">div").find("span[contenteditable='true']").length);
 		//if($("#"+balises_entites_base).find("span").attr('contenteditable') == "true"){
-		if($("#"+balises_entites_base+">div").find("span[contenteditable='true']").length){
+		//if($("#"+balises_entites_base+">div").find("span[contenteditable='true']").length){
+		if(gblEntiteEnCoursEdition == $(this).parents('.aide-memoire').data('idself')){
+			console.log("CET enfant est déjà en mode édition!");
+			alert("Erreur!\n\nCette entitée est déjà en mode édition!");
+		}else if(gblEntiteEnCoursEdition > -1){
 			console.log("un enfant est déjà en mode édition!");
 			alert("Erreur!\n\nUne entitée est déjà en mode édition!");
 		}else{
 			$(this).parents(".aide-memoire").find("span").attr("contenteditable", "true");
+			gblEntiteEnCoursEdition = $(this).parents(".aide-memoire").data("idself");
 		}
 	});
 
 	$("#"+balises_entites_base).on('click', '.aide-memoire-headings>img:nth-of-type(2)', function(){
-		var idSelf = $(this).parents(".aide-memoire").data("idself");
-		console.log("click -- effacer (" + idSelf +")");
+		/*
+			Effacer l'entitée
+		*/
+		var idEntite;
+
+		if(gblEntiteEnCoursEdition == -1){
+			idEntite = $(this).parents(".aide-memoire").data("idself");
+			console.log("click -- effacer (" + idEntite +")");
+			//manque code pour faire l'effacement
+			//var etatDeleted = false;
+			//effacerEntite(deplacerEntiteRetour, traiterErreurs, idRoman, typeEntite, idEntite, etatDeleted);
+		}else	if(gblEntiteEnCoursEdition == $(this).parents('.aide-memoire').data('idself')){
+			alert("Erreur!\n\nVeuillez annuler l'édition de cette entitée avant de lancer une autre opération!");
+		}else{
+			alert("Erreur!\n\nVeuillez terminer l'édition de l'entitée en cours avant de lancer une autre opération!");
+		}
 	});
 
 	/*$("#"+balises_entites_base).on('dblclick', 'div.aide-memoire', function(){
@@ -177,34 +233,8 @@ $(function(){
 		}else{
 			console.log("btn_save / DirtyBit :: False");
 		}
-	});*/
-
-	/*$("#btn_lireEntites").click(function(){
-		/ *
-			Charger les entitees de type "qui"
-		* /
-		var typeEntite = "qui";
-		var containerEntites = balises_entites_base + typeEntite;
-		lireEntites(afficherEntites, traiterErreurs, idRoman, typeEntite, containerEntites);
 	});
-
-	$("#btn_saveEntite").click(function(){
-		var typeEntite = "pourquoi";
-		var contenu = 'blablablablabla';
-		var noteEntite="";
-		var titre = "test7";
-		insererEntite(insererEntiteRetour, traiterErreurs, idRoman, typeEntite, titre, contenu, noteEntite);
-	});
-
-	$("#btn_updEntite").click(function(){
-		var typeEntite = "comment";
-		var idEntite = 19;
-		var titre = "updated5";
-		var contenu = 'whacka';
-		var noteEntite = "hum";
-		modifierEntite(MaJ_EntiteRetour, traiterErreurs, idRoman, typeEntite, idEntite, titre, contenu, noteEntite);
-	});
-
+	
 	$("#btn_moveEntite").click(function(){
 		var typeEntite = "qui";
 		var nvTypeEntite = "quoi"; // <-- optionnel, ici pour illustrer que c'est supporté, de pouvoir déplacer de type une entitée
@@ -215,12 +245,7 @@ $(function(){
 		deplacerEntite(deplacerEntiteRetour, traiterErreurs, idRoman, typeEntite, idEntite, id_prev, id_next, nvTypeEntite);
 	});
 
-	$("#btn_deleteEntite").click(function(){
-		var typeEntite = "quoi";
-		var idEntite = 11;
-		var etatDeleted = false;
-		effacerEntite(deplacerEntiteRetour, traiterErreurs, idRoman, typeEntite, idEntite, etatDeleted);
-	});*/
+*/
 
 	if(idRoman > 0){
 		$("#balise_MainText").hide();
@@ -241,11 +266,11 @@ function lireEntites(fctTraitementPositif, fctTraitementNegatif, idRoman, typeEn
 	execXHR_Request("../assets/xhr/mode_edition.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
 
-/*
-function modifierEntite(fctTraitementPositif, fctTraitementNegatif, idRoman, typeEntite, idEntite, titre, contenu, noteEntite){
+function modifierEntite(fctTraitementPositif, fctTraitementNegatif, idRoman, typeEntite, titre, contenu, noteEntite, idEntite){
 	var XHR_Query = "oper=ecrire&typeEntite="+typeEntite+"&idRoman="+idRoman+"&titre="+titre+"&contenu="+contenu+"&note="+noteEntite+"&idEntite="+idEntite;
+	console.log(XHR_Query);
 	execXHR_Request("../assets/xhr/mode_edition.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
-}*/
+}
 
 function insererEntite(fctTraitementPositif, fctTraitementNegatif, idRoman, typeEntite, titre, contenu, noteEntite){
 	var XHR_Query = "oper=inserer&typeEntite="+typeEntite+"&idRoman="+idRoman+"&titre="+titre+"&contenu="+contenu+"&note="+noteEntite;
@@ -292,43 +317,52 @@ function sauvegarderTexte(fctTraitementPositif, fctTraitementNegatif, idRoman, n
 	FONCTIONS GLOBALES
 	=N/A=
 *********************/
-function TraiterClickOnglets(ceci){
+function TraiterClickOnglets_Entites(ceci){
 	/*
 		Pour les onglets des entitées, s'occupe de relier l'event click au code XHR
 	*/
 	var typeEntite;
 	var posSpace;
+	var bProceder = true; // si est TRUE, continuer avec le changement d'onglet
 	//console.log('click');
 	if(!ceci.hasClass("active") && !ceci.hasClass("dropdown")){
-		//ceci.parents(".col-md-4 ul").find(".active").removeClass("active");
-		//ceci.parents("#maincontent>div:nth-child(2)>ul").find(".active").removeClass("active");
-		ceci.parents("#"+balises_entites_base+">ul").find(".active").removeClass("active");
-		ceci.addClass("active");
-		typeEntite = ceci.text();
-		posSpace = typeEntite.indexOf(" ");
-		if(posSpace > 0){
-			typeEntite = typeEntite.substring(0, posSpace);
+		if(gblEntiteEnCoursEdition != -1){
+			bProceder = confirm("Attention!\n\nUne entitée est en cours d'édition, vous risquez de perdre des données!\n\nContinuer?");
+			console.log("bProceder = "+bProceder);
+			//return;
 		}
-		console.log(typeEntite);
-		//return;
-		typeEntite = typeEntite.toLowerCase();
-		typeEntite = typeEntite.replace('ù', 'u');
-		typeEntite = typeEntite.replace('é', 'e');
-		if(typeEntite == "delit") {
-			// Si c'est le bouton "Délit", ignorer l'évènement
-			return;
-		}
-		//if(gblEntites[typeEntite].length > 0){
-		if(gblEntites[typeEntite] !== undefined){
-			/*if(gblEntites[typeEntite][0]['first'] > 0){
-				console.log(typeEntite + " as au moins 1 membre");
+		if(bProceder){
+			gblEntiteEnCoursEdition = -1; // on force à "aucune entitée en mode édition"
+			//ceci.parents(".col-md-4 ul").find(".active").removeClass("active");
+			//ceci.parents("#maincontent>div:nth-child(2)>ul").find(".active").removeClass("active");
+			ceci.parents("#"+balises_entites_base+">ul").find(".active").removeClass("active");
+			ceci.addClass("active");
+			typeEntite = ceci.text();
+			posSpace = typeEntite.indexOf(" ");
+			if(posSpace > 0){
+				typeEntite = typeEntite.substring(0, posSpace);
+			}
+			console.log(typeEntite);
+			//return;
+			typeEntite = typeEntite.toLowerCase();
+			typeEntite = typeEntite.replace('ù', 'u');
+			typeEntite = typeEntite.replace('é', 'e');
+			if(typeEntite == "delit") {
+				// Si c'est le bouton "Délit", ignorer l'évènement
+				return;
+			}
+			//if(gblEntites[typeEntite].length > 0){
+			if(gblEntites[typeEntite] !== undefined){
+				/*if(gblEntites[typeEntite][0]['first'] > 0){
+					console.log(typeEntite + " as au moins 1 membre");
+				}else{
+					console.log(typeEntite + " as déjà été lu mais est vide!");
+				}*/
+				afficherEntites(gblEntites[typeEntite], false);
 			}else{
-				console.log(typeEntite + " as déjà été lu mais est vide!");
-			}*/
-			afficherEntites(gblEntites[typeEntite], false);
-		}else{
-			//console.log(typeEntite + " est vide");
-			lireEntites(afficherEntites, traiterErreurs, idRoman, typeEntite);
+				//console.log(typeEntite + " est vide");
+				lireEntites(afficherEntites, traiterErreurs, idRoman, typeEntite);
+			}
 		}
 	//}else{
 	//	console.log("L'onglet est deja active");
@@ -345,7 +379,7 @@ function construireCodeEntite(curIndex){
 	var editable = '';
 
 	if(arguments[1] === undefined){
-		donnees = {'titre':"Tapez votre titre ici", 'contenu':"Entrez votre texte ici", 'note':"Les notes vont ici"};
+		donnees = {'titre':"Tapez votre titre ici", 'contenu':"Entrez votre texte ici", 'note':"Laisser une note"};
 		curIndex = 0;
 		editable = ' contenteditable="true"';
 	}else{
@@ -382,18 +416,60 @@ function construireCodeEntite(curIndex){
 **********************/
 
 function insererEntiteRetour(donnees){
+	var typeEntite = gblEntites['temp']['typeEntite'];
+	var enfant;
+	
 	console.log("[insererEntiteRetour] Retour = ' "+donnees+" '");
+	//gblEntites[gblEntites['temp']['typeEntite']][donnees]['titre'] = gblEntites['temp']['titre'];
+	gblEntites[typeEntite][donnees] = gblEntites['temp'];
+	//gblEntites['temp']['contenu'] = spanChilds[1].innerHTML;
+	//gblEntites['temp']['note'] = spanChilds[2].innerHTML;
+	gblEntites[typeEntite][donnees]['ID_prev'] = gblEntites[typeEntite][0]['last'];
+	gblEntites[typeEntite][donnees]['ID_next'] = 0;
+	gblEntites[typeEntite][gblEntites[typeEntite][0]['last']]['ID_next'] = donnees;
+	gblEntites[typeEntite][0]['last'] = donnees;
+	
+	//$("#"+balises_entites_base+">div>div:last-child").data("idself", "-20");
+	//console.log("idself = " + $("#"+balises_entites_base+">div>div:last-child").data("idself"));
+	$("#"+balises_entites_base+">div>div:last-child").data("idself", donnees);
+	//$("#"+balises_entites_base+">div>div:last-child").attr("data-idself", donnees+"");
+	console.log("idself = " + $("#"+balises_entites_base+">div>div:last-child").data("idself"));
+	//enfant = $("#"+balises_entites_base+">div").find("div[data-idself=0]");
+	//$("#"+balises_entites_base+">div").find("div[data-idself='0']").data("idself") = donnees;
+	//enfant.setAttribute("data-idself") = donnees;
+	//enfant.data("idself", donnees);
+	//console.log(gblEntites[typeEntite]);
+	//console.log(gblEntites['temp']);
+	$("#"+balises_entites_base+">div").find("span[contenteditable='true']").removeAttr("contenteditable");
 }
+
+function MaJ_EntiteRetour(donnees){
+	var typeEntite = gblEntites['temp']['typeEntite'];
+	var idEntite = gblEntites['temp']['idEntite'];
+	
+	console.log("[MaJ_EntiteRetour] Retour = ' "+donnees+" '");
+	gblEntites[typeEntite][idEntite]['titre'] = gblEntites['temp']['titre'];
+	gblEntites[typeEntite][idEntite]['contenu'] = gblEntites['temp']['contenu'];
+	gblEntites[typeEntite][idEntite]['note'] = gblEntites['temp']['note'];
+	//gblEntites[typeEntite][donnees]['ID_prev'] = gblEntites[typeEntite][0]['last'];
+	//gblEntites[typeEntite][donnees]['ID_next'] = 0;
+	//gblEntites[typeEntite][gblEntites[typeEntite][0]['last']]['ID_next'] = donnees;
+	//gblEntites[typeEntite][0]['last'] = donnees;
+	
+	//$("#"+balises_entites_base+">div>div:last-child").data("idself", donnees);
+	//console.log("idself = " + $("#"+balises_entites_base+">div>div:last-child").data("idself"));
+	
+	console.log(gblEntites[typeEntite]);
+	console.log(gblEntites['temp']);
+	
+	$("#"+balises_entites_base+">div").find("span[contenteditable='true']").removeAttr("contenteditable");
+}
+
 /*
 function deplacerEntiteRetour(donnees){
 	console.log("[deplacerEntiteRetour] Retour = ' "+donnees+" '");
 }
-
-function MaJ_EntiteRetour(donnees){
-	console.log("[MaJ_EntiteRetour] Retour = ' "+donnees+" '");
-}
 */
-
 function afficherEntites(donnees){
 	/*
 		Affiche les entitées contenues dans "donnees"
@@ -408,10 +484,10 @@ function afficherEntites(donnees){
 	if(arguments[1] === undefined){
 		donnees = JSON.parse(donnees); // contraire :: JSON.stringify(array);
 		gblEntites[donnees[0]['typeEntite']] = donnees;
-		console.log("[afficherEntites] j'ai chargé les entites");
+		//console.log("[afficherEntites] j'ai chargé les entites");
 	}
 
-	console.log(donnees);
+	//console.log(donnees);
 	var contenu='';
 	var curIndex = donnees[0]['first'];
 	//var typeEntite = donnees[0]['typeEntite'];
@@ -446,7 +522,7 @@ function afficherEntites(donnees){
 			contenu += "</div>\n\n";*/
 
 			//$("#"+balises_entites_base).append(construireCodeEntite(curIndex, donnees[curIndex]));
-			contenu +=  construireCodeEntite(curIndex, donnees[curIndex]);
+			contenu += construireCodeEntite(curIndex, donnees[curIndex]);
 			curIndex = donnees[curIndex]['ID_next'];
 		}while(curIndex != 0);
 

@@ -26,11 +26,11 @@ To Do:
 -[x] copier ce qui est pertinent du code pour les onglets entités vers les onglet textePrincipal et Notes globales
 -[x] changer création Roman ds BD pour enregistrer le synopsis aussi dans champs notes
 - ~~ [] créer fct qui ajoute des boutons pour modifier les entitées et fct onblur qui fait ESC/restaure le texte à partir de la mémoire. Btns poppent... non ~~
-- [] btns pour modifier les entitées sont ajouté à la création, pê ajouter une couche de DIV (si overflow hidden pas suffisant ou que visuellement ça fct pas)? laisser les gars faire mieux
+- [x] btns pour modifier les entitées sont ajouté à la création, pê ajouter une couche de DIV (si overflow hidden pas suffisant ou que visuellement ça fct pas)? laisser les gars faire mieux
 	- [] {entitées} faire la copie des span vers la mémoire quand l'usager clique le bouton [accepter] -et- vers la BD
-	- [] {entitées} faire la copie de la mémoire vers les span quand l'usager clique le bouton [annuler]
--[] ajouter mini-toolbar pour faire l'ajout d'entitées
--[] ajouter mini-toolbar aux entitées pour edit (ou commence avec un dbl-click?) et delete
+	- [x] {entitées} faire la copie de la mémoire vers les span quand l'usager clique le bouton [annuler]
+-[x] ajouter mini-toolbar pour faire l'ajout d'entitées
+-[x] ajouter mini-toolbar aux entitées pour edit (ou commence avec un dbl-click?) et delete
 -ne pas faire le truc d'inspiration!
 -ne pas oublier le drag'n'drop, voir où mettre le fameux icône
 - [] pour le probleme de note "deleted", sur restauration on la replace à la toute fin? càd que son prev devient celui qui as next==0 et elle hérite elle-même de next=0
@@ -38,11 +38,10 @@ To Do:
 - [] nouvelle page admin, affiche sur chaque ligne : nom roman, nom usager, genre littéraire, état DELETED, bouton DELETE (ou pour les deux derniers, bouton del/undel)
 - [] faire un trim (g/d) des espaces avant d'enregistrer une donnée (titre, texte, nom, etc); ajouter ceci (aussi) à la fonction real_escape_string ?
 
-1. clique "btn +" fait crée interface avec défauts texte et contenteditable
-2. clique btn save fait si data-idself == 0 insert, sinon update
-3. si insert, (on recoit le nouvel ID et ) on cherche dernier enfant de balises_entites_base et il dois avoir data-idself == 0 si oui alors le nouvel ID y est copié et on copie dans la mémoire >> a la fin de l'insertion, ne pas oublier [0]['last'] qu'il faut utiliser pour atteindre en mémoire celui qui as next=0, le corriger en lui donnant le ID de la nouvelle entitée et copier le nouvel ID dans [0]['last']
-4. si clique btn cancel alors tuer dnr enfant de balises_entites_base
-5. manque : si une entitée est en mode édition et on clique 'ajouter', alors bloquer l'opération
+MANQUE:
+-sauvegarder entitée
+-effacer entitée
+-sauvegarder texte/notes générales
 
 ============================================
 
