@@ -3,7 +3,7 @@
 
 To Do:
 - [x] Une fois le CSS fini pour les toolbars de la page Edition, ne pas oublier de restaurer le code dana header.inc (~ln 5), mode_edition.js (~ln210 >> lireEntites) et enlever dans mode_edition.php le code direct en recopiant les changements dans mode_edition.js (~ln331 afficherEntite)
-- [] autosave texte principal, solution 1: lancer intervalle, si var1 et var2 sont 0 alors ne rien faire;  si on tape (keyup) var1++; si qd intervalle arrive var1 et var2 différents alors var2=var1; si var1==var2 et tous deux !== 0 alors sauvegarder et var1 et var2 === 0
+- [] autosave texte principal, solution 1: lancer intervalle, si var1 et var2 sont 0 alors ne rien faire; si on tape (keyup) var1++; si qd intervalle arrive var1 et var2 différents alors var2=var1; si var1==var2 et tous deux !== 0 alors sauvegarder et var1 et var2 === 0
 - [] autosave texte principal, solution 2: pour la sauvegarde, il faudrait changer pour qu'il y ais ces variables (booleennes):
 	= mainText_DirtyBit_GUI si on as modifié le texte présentement à l'écran, remplace data-dirtybit
 	= mainText_DirtyBit_Disk_Texte si on as copié le texte en mémoire mais qu'il n'as pas été enregistré ds la BD
@@ -27,7 +27,7 @@ To Do:
 -[x] changer création Roman ds BD pour enregistrer le synopsis aussi dans champs notes
 - ~~ [] créer fct qui ajoute des boutons pour modifier les entitées et fct onblur qui fait ESC/restaure le texte à partir de la mémoire. Btns poppent... non ~~
 - [x] btns pour modifier les entitées sont ajouté à la création, pê ajouter une couche de DIV (si overflow hidden pas suffisant ou que visuellement ça fct pas)? laisser les gars faire mieux
-	- [] {entitées} faire la copie des span vers la mémoire quand l'usager clique le bouton [accepter] -et- vers la BD
+	- [x] {entitées} faire la copie des span vers la mémoire quand l'usager clique le bouton [accepter] -et- vers la BD
 	- [x] {entitées} faire la copie de la mémoire vers les span quand l'usager clique le bouton [annuler]
 -[x] ajouter mini-toolbar pour faire l'ajout d'entitées
 -[x] ajouter mini-toolbar aux entitées pour edit (ou commence avec un dbl-click?) et delete
@@ -52,7 +52,7 @@ TODO:
 		-déplacer :: possible aussi je crois
 	10. BUG :: si on change l'état DELETED, les entitées pointées par PREV/NEXT de l'entitée retirée ne sont -pas- corrigées ni au retrait, ni à la récupération, à corriger dès que possible
 	11. Tester plus pour savoir si j'ai un bug avec la fonction "miseAJourDonneesEntite" ou si c'est simplement que j'essaie de sauver une fraction avant l'ordi et donc que non seulement le flag "DirtyBit" dans le code JS est toujours vrai mais en plus qu'il n'y as rien à changer, aucune erreur et donc que je devrais changer le code pour NE PAS renvoyer d'erreur quand "rows_affected" == 0...
-	12. changer EFFACER comme suit :  si on recoit un idEntite, c'est un quoi,etc... si on recoit un idRoman, c'est le textePrincipal/Roman table roman_details
+	12. changer EFFACER comme suit : si on recoit un idEntite, c'est un quoi,etc... si on recoit un idRoman, c'est le textePrincipal/Roman table roman_details
 
 ====
 
@@ -114,9 +114,9 @@ TODO:
 - [x] fonction XHR pour enregistrer le document
 - [ ] lire plus sur le mécanisme de drag&drop pour savoir comment aborder le réordonnement des entitées --> http://www.html5rocks.com/en/tutorials/dnd/basics/ --> Modernizr --> pas compliqué juste 30-40 lignes de JS
 - [x] permettre de dragger une "note" sur le document et ça fait copy-paste?
-  * retiré
+ * retiré
 - [x] permettre de dragger un personnage, un lieu ou un "autres" sur le document et ça copie le nom + lien?
-  * retiré
+ * retiré
  - [x] bug : s'il n'y as aucune entrée dans la table romans_details mais que celle correspondant dans romans_texte existe, agit comme s'il ne manquait rien, donc changer le code pour tout passer par romans_details, surtout que c'est elle qui décide si un roman est deleted ou non; en fait le bug persiste avec les entitées! oui bon, dans le cas des entitées, en principe une fois le code bien écrit il sera impossible de les charger ^_^'...
 
  =====

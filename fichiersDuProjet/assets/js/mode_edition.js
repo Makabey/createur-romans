@@ -79,7 +79,7 @@ $(function(){
 		var spanChilds;
 		var typeEntite;
 		var iCmpt;
-		
+
 		console.log($(this).data("btntype"));
 		console.log(idEntite);
 		if($(this).data("btntype") == "cancel"){ // BOUTON "ANNULER"
@@ -108,7 +108,7 @@ $(function(){
 					}
 				}
 			}
-		//	gblEntiteEnCoursEdition = -1;
+			gblEntiteEnCoursEdition = -1;
 		}else{ // BOUTON "SAUVEGARDER"
 			typeEntite = $("#"+balises_entites_base+">ul .active a").text();
 			typeEntite = typeEntite.toLowerCase();
@@ -121,7 +121,7 @@ $(function(){
 			gblEntites['temp']['contenu'] = spanChilds[1].innerHTML;
 			gblEntites['temp']['note'] = spanChilds[2].innerHTML;
 			gblEntites['temp']['typeEntite'] = typeEntite;
-			gblEntites['temp']['idEntite'] = idEntite;
+			//gblEntites['temp']['idEntite'] = idEntite;
 			console.log(gblEntites['temp']);
 			console.log(typeEntite);
 
@@ -136,7 +136,7 @@ $(function(){
 				console.log(idEntite);
 			}
 		}
-		gblEntiteEnCoursEdition = -1;
+		//gblEntiteEnCoursEdition = -1;
 	});
 
 
@@ -194,15 +194,23 @@ $(function(){
 		/*
 			Effacer l'entitée
 		*/
-		var idEntite;
+		var typeEntite;
+		var etatDeleted = false;
 
 		if(gblEntiteEnCoursEdition == -1){
-			idEntite = $(this).parents(".aide-memoire").data("idself");
-			console.log("click -- effacer (" + idEntite +")");
+			gblEntiteEnCoursEdition = $(this).parents(".aide-memoire").data("idself");
+			console.log("click -- effacer (" + gblEntiteEnCoursEdition +")");
 			//manque code pour faire l'effacement
-			//var etatDeleted = false;
-			//effacerEntite(deplacerEntiteRetour, traiterErreurs, idRoman, typeEntite, idEntite, etatDeleted);
-		}else	if(gblEntiteEnCoursEdition == $(this).parents('.aide-memoire').data('idself')){
+
+			typeEntite = $("#"+balises_entites_base+">ul .active a").text();
+			typeEntite = typeEntite.toLowerCase();
+			typeEntite = typeEntite.replace('ù', 'u');
+			typeEntite = typeEntite.replace('é', 'e');
+			gblEntites['temp'] = new Array();
+			gblEntites['temp']['typeEntite'] = typeEntite;
+
+			effacerEntite(effacerEntiteRetour, traiterErreurs, idRoman, gblEntiteEnCoursEdition, etatDeleted);
+		}else if(gblEntiteEnCoursEdition == $(this).parents('.aide-memoire').data('idself')){
 			alert("Erreur!\n\nVeuillez annuler l'édition de cette entitée avant de lancer une autre opération!");
 		}else{
 			alert("Erreur!\n\nVeuillez terminer l'édition de l'entitée en cours avant de lancer une autre opération!");
@@ -234,7 +242,7 @@ $(function(){
 			console.log("btn_save / DirtyBit :: False");
 		}
 	});
-	
+
 	$("#btn_moveEntite").click(function(){
 		var typeEntite = "qui";
 		var nvTypeEntite = "quoi"; // <-- optionnel, ici pour illustrer que c'est supporté, de pouvoir déplacer de type une entitée
@@ -242,7 +250,7 @@ $(function(){
 		var id_prev = 13;
 		var id_next = 0;
 
-		deplacerEntite(deplacerEntiteRetour, traiterErreurs, idRoman, typeEntite, idEntite, id_prev, id_next, nvTypeEntite);
+		deplacerEntite(deplacerEntiteRetour <-- a creer!! , traiterErreurs, idRoman, typeEntite, idEntite, id_prev, id_next, nvTypeEntite);
 	});
 
 */
@@ -291,13 +299,14 @@ function deplacerEntite(fctTraitementPositif, fctTraitementNegatif, idRoman, typ
 
 	execXHR_Request("../assets/xhr/mode_edition.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
+*/
 
 function effacerEntite(fctTraitementPositif, fctTraitementNegatif, idRoman, typeEntite, idEntite){
 	var etatDeleted = (arguments[5] != undefined)?arguments[5]:1; // argument optionel
-	var XHR_Query = "oper=effacer&typeEntite="+typeEntite+"&idRoman="+idRoman+"&idEntite="+idEntite+"&etat="+etatDeleted;
+	var XHR_Query = "oper=effacer&idRoman="+idRoman+"&idEntite="+idEntite+"&etat="+etatDeleted;
 	execXHR_Request("../assets/xhr/mode_edition.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
-*/
+
 
 function chargerRoman(fctTraitementPositif, fctTraitementNegatif, idRoman){
 	var XHR_Query = "oper=lire&typeEntite=textePrincipal&idRoman="+idRoman;
@@ -417,18 +426,18 @@ function construireCodeEntite(curIndex){
 
 function insererEntiteRetour(donnees){
 	var typeEntite = gblEntites['temp']['typeEntite'];
-	var enfant;
-	
+	//var enfant;
+
 	console.log("[insererEntiteRetour] Retour = ' "+donnees+" '");
 	//gblEntites[gblEntites['temp']['typeEntite']][donnees]['titre'] = gblEntites['temp']['titre'];
-	gblEntites[typeEntite][donnees] = gblEntites['temp'];
+	gblEntites[typeEntite][donnees] = {'ID_prev':gblEntites[typeEntite][0]['last'], 'ID_next':'0','titre':gblEntites['temp']['titre'], 'contenu':gblEntites['temp']['contenu'], 'note':gblEntites['temp']['note']};
 	//gblEntites['temp']['contenu'] = spanChilds[1].innerHTML;
 	//gblEntites['temp']['note'] = spanChilds[2].innerHTML;
-	gblEntites[typeEntite][donnees]['ID_prev'] = gblEntites[typeEntite][0]['last'];
-	gblEntites[typeEntite][donnees]['ID_next'] = 0;
+	//gblEntites[typeEntite][donnees]['ID_prev'] = gblEntites[typeEntite][0]['last'];
+	//gblEntites[typeEntite][donnees]['ID_next'] = 0;
 	gblEntites[typeEntite][gblEntites[typeEntite][0]['last']]['ID_next'] = donnees;
 	gblEntites[typeEntite][0]['last'] = donnees;
-	
+
 	//$("#"+balises_entites_base+">div>div:last-child").data("idself", "-20");
 	//console.log("idself = " + $("#"+balises_entites_base+">div>div:last-child").data("idself"));
 	$("#"+balises_entites_base+">div>div:last-child").data("idself", donnees);
@@ -441,35 +450,50 @@ function insererEntiteRetour(donnees){
 	//console.log(gblEntites[typeEntite]);
 	//console.log(gblEntites['temp']);
 	$("#"+balises_entites_base+">div").find("span[contenteditable='true']").removeAttr("contenteditable");
+	gblEntiteEnCoursEdition = -1;
 }
 
 function MaJ_EntiteRetour(donnees){
 	var typeEntite = gblEntites['temp']['typeEntite'];
-	var idEntite = gblEntites['temp']['idEntite'];
-	
+	//var idEntite = gblEntites['temp']['idEntite'];
+
 	console.log("[MaJ_EntiteRetour] Retour = ' "+donnees+" '");
-	gblEntites[typeEntite][idEntite]['titre'] = gblEntites['temp']['titre'];
-	gblEntites[typeEntite][idEntite]['contenu'] = gblEntites['temp']['contenu'];
-	gblEntites[typeEntite][idEntite]['note'] = gblEntites['temp']['note'];
+	gblEntites[typeEntite][gblEntiteEnCoursEdition]['titre'] = gblEntites['temp']['titre'];
+	gblEntites[typeEntite][gblEntiteEnCoursEdition]['contenu'] = gblEntites['temp']['contenu'];
+	gblEntites[typeEntite][gblEntiteEnCoursEdition]['note'] = gblEntites['temp']['note'];
 	//gblEntites[typeEntite][donnees]['ID_prev'] = gblEntites[typeEntite][0]['last'];
 	//gblEntites[typeEntite][donnees]['ID_next'] = 0;
 	//gblEntites[typeEntite][gblEntites[typeEntite][0]['last']]['ID_next'] = donnees;
 	//gblEntites[typeEntite][0]['last'] = donnees;
-	
+
 	//$("#"+balises_entites_base+">div>div:last-child").data("idself", donnees);
 	//console.log("idself = " + $("#"+balises_entites_base+">div>div:last-child").data("idself"));
-	
+
 	console.log(gblEntites[typeEntite]);
 	console.log(gblEntites['temp']);
-	
+
 	$("#"+balises_entites_base+">div").find("span[contenteditable='true']").removeAttr("contenteditable");
+	gblEntiteEnCoursEdition = -1;
 }
 
-/*
-function deplacerEntiteRetour(donnees){
-	console.log("[deplacerEntiteRetour] Retour = ' "+donnees+" '");
+
+function effacerEntiteRetour(donnees){
+	var typeEntite = gblEntites['temp']['typeEntite'];
+	var ID_next;
+	var ID_prev;
+
+	console.log("[effacerEntiteRetour] Retour = ' "+donnees+" '");
+
+	ID_next = gblEntites[typeEntite][gblEntiteEnCoursEdition]['ID_next'];
+	ID_prev = gblEntites[typeEntite][gblEntiteEnCoursEdition]['ID_prev'];
+
+	if(ID_prev > 0) { gblEntites[typeEntite][ID_prev]['ID_next'] = ID_next; }
+	if(ID_next > 0) { gblEntites[typeEntite][ID_next]['ID_prev'] = ID_prev; }
+
+
+	gblEntiteEnCoursEdition = -1;
 }
-*/
+
 function afficherEntites(donnees){
 	/*
 		Affiche les entitées contenues dans "donnees"
@@ -595,6 +619,11 @@ function traiterErreurs(msgErreur){
 	ce qui veux dire que l'on doit créer l'usager pour accèder à la BD (ne pas mélanger avec la table "usagers"
 	parce que ce n'est pas du tout la même chose), voir le fichier db_access.inc.php pour le mot de passe
 	*/
+	
+	if(msgErreur.substring(0,6) =="<br />"){ // Si commence par '<br />', on suppose que c'est une erreur PHP!
+		msgErreur = "[PHP] " + strStripHTML(msgErreur);
+	}
+	
 	alert("L'erreur suivante est survenue : '"+msgErreur+"'");
 }
 
