@@ -313,7 +313,7 @@ function afficherEntites(donnees){
 	var entiteOnglet = $("#"+balises_entites_base).find("ul .active").text();
 
 	//contenu += '<div class="aide-memoire-toolbar"><span class="toolbar-title">'+donnees[0]['typeEntite']+'</span><img src="../assets/images/toolbars/list.png" alt="drag and drop" /><img src="../assets/images/toolbars/pencil_add.png" /></div>';
-	contenu += '<div class="aide-memoire-toolbar"><span class="toolbar-title">'+entiteOnglet+'</span><span class="glyphicon glyphicon-pencil"></span><span class="glyphicon glyphicon-list"></span></div>';
+	contenu += '<div class="aide-memoire-toolbar"><span class="toolbar-title">'+entiteOnglet+'</span><span class="glyphicon glyphicon-pencil"></span><span class="glyphicon glyphicon-minus"></span></div>';
 
 
 	if(curIndex !== null){
@@ -334,8 +334,8 @@ function afficherEntites(donnees){
 			contenu += '</span>';
 			contenu += '	</div>';
 			contenu += '	<div class="aide-memoire-boutons-edition">';
-			contenu += '		<button type="button" data-btntype="save"><img src="../assets/images/toolbars/checkmark_pencil.png" alt="Accepter les changements" />Sauvegarder</button>';
-			contenu += '		<button type="button" data-btntype="cancel"><img src="../assets/images/toolbars/close_pencil.png" alt="Annuler les changements" />Annuler</button>';
+			contenu += '		<button type="button" class="btn btn-success" data-btntype="save"><span class="glyphicon glyphicon-ok"></span></button>';
+			contenu += '		<button type="button" class="btn btn-danger" data-btntype="cancel"><span class="glyphicon glyphicon-remove"></span></button>';
 			contenu += '	</div>';
 			contenu += "</div>\n\n";
 

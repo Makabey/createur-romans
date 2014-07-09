@@ -220,16 +220,20 @@ code {
 	width: 100%;
 	text-align: center;
 }
-.mode_edition .aide-memoire-toolbar img{
+.mode_edition .aide-memoire-toolbar span{
 	max-width: 30px;
 	position: absolute;
-	top: 0;
+	top: 10px;
 }
-.mode_edition .aide-memoire-toolbar img:first-of-type{
+.mode_edition .aide-memoire-toolbar span:first-of-type{
+	left:50%;
+	margin-left: -15px;
+}
+.mode_edition .aide-memoire-toolbar span:nth-of-type(2){
 	right: 3px;
 }
-.mode_edition .aide-memoire-toolbar img:last-of-type{
-	right: 36px;
+.mode_edition .aide-memoire-toolbar span:last-of-type{
+	right: 30px;
 }
 .mode_edition .aide-memoire{
 	width: 98%;
@@ -239,12 +243,25 @@ code {
 	margin: auto;
 	margin-top: 10px;
 	overflow: hidden;
+	position: relative;
+	
+	-webkit-transition: border .1s ease-in-out;
+	-moz-transition: border .1s ease-in-out;
+	-o-transition: border .1s ease-in-out;
+	-ms-transition: border .1s ease-in-out;
+	transition: border .1s ease-in-out;
 }
 .mode_edition .aide-memoire-headings{
 	width: 100%;
 	height: 40px;
 	border-bottom: 1px solid #ccc;
 	position:relative;
+	
+	-webkit-transition: border .1s ease-in-out;
+	-moz-transition: border .1s ease-in-out;
+	-o-transition: border .1s ease-in-out;
+	-ms-transition: border .1s ease-in-out;
+	transition: border .1s ease-in-out;
 }
 .mode_edition .aide-memoire-headings span{
 	display: inline-block;
@@ -290,11 +307,9 @@ code {
 }
 .mode_edition .aide-memoire:hover{
 	border: 1px solid #3276b1;
-	background: #F8F8F8;
 }
 .mode_edition .aide-memoire:hover .aide-memoire-headings{
 	border-bottom: 1px solid #3276b1;
-	background: #F8F8F8;
 }
 .mode_edition .titre-roman{
 	font-size: 26px;
@@ -303,6 +318,37 @@ code {
 	width: 60%;
 	min-width: 300px;
 	margin-bottom: 20px;
+}
+.mode_edition .btn{
+	position: absolute;
+	bottom: 3px;
+	opacity: 0.5;
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	
+	-webkit-transition: opacity .1s ease-in-out;
+	-moz-transition: opacity .1s ease-in-out;
+	-o-transition: opacity .1s ease-in-out;
+	-ms-transition: opacity .1s ease-in-out;
+	transition: opacity .1s ease-in-out;
+}
+.mode_edition .btn:hover{
+	opacity: 1;
+}
+.mode_edition .btn:first-of-type{
+	right: 38px;
+}
+.mode_edition .btn:last-of-type{
+	right: 3px;
+}
+.mode_edition .btn > span{
+	display: inline-block;
+	position: absolute;
+	top:50%;
+	margin-top: -7px;
+	left: 50%;
+	margin-left: -7px;
 }
 /*
 // Ajouts Eric
