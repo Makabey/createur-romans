@@ -70,7 +70,7 @@ if($_POST['idRoman'] <= 0){
 }
 
 
-$arrValidEntities = array('quoi', 'ou', 'comment', 'pourquoi', 'qui', 'quand', 'textePrincipal');
+$arrValidEntities = array('quoi', 'ou', 'comment', 'pourquoi', 'qui', 'quand', 'textePrincipal', 'notesGenerales');
 
 $db = db_connect();
 
@@ -105,7 +105,7 @@ switch($_POST['oper']){
 			}else{
 				if(isset($_POST['contenu']) &&
 					(($_POST['typeEntite'] != 'textePrincipal' && isset($_POST['idEntite']) && isset($_POST['titre']) && isset($_POST['note'])) xor
-					($_POST['typeEntite'] == 'textePrincipal'))# && isset($_POST['idRoman'])))
+					(($_POST['typeEntite'] == 'textePrincipal') || ($_POST['typeEntite'] == 'notesGenerales')))
 					){
 					$resultat = miseAJourDonneesEntite($db);
 				}else{
@@ -192,7 +192,7 @@ function lireDonneesEntite($db){
 	$arrChamps_roman = array('contenu', 'synopsis', 'notes_globales', 'titre');
 	$resultat = false;
 
-	if($_POST['typeEntite'] == 'textePrincipal' ){
+	if($_POST['typeEntite'] == 'textePrincipal'){
 		$query = "SELECT `roman_texte`.`contenu`, `roman_texte`.`synopsis`, `roman_texte`.`notes_globales`, `roman_details`.`titre` FROM `roman_texte`, `roman_details` WHERE `roman_texte`.`ID_roman` = `roman_details`.`ID_roman` AND `roman_details`.`ID_roman` = " . $_POST['idRoman'] . " AND `roman_details`.`deleted` = 0;";
 		$mode=1;
 	}else{ // L'une des autres entitées : ou, quand, etc...
@@ -205,6 +205,11 @@ function lireDonneesEntite($db){
 		if($mode == 1){
 			/* On veux le texte ? Faire une simple lecture */
 			$resultat = array_combine($arrChamps_roman, $result->fetch_row());
+			// Corriger des transformation faites par la fonction real_escape_string
+			$resultat['contenu'] = str_replace('&gt;', '>', $resultat['contenu']);
+			$resultat['contenu'] = str_replace('&lt;', '<', $resultat['contenu']);
+			$resultat['notes_globales'] = str_replace('&gt;', '>', $resultat['notes_globales']);
+			$resultat['notes_globales'] = str_replace('&lt;', '<', $resultat['notes_globales']);
 		}elseif($mode == 2){
 			$resultat[0]['typeEntite'] = $_POST['typeEntite'];
 			#$resultat[0]['target'] = $_POST['target'];
@@ -241,9 +246,16 @@ function miseAJourDonneesEntite($db){
 	global $arrValidEntities;
 	$resultat = false;
 
-	if($_POST['typeEntite'] == 'textePrincipal'){
+	/*if($_POST['typeEntite'] == 'textePrincipal'){
 		$_POST['contenu'] = real_escape_string($_POST['contenu'], $db);
 		$query = 'UPDATE roman_texte SET contenu = "' . $_POST['contenu'] . '" WHERE ID_roman=' . $_POST['idRoman'] . ';';
+	}else if($_POST['typeEntite'] == 'notesGenerales'){
+		$_POST['contenu'] = real_escape_string($_POST['contenu'], $db);
+		$query = 'UPDATE roman_texte SET notes_globales = "' . $_POST['contenu'] . '" WHERE ID_roman=' . $_POST['idRoman'] . ';';*/
+	if($_POST['typeEntite'] == 'textePrincipal'){
+		$_POST['contenu'] = real_escape_string($_POST['contenu'], $db);
+		$_POST['notes'] = real_escape_string($_POST['notes'], $db);
+		$query = 'UPDATE roman_texte SET contenu = "' . $_POST['contenu'] . '", notes_globales = "' . $_POST['notes'] . '" WHERE ID_roman=' . $_POST['idRoman'] . ';';
 	}else{
 		$query = 'UPDATE entites SET ';
 		if(isset($_POST['contenu'])){ // Mise à jour intégrale
@@ -273,9 +285,9 @@ function miseAJourDonneesEntite($db){
 		$result = $db->query ($query);
 		if(false !== $result){
 			if($db->affected_rows){
-				$resultat = "1¬[" . __FUNCTION__ . "] UPDATE successful\n\n '$query'";
-			#}else{
-			#	$resultat = "0¬[" . __FUNCTION__ . "] UPDATE didn't occur (most probably because there was nothing to change)\n\n $query";
+				$resultat = "1¬[" . __FUNCTION__ . "] UPDATE successful\n\n $query";
+			}else{
+				$resultat = "1¬[" . __FUNCTION__ . "] UPDATE didn't occur (most probably because there was nothing to change)\n\n $query";
 			}
 		}else{
 			$resultat = "0¬[" . __FUNCTION__ . "] An error occured during an UPDATE operation.\n\n" . $db->error . "\n\n $query";

@@ -17,7 +17,8 @@
 	CONFIGURATION / VARIABLES GLOBALES
 **********************/
 var gbl_DelaiSauvegarde_TextePrincipal = null; // SI on voulais arrêter le cycle d'enregistrement, il suffirais d'utiliser clearTimeout(gbl_DelaiSauvegarde_TextePrincipal);
-var iFrequenceSauvegarde_TextePrincipal = 5000; // 5 secs, mériterais probablement une valeur entre 60 et 300 secs
+var iFrequenceSauvegarde_TextePrincipal = 7000; // Le delai a attendre depuis la dernière frappe dans le texte principal ou les notes avant de lancer la sauvegarde
+var iDelaiOcculterMessageSauvegarde = 5000; // Laps de temps durant lequel le message confirmant la sauvegarde doit rester à l'écran
 var balise_MainText = "main_write";
 //var balises_entites_base = "contenantEntites";
 //var balises_entites_base = "edition-boite-entites>div";
@@ -37,7 +38,9 @@ $(function(){
 	//$("#"+balise_MainText).data("dirtyBit", false);
 	$("#"+balise_MainText).keyup(function(){
 		//$("#"+balise_MainText).data("dirtyBit", true);
-		DirtyBits[DirtyBits['onglet']+'_Memory'] = Date.now();
+		//DirtyBits[DirtyBits['onglet']+'_Memory'] = Date.now();
+		clearTimeout(gbl_DelaiSauvegarde_TextePrincipal);
+		gbl_DelaiSauvegarde_TextePrincipal = setTimeout(function(){sauvegarderTextePrincipal(balise_MainText);}, iFrequenceSauvegarde_TextePrincipal);
 	});
 
 	//$(".col-md-8>ul>li").click(function(){
@@ -50,18 +53,24 @@ $(function(){
 			//console.log(gblRoman['notes_globales']);
 
 			if($(this).text() == "Composition"){
-				if($("#"+balise_MainText).data("dirtyBit") === true){
+				//if($("#"+balise_MainText).data("dirtyBit") === true){
+				//if(DirtyBits[DirtyBits['onglet']+'_Memory'] = Date.now();
 					gblRoman['notes_globales'] = $("#"+balise_MainText).val();
 					//console.log(gblRoman['notes_globales']);
-					$("#"+balise_MainText).data("dirtyBit", false);
-				}
+					//$("#"+balise_MainText).data("dirtyBit", false);
+					//DirtyBits[DirtyBits['onglet']+'_Memory'] = Date.now();
+					DirtyBits['onglet'] = "textePrincipal";
+				//}
 				$("#"+balise_MainText).val(gblRoman['contenu']);
 			}else{
-				if($("#"+balise_MainText).data("dirtyBit") === true){
+				/*if($("#"+balise_MainText).data("dirtyBit") === true){
 					gblRoman['contenu'] = $("#"+balise_MainText).val();
 					//console.log(gblRoman['contenu']);
 					$("#"+balise_MainText).data("dirtyBit", false);
-				}
+				}*/
+				gblRoman['contenu'] = $("#"+balise_MainText).val();
+				//DirtyBits[DirtyBits['onglet']+'_Memory'] = Date.now();
+				DirtyBits['onglet'] = "notesGenerales";
 				$("#"+balise_MainText).val(gblRoman['notes_globales']);
 			}
 		}
@@ -268,7 +277,6 @@ $(function(){
 	if(idRoman > 0){
 		$("#balise_MainText").hide();
 		chargerRoman(afficherRoman, traiterErreurs, idRoman);
-		//désactiver en attendant modifications au CSS pour les boutons >>
 		lireEntites(afficherEntites, traiterErreurs, idRoman, "qui");
 	}else{
 		window.location.replace(baseURL+"index.php");
@@ -285,13 +293,23 @@ function lireEntites(fctTraitementPositif, fctTraitementNegatif, idRoman, typeEn
 }
 
 function modifierEntite(fctTraitementPositif, fctTraitementNegatif, idRoman, typeEntite, titre, contenu, noteEntite, idEntite){
-	var XHR_Query = "oper=ecrire&typeEntite="+typeEntite+"&idRoman="+idRoman+"&titre="+titre+"&contenu="+contenu+"&note="+noteEntite+"&idEntite="+idEntite;
+	var XHR_Query;
+	
+	titre = encodeURIComponent (titre);
+	contenu = encodeURIComponent (contenu);
+	noteEntite = encodeURIComponent (noteEntite);
+	XHR_Query = "oper=ecrire&typeEntite="+typeEntite+"&idRoman="+idRoman+"&titre="+titre+"&contenu="+contenu+"&note="+noteEntite+"&idEntite="+idEntite;
 	console.log(XHR_Query);
 	execXHR_Request("../assets/xhr/mode_edition.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
 
 function insererEntite(fctTraitementPositif, fctTraitementNegatif, idRoman, typeEntite, titre, contenu, noteEntite){
-	var XHR_Query = "oper=inserer&typeEntite="+typeEntite+"&idRoman="+idRoman+"&titre="+titre+"&contenu="+contenu+"&note="+noteEntite;
+	var XHR_Query;
+	
+	titre = encodeURIComponent (titre);
+	contenu = encodeURIComponent (contenu);
+	noteEntite = encodeURIComponent (noteEntite);
+	XHR_Query = "oper=inserer&typeEntite="+typeEntite+"&idRoman="+idRoman+"&titre="+titre+"&contenu="+contenu+"&note="+noteEntite;
 	execXHR_Request("../assets/xhr/mode_edition.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
 
@@ -323,11 +341,12 @@ function chargerRoman(fctTraitementPositif, fctTraitementNegatif, idRoman){
 	execXHR_Request("../assets/xhr/mode_edition.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
 
-function sauvegarderTexte(fctTraitementPositif, fctTraitementNegatif, idRoman, nouveauTexte){
+function sauvegarderTexte(fctTraitementPositif, fctTraitementNegatif, idRoman, nouveauTexte, nouvelleNote){
 	// pour arguments[4], valeurs attendues soit "textePrincipal" ou "notesGlobales"
 	var nouveauTexte = encodeURIComponent (nouveauTexte);
-	var entiteASauvegarder = (arguments[4] !== undefined)?arguments[4]:"textePrincipal";
-	var XHR_Query = "oper=ecrire&typeEntite="+entiteASauvegarder+"&idRoman="+idRoman+"&contenu="+nouveauTexte;
+	//var entiteASauvegarder = (arguments[4] !== undefined)?arguments[4]:"textePrincipal";
+	//var XHR_Query = "oper=ecrire&typeEntite="+entiteASauvegarder+"&idRoman="+idRoman+"&contenu="+nouveauTexte;
+	var XHR_Query = "oper=ecrire&typeEntite=textePrincipal&idRoman="+idRoman+"&contenu="+nouveauTexte+"&notes="+nouvelleNote;
 	execXHR_Request("../assets/xhr/mode_edition.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
 
@@ -409,18 +428,18 @@ function construireCodeEntite(curIndex){
 		contenu += '	<div class="aide-memoire-headings"><span'+editable+'>'+donnees['titre']+'</span><img src="../assets/images/toolbars/contract2_pencil.png" alt="Éditer cette entitée" /><img src="../assets/images/toolbars/trash_can_add.png" alt="Effacer cette entitée" /></div>';
 
 		contenu += '	<div class="aide-memoire-content">';
-		contenu += '		<span'+editable+'>(contenu -&gt;) '+donnees['contenu']+'</span>';
+		contenu += '		<span'+editable+'>'+donnees['contenu']+'</span>';
 		contenu += '	</div>';
 		contenu += '	<div class="aide-memoire-notes">';
-		contenu += '		<span'+editable+'>(notes -&gt;) ';
+		contenu += '		<span'+editable+'>';
 		if(donnees['note'] !== null){
 			contenu += donnees['note'];
 			}
 		contenu += '</span>';
 		contenu += '	</div>';
 		contenu += '	<div class="aide-memoire-boutons-edition">';
-		contenu += '		<button type="button" class="btn btn-success"  data-btntype="save"><span class="glyphicon glyphicon-ok"></span>Sauvegarder</button>';
-		contenu += '		<button type="button" class="btn btn-danger" data-btntype="cancel"><span class="glyphicon glyphicon-remove"></span>Annuler</button>';
+		contenu += '		<button type="button" class="btn btn-success"  data-btntype="save"><span class="glyphicon glyphicon-ok"></span></button>';
+		contenu += '		<button type="button" class="btn btn-danger" data-btntype="cancel"><span class="glyphicon glyphicon-remove"></span></button>';
 		contenu += '	</div>';
 		contenu += "</div>\n\n";
 
@@ -565,7 +584,9 @@ function afficherRoman(donnees){
 	if(gblRoman.length !== 0){
 		$("#"+balise_MainText).text(gblRoman['contenu']);
 		$("h2").text(gblRoman['titre']);
-		//gbl_DelaiSauvegarde_TextePrincipal = setTimeout('sauvegarderTextePrincipal("'+balise_MainText+'")', iFrequenceSauvegarde_TextePrincipal);
+		
+		// Lancer l'Interval qui s'occupe de sauvegarder les texte principal et notes à un certain délai
+		//gbl_DelaiSauvegarde_TextePrincipal = setInterval(function(){sauvegarderTextePrincipal(balise_MainText);}, iFrequenceSauvegarde_TextePrincipal);
 	}else{
 		$("#"+balise_MainText).text("[Cet usager n'as aucun Roman ou il y as eût une erreur de BD.]");
 	}
@@ -581,23 +602,40 @@ function sauvegarderTextePrincipal(id_balise){
 
 	//$("#temoin_activite").css("background-color", ($("#temoin_activite").css("background-color") == "rgb(255, 255, 0)")?"blue":"yellow");
 
-	if($("#"+balise_MainText).data("dirtyBit") === true){
-		sauvegarderTexte(lancerDelaiSauvegardeTextePrincipal, traiterErreurs, idRoman, $("#"+id_balise).val());
-		console.log("sauvegarderTextePrincipal("+id_balise+") / DirtyBit :: True");
-	}else{
-		gbl_DelaiSauvegarde_TextePrincipal = setTimeout('sauvegarderTextePrincipal("'+balise_MainText+'")', iFrequenceSauvegarde_TextePrincipal);
-		console.log("sauvegarderTextePrincipal("+id_balise+") / DirtyBit :: False");
-	}
+	//if($("#"+balise_MainText).data("dirtyBit") === true){
+		if(DirtyBits['onglet'] == "textePrincipal"){
+			gblRoman['contenu'] = $("#"+id_balise).val();
+		}else{
+			gblRoman['notes_globales'] = $("#"+id_balise).val();
+		}
+	
+		//sauvegarderTexte(lancerDelaiSauvegardeTextePrincipal, traiterErreurs, idRoman, gblRoman['contenu'], 'textePrincipal');
+		sauvegarderTexte(lancerDelaiSauvegardeTextePrincipal, traiterErreurs, idRoman, gblRoman['contenu'],  gblRoman['notes_globales']);
+		//sauvegarderTexte(lancerDelaiSauvegardeTextePrincipal, traiterErreurs, idRoman, gblRoman['notes_globales'], 'notesGenerales');
+		
+		//console.log($("#"+id_balise).val());
+		//console.log($("#"+id_balise).text());
+	//	console.log("sauvegarderTextePrincipal("+id_balise+") / DirtyBit :: True");
+	//}else{
+		//gbl_DelaiSauvegarde_TextePrincipal = setTimeout('sauvegarderTextePrincipal("'+balise_MainText+'")', iFrequenceSauvegarde_TextePrincipal);
+	//	console.log("sauvegarderTextePrincipal("+id_balise+") / DirtyBit :: False");
+	//}
 }
 
 function lancerDelaiSauvegardeTextePrincipal(msgRetour){
 	/*
 		Lance un nouveau setTimeout à la fin duquel une tentative de sauvegarde sera faite
 	*/
-	$("#"+balise_MainText).data("dirtyBit", false);
+	/*$("#"+balise_MainText).data("dirtyBit", false);
 	gbl_DelaiSauvegarde_TextePrincipal = setTimeout('sauvegarderTextePrincipal("'+balise_MainText+'")', iFrequenceSauvegarde_TextePrincipal);
-	$("#temoin_activite").css("background-color", ($("#temoin_activite").css("background-color") == "rgb(255, 0, 0)")?"green":"red");
+	$("#temoin_activite").css("background-color", ($("#temoin_activite").css("background-color") == "rgb(255, 0, 0)")?"green":"red");*/
+	console.log(msgRetour);
+	//$("#msg_confirm_save").text("Texte sauvegardé @ " + Date.now()).show();
+	//setTimeout(function(){ $("#msg_confirm_save").hide();}, iDelaiOcculterMessageSauvegarde);
+	$("#msg_confirm_save").text("Texte sauvegardé @ " + Date.now()).fadeIn('medium').delay(iDelaiOcculterMessageSauvegarde).fadeOut('slow');
 }
+
+
 
 
 /**********************
