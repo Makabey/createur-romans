@@ -25,15 +25,19 @@ var balises_entites_base = "edition-boite-entites";
 var gblRoman;
 var gblEntites = new Array();
 var gblEntiteEnCoursEdition = -1; // si -1 alors aucune entitée en édition
+var maintenant = Date.now();
+var DirtyBits = {'onglet':'textePrincipal', 'textePrincipal_Memory':maintenant, 'textePrincipal_Disk':maintenant, 'notesGenerales_Memory':maintenant, 'notesGenerales_Disk':maintenant};
+
 
 /**********************
 	EVENT HANDLERS
 **********************/
 $(function(){
 	// Handlers pour le textArea contenant le textePrincipal
-	$("#"+balise_MainText).data("dirtyBit", false);
+	//$("#"+balise_MainText).data("dirtyBit", false);
 	$("#"+balise_MainText).keyup(function(){
-		$("#"+balise_MainText).data("dirtyBit", true);
+		//$("#"+balise_MainText).data("dirtyBit", true);
+		DirtyBits[DirtyBits['onglet']+'_Memory'] = Date.now();
 	});
 
 	//$(".col-md-8>ul>li").click(function(){
@@ -196,20 +200,26 @@ $(function(){
 		*/
 		var typeEntite;
 		var etatDeleted = true;
+		var bProceder = false;
 
 		if(gblEntiteEnCoursEdition == -1){
-			gblEntiteEnCoursEdition = $(this).parents(".aide-memoire").data("idself");
-			console.log("click -- effacer (" + gblEntiteEnCoursEdition +")");
-			//manque code pour faire l'effacement
+			bProceder = confirm("Attention!\n\nVous êtes sur le point d'effacer cette entitée!\n\nContinuer?");
+			console.log("bProceder = "+bProceder);
 
-			typeEntite = $("#"+balises_entites_base+">ul .active a").text();
-			typeEntite = typeEntite.toLowerCase();
-			typeEntite = typeEntite.replace('ù', 'u');
-			typeEntite = typeEntite.replace('é', 'e');
-			gblEntites['temp'] = new Array();
-			gblEntites['temp']['typeEntite'] = typeEntite;
+			if(bProceder){
+				gblEntiteEnCoursEdition = $(this).parents(".aide-memoire").data("idself");
+				console.log("click -- effacer (" + gblEntiteEnCoursEdition +")");
+				//manque code pour faire l'effacement
 
-			effacerEntite(effacerEntiteRetour, traiterErreurs, idRoman, gblEntiteEnCoursEdition, etatDeleted);
+				typeEntite = $("#"+balises_entites_base+">ul .active a").text();
+				typeEntite = typeEntite.toLowerCase();
+				typeEntite = typeEntite.replace('ù', 'u');
+				typeEntite = typeEntite.replace('é', 'e');
+				gblEntites['temp'] = new Array();
+				gblEntites['temp']['typeEntite'] = typeEntite;
+
+				effacerEntite(effacerEntiteRetour, traiterErreurs, idRoman, gblEntiteEnCoursEdition, etatDeleted);
+			}
 		}else if(gblEntiteEnCoursEdition == $(this).parents('.aide-memoire').data('idself')){
 			alert("Erreur!\n\nVeuillez annuler l'édition de cette entitée avant de lancer une autre opération!");
 		}else{
@@ -307,7 +317,6 @@ function effacerEntite(fctTraitementPositif, fctTraitementNegatif, idRoman, idEn
 	console.log(XHR_Query);
 	execXHR_Request("../assets/xhr/mode_edition.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
-
 
 function chargerRoman(fctTraitementPositif, fctTraitementNegatif, idRoman){
 	var XHR_Query = "oper=lire&typeEntite=textePrincipal&idRoman="+idRoman;
@@ -410,8 +419,8 @@ function construireCodeEntite(curIndex){
 		contenu += '</span>';
 		contenu += '	</div>';
 		contenu += '	<div class="aide-memoire-boutons-edition">';
-		contenu += '		<button type="button" data-btntype="save"><img src="../assets/images/toolbars/checkmark_pencil.png" alt="Accepter les changements" />Sauvegarder</button>';
-		contenu += '		<button type="button" data-btntype="cancel"><img src="../assets/images/toolbars/close_pencil.png" alt="Annuler les changements" />Annuler</button>';
+		contenu += '		<button type="button" class="btn btn-success"  data-btntype="save"><span class="glyphicon glyphicon-ok"></span>Sauvegarder</button>';
+		contenu += '		<button type="button" class="btn btn-danger" data-btntype="cancel"><span class="glyphicon glyphicon-remove"></span>Annuler</button>';
 		contenu += '	</div>';
 		contenu += "</div>\n\n";
 
@@ -493,7 +502,8 @@ function effacerEntiteRetour(donnees){
 
 
 	// Manque activer lignes pour BD (updates) et ici trouver/effacer interface
-	
+	$("#"+balises_entites_base+">div").find("div[data-idself='"+gblEntiteEnCoursEdition+"']").remove();
+
 	gblEntiteEnCoursEdition = -1;
 }
 
@@ -522,33 +532,12 @@ function afficherEntites(donnees){
 	var entiteOnglet = $("#"+balises_entites_base).find("ul .active").text();
 
 	//contenu += '<div class="aide-memoire-toolbar"><span class="toolbar-title">'+donnees[0]['typeEntite']+'</span><img src="../assets/images/toolbars/list.png" alt="drag and drop" /><img src="../assets/images/toolbars/pencil_add.png" /></div>';
-	contenu += '<div class="aide-memoire-toolbar"><span class="toolbar-title">'+entiteOnglet+'</span><span class="glyphicon glyphicon-pencil"></span><span class="glyphicon glyphicon-list"></span></div>';
+	contenu += '<div class="aide-memoire-toolbar"><span class="toolbar-title">'+entiteOnglet+'</span><span class="glyphicon glyphicon-pencil"></span><span class="glyphicon glyphicon-minus"></span></div>';
 
 	if(curIndex !== null){
 		// 	Créer l'interface dans le parent donnees[0]['target']
 		//$("#"+balises_entites_base).html('');
 		do{
-			/*contenu += '<div class="aide-memoire" data-idself="'+curIndex+'">';
-
-			contenu += '	<div class="aide-memoire-headings"><span>'+donnees[curIndex]['titre']+'</span><img src="../assets/images/toolbars/contract2_pencil.png" alt="Éditer cette entitée" /><img src="../assets/images/toolbars/trash_can_add.png" alt="Effacer cette entitée" /></div>';
-
-			contenu += '	<div class="aide-memoire-content">';
-			contenu += '		<span>(contenu -&gt;) '+donnees[curIndex]['contenu']+'</span>';
-			contenu += '	</div>';
-			contenu += '	<div class="aide-memoire-notes">';
-			contenu += '		<span>(notes -&gt;) ';
-			if(donnees[curIndex]['note'] !== null){
-				contenu += donnees[curIndex]['note'];
-				}
-			contenu += '</span>';
-			contenu += '	</div>';
-			contenu += '	<div class="aide-memoire-boutons-edition">';
-			contenu += '		<button type="button" data-btntype="save"><img src="../assets/images/toolbars/checkmark_pencil.png" alt="Accepter les changements" />Sauvegarder</button>';
-			contenu += '		<button type="button" data-btntype="cancel"><img src="../assets/images/toolbars/close_pencil.png" alt="Annuler les changements" />Annuler</button>';
-			contenu += '	</div>';
-			contenu += "</div>\n\n";*/
-
-			//$("#"+balises_entites_base).append(construireCodeEntite(curIndex, donnees[curIndex]));
 			contenu += construireCodeEntite(curIndex, donnees[curIndex]);
 			curIndex = donnees[curIndex]['ID_next'];
 		}while(curIndex != 0);
@@ -622,11 +611,11 @@ function traiterErreurs(msgErreur){
 	ce qui veux dire que l'on doit créer l'usager pour accèder à la BD (ne pas mélanger avec la table "usagers"
 	parce que ce n'est pas du tout la même chose), voir le fichier db_access.inc.php pour le mot de passe
 	*/
-	
+
 	if(msgErreur.substring(0,6) =="<br />"){ // Si commence par '<br />', on suppose que c'est une erreur PHP!
 		msgErreur = "[PHP] " + strStripHTML(msgErreur);
 	}
-	
+
 	alert("L'erreur suivante est survenue : '"+msgErreur+"'");
 }
 

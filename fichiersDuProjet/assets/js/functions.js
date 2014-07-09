@@ -1,8 +1,8 @@
 /**********************
 	Variables globales
 **********************/
-var baseURL = "http://createur-romans/fichiersDuProjet/"; // à changer quand le site sera en ligne
-//var baseURL = "http://localhost/GitHub/createur-romans/fichiersDuProjet/"; // à changer quand le site sera en ligne
+//var baseURL = "http://createur-romans/fichiersDuProjet/"; // à changer quand le site sera en ligne
+var baseURL = "http://localhost/GitHub/createur-romans/fichiersDuProjet/"; // à changer quand le site sera en ligne
 
 /**********************
 	Fonctions communes à toutes les pages

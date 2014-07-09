@@ -36,12 +36,12 @@ To Do:
 - [] pour le probleme de note "deleted", sur restauration on la replace à la toute fin? càd que son prev devient celui qui as next==0 et elle hérite elle-même de next=0
 - [] entitées et romans deleted, comment proposer la liste? mettre une sorte de poubelle?
 - [] nouvelle page admin, affiche sur chaque ligne : nom roman, nom usager, genre littéraire, état DELETED, bouton DELETE (ou pour les deux derniers, bouton del/undel)
-- [] faire un trim (g/d) des espaces avant d'enregistrer une donnée (titre, texte, nom, etc); ajouter ceci (aussi) à la fonction real_escape_string ?
+- [x] faire un trim (g/d) des espaces avant d'enregistrer une donnée (titre, texte, nom, etc); ajouter ceci (aussi) à la fonction real_escape_string ?
 
 MANQUE:
--sauvegarder entitée
--effacer entitée
--sauvegarder texte/notes générales
+-[x] sauvegarder entitée
+-[x] effacer entitée
+-[] sauvegarder texte/notes générales
 
 ============================================
 

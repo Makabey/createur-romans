@@ -306,8 +306,8 @@ function miseAJourDonneesEntite_EtatDeleted($db){
 				$row_idEntite = $resultat->fetch_row();
 				if($row_idEntite[0]  > 0){
 					$query = 'UPDATE `entites` SET `ID_next` = ' . $row_idEntite[1] . ' WHERE `ID_entite` = ' . $row_idEntite[0] . ';';
-					##$resultat = $db->query ($query);
-					##if(!$db->affected_rows){ $resultat = false; }
+					$resultat = $db->query ($query);
+					if(!$db->affected_rows){ $resultat = false; }
 				}
 			}else{
 				$resultat = false;
@@ -319,15 +319,15 @@ function miseAJourDonneesEntite_EtatDeleted($db){
 				//$row_idEntite = $resultat->fetch_row();
 				#if($row_idEntite[1]  > 0){
 					$query = 'UPDATE `entites` SET `ID_prev` = ' . $row_idEntite[0] . ' WHERE `ID_entite` = ' . $row_idEntite[1] . ';';
-					##$resultat = $db->query ($query);
-					##if(!$db->affected_rows){ $resultat = false; }
+					$resultat = $db->query ($query);
+					if(!$db->affected_rows){ $resultat = false; }
 				#}
 			}
 		}
 
 		if(false !== $resultat){
 			$query = 'UPDATE `entites` SET deleted = ' . $_POST['etat'] . ' WHERE ID_entite = ' . $_POST['idEntite'] . ';';
-			##$resultat = $db->query ($query);
+			$resultat = $db->query ($query);
 		}
 	}else{ // UNDELETE
 		/*
