@@ -121,6 +121,12 @@ code {
 	margin-left: -1px;
 	margin-bottom: -1px;
 	height: 220px;
+	
+	-webkit-transition: border 0.1s ease-in-out;
+	-moz-transition: border 0.1s ease-in-out;
+	-o-transition: border 0.1s ease-in-out;
+	-ms-transition: border 0.1s ease-in-out;
+	transition: border 0.1s ease-in-out;
 }
 .hub_client .btn-roman:hover{
 	border: 1px solid #3276b1;
