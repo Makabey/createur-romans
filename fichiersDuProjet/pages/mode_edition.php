@@ -13,6 +13,7 @@ require "../assets/inc/header.inc.php";
 				<li class="">Notes</li>-->
 			</ul>
 			<div class="wrap-composition">
+				<span id="msg_confirm_save">Modifications enregistrées 2014-07-09 10:24 ( date et heure )</span>
 				<textarea id="main_write" class=""></textarea>
 				<p><img src="../assets/images/wait_circle2.png" class="waitCircle" alt="Attendez..." /><span>Chargement du texte</span></p>
 			</div>

@@ -40,7 +40,7 @@ function genererBoutonAjouter(){
 
 	bouton += "<div class=\"col-6 col-sm-6 col-lg-4 btn-roman last-cell\" data-idRoman=\"0\">\n";
 	bouton += "<h2>Nouveau</h2>\n";
-	bouton += "<img src=\"../assets/images/plus.png\" class=\"nouveau_img\" alt=\"nouveau\" />\n</div>\n";
+	bouton += "<span class=\"nouveau_projet\"></span>\n</div>\n";
 
 	//$("#"+gblParentDesBalises).append(bouton);
 	return bouton;
@@ -67,13 +67,13 @@ function genererUnBoutonCharger(donnees){
 	synopsis_court = synopsis_court.replace(/¯/g, "; ");
 	synopsis_court = synopsis_court.replace(/"/g, "&quot;");
 
-	if(synopsis_court.length > 240){
-		synopsis_court = synopsis_court.substring(0, 239) + "...";
+	if(synopsis_court.length > 260){
+		synopsis_court = synopsis_court.substring(0, 259) + "...";
 	}
 
 	bouton += "<div class=\"col-6 col-sm-6 col-lg-4 btn-roman genreLit"+donnees['ID_genre']+"\" data-idRoman="+donnees['ID_roman'];
 	bouton += ">\n<h2 data-creation=\""+donnees['date_creation']+"\" data-dnrEdition=\""+donnees['date_dnrEdition']+"\" title=\""+donnees['titre']+"\">"+titre+"</h2>\n<p title=\""+synopsis+"\">"+synopsis_court+"</p>\n";
-	bouton += "<p><a class=\"btn btn-default\" href=\"#\" role=\"button\">Voir détails &raquo;</a></p>\n</div>";
+	bouton += "</div>";
 
 	return bouton;
 }

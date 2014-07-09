@@ -45,7 +45,7 @@ $rootDomaine = ($sNomDeCettePage == "index")?"":"http://localhost/GitHub/createu
 						</button>
 						<a class="navbar-brand" href="#"><img src="<?php echo $rootDomaine; ?>assets/images/logo.png" alt="créateur roman, bienvenue" />Créateur Roman</a>
 					</div>
-					<div class="navbar-collapse collapse">
+					<div class="navbar-collapse collapse inner-header">
 						<?php if(!isset($_SESSION['pseudo'])){ ?>
 						<form id="form_login" method="post" action="#" class="navbar-form navbar-right" role="form">
 							<div class="form-group">
@@ -57,8 +57,13 @@ $rootDomaine = ($sNomDeCettePage == "index")?"":"http://localhost/GitHub/createu
 							<button type="submit" class="btn btn-success">Connexion</button>
 						</form>
 						<?php }else{ ?>
-						<p>Bienvenue <?php echo $_SESSION[$_SESSION['pseudo']]['nom']; ?></p>
-						<a href="<?php echo $rootDomaine; ?>pages/logout.php">Se déconnecter</a>
+							<div class="bienvenue_user">
+								<span class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Bienvenue <?php echo $_SESSION[$_SESSION['pseudo']]['nom']; ?> <span class="caret"></span></a>
+									<ul class="dropdown-menu">
+										<li><a href="<?php echo $rootDomaine; ?>pages/logout.php">Se déconnecter</a></li>
+									<ul>
+								</span>
+							</div>
 						<?php } ?>
 					</div><!--/.navbar-collapse -->
 				</div>
