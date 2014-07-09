@@ -345,7 +345,7 @@ function miseAJourDonneesEntite_EtatDeleted($db){
 			#	$resultat = "0¬[" . __FUNCTION__ . "] UPDATE didn't occur (most probably because there was nothing to change)\n\n $query";
 			}
 		}else{
-			$resultat = "0¬[" . __FUNCTION__ . "] An error occured during an UPDATE operation.\n\nError=" . $db->error . " num_rows=" . $num_rows . "\n\n $query";
+			$resultat = "0¬[" . __FUNCTION__ . "] An error occured during an UPDATE operation.\n\nError = " . $db->error . "\nnum_rows = $num_rows \n\n $query";
 		}
 	#}
 	return $resultat;

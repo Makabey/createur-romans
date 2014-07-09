@@ -195,7 +195,7 @@ $(function(){
 			Effacer l'entitée
 		*/
 		var typeEntite;
-		var etatDeleted = false;
+		var etatDeleted = true;
 
 		if(gblEntiteEnCoursEdition == -1){
 			gblEntiteEnCoursEdition = $(this).parents(".aide-memoire").data("idself");
@@ -301,9 +301,10 @@ function deplacerEntite(fctTraitementPositif, fctTraitementNegatif, idRoman, typ
 }
 */
 
-function effacerEntite(fctTraitementPositif, fctTraitementNegatif, idRoman, typeEntite, idEntite){
-	var etatDeleted = (arguments[5] != undefined)?arguments[5]:1; // argument optionel
+function effacerEntite(fctTraitementPositif, fctTraitementNegatif, idRoman, idEntite){
+	var etatDeleted = (arguments[4] != undefined)?arguments[4]:1; // argument optionel
 	var XHR_Query = "oper=effacer&idRoman="+idRoman+"&idEntite="+idEntite+"&etat="+etatDeleted;
+	console.log(XHR_Query);
 	execXHR_Request("../assets/xhr/mode_edition.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
 
@@ -491,6 +492,8 @@ function effacerEntiteRetour(donnees){
 	if(ID_next > 0) { gblEntites[typeEntite][ID_next]['ID_prev'] = ID_prev; }
 
 
+	// Manque activer lignes pour BD (updates) et ici trouver/effacer interface
+	
 	gblEntiteEnCoursEdition = -1;
 }
 
