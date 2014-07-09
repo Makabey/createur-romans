@@ -336,7 +336,11 @@ code {
 	margin-top: -40px;
 	padding: 45px 10px 0 10px;
 }
-.mode_edition .aide-memoire-content span{
+.mode_edition .aide-memoire-notes{
+	padding: 5px 10px 25px 10px;
+}
+.mode_edition .aide-memoire-content span,
+.mode_edition .aide-memoire-notes span{
 	display: inline-block;
 	width: 100%;
 	height: 100%;
@@ -400,24 +404,24 @@ code {
 // Ajouts Eric
 .mode_edition .custom-ul>li.active{
 	-moz-border-bottom-colors: none;
-    -moz-border-left-colors: none;
-    -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
-    background-color: #fff;
-    border-color: #ddd #ddd transparent;
-    border-image: none;
-    border-style: solid;
-    border-width: 1px;
-    color: #555;
-    cursor: default;
+	-moz-border-left-colors: none;
+	-moz-border-right-colors: none;
+	-moz-border-top-colors: none;
+	background-color: #fff;
+	border-color: #ddd #ddd transparent;
+	border-image: none;
+	border-style: solid;
+	border-width: 1px;
+	color: #555;
+	cursor: default;
 	}
 .mode_edition .custom-ul>li{
-    border-radius: 4px 4px 0 0;
-    line-height: 1.42857;
-    margin-right: 2px;
-    display: block;
-    padding: 10px 15px;
-    position: relative;
+	border-radius: 4px 4px 0 0;
+	line-height: 1.42857;
+	margin-right: 2px;
+	display: block;
+	padding: 10px 15px;
+	position: relative;
 	cursor:pointer;
 }
 // \Ajouts Eric
@@ -524,35 +528,36 @@ code {
 	-ms-animation: eternalRotation 1.5s infinite linear;
 	-moz-animation: eternalRotation 1.5s infinite linear;
 	-webkit-animation: eternalRotation 1.5s infinite linear;
-    animation: eternalRotation 1.5s infinite linear;
+	animation: eternalRotation 1.5s infinite linear;
 	margin-right:10px;
 }
 
 @-o-keyframes eternalRotation {
-    from {-moz-transform:rotate(0deg);}
-    to {-moz-transform:rotate(360deg);}
+	from {-moz-transform:rotate(0deg);}
+	to {-moz-transform:rotate(360deg);}
 } 
 
 @-ms-keyframes eternalRotation {
-    from {-moz-transform:rotate(0deg);}
-    to {-moz-transform:rotate(360deg);}
+	from {-moz-transform:rotate(0deg);}
+	to {-moz-transform:rotate(360deg);}
 } 
 
 @-moz-keyframes eternalRotation {
-    from {-moz-transform:rotate(0deg);}
-    to {-moz-transform:rotate(360deg);}
+	from {-moz-transform:rotate(0deg);}
+	to {-moz-transform:rotate(360deg);}
 } 
 
 @-webkit-keyframes eternalRotation {
-    from {webkit-transform:rotate(0deg);}
-    to {webkit-transform:rotate(360deg);}
+	from {webkit-transform:rotate(0deg);}
+	to {webkit-transform:rotate(360deg);}
 }
 
 /* Standard syntax */
 @keyframes eternalRotation {
-    from {transform:rotate(0deg);}
-    to {transform:rotate(360deg);}
+	from {transform:rotate(0deg);}
+	to {transform:rotate(360deg);}
 } 
+
 /*
  * General -- Eric / Fin
  */ 

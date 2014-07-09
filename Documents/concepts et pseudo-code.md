@@ -3,12 +3,12 @@
 
 To Do:
 - [x] Une fois le CSS fini pour les toolbars de la page Edition, ne pas oublier de restaurer le code dana header.inc (~ln 5), mode_edition.js (~ln210 >> lireEntites) et enlever dans mode_edition.php le code direct en recopiant les changements dans mode_edition.js (~ln331 afficherEntite)
-- [] autosave texte principal, solution 1: lancer intervalle, si var1 et var2 sont 0 alors ne rien faire; si on tape (keyup) var1++; si qd intervalle arrive var1 et var2 différents alors var2=var1; si var1==var2 et tous deux !== 0 alors sauvegarder et var1 et var2 === 0
-- [] autosave texte principal, solution 2: pour la sauvegarde, il faudrait changer pour qu'il y ais ces variables (booleennes):
+- [x] autosave texte principal, solution 1: lancer intervalle, si var1 et var2 sont 0 alors ne rien faire; si on tape (keyup) var1++; si qd intervalle arrive var1 et var2 différents alors var2=var1; si var1==var2 et tous deux !== 0 alors sauvegarder et var1 et var2 === 0
+- [x] autosave texte principal, solution 2: pour la sauvegarde, il faudrait changer pour qu'il y ais ces variables (booleennes):
 	= mainText_DirtyBit_GUI si on as modifié le texte présentement à l'écran, remplace data-dirtybit
 	= mainText_DirtyBit_Disk_Texte si on as copié le texte en mémoire mais qu'il n'as pas été enregistré ds la BD
 	= mainText_DirtyBit_Disk_Notes si on as copié les notes en mémoire mais qu'elles n'ont pas été enregistrées ds la BD
-- [] autosave texte principal, solution 3: autosave, autre idée : un timeinterval aux secondes, onKeyUp on enregistre la date en timestamp, une autre variable enregistre le timestamp de la dernière sauvegarde; si le temps au moment du timeInterval entre les deux timeStamps >= disons 7 secondes, alors on tue l'intervalle puis on copie ds la BD le texte et au retour de l'opération XHR, on copie le timestamp courant vers le "dernier timestamp"(de sauvegarde)
+- [x] autosave texte principal, solution 3: autosave, autre idée : un timeinterval aux secondes, onKeyUp on enregistre la date en timestamp, une autre variable enregistre le timestamp de la dernière sauvegarde; si le temps au moment du timeInterval entre les deux timeStamps >= disons 7 secondes, alors on tue l'intervalle puis on copie ds la BD le texte et au retour de l'opération XHR, on copie le timestamp courant vers le "dernier timestamp"(de sauvegarde)
 - [] autre idée : au lieu d'utiliser une variable "globale" pour retenir le texte et les notes (applicable aussi aux "entitées" dans un deuxième temps), utiliser le "web storage", si indisponible alors seulement là utiliser une var globale!
 - [x] petit bug : le bouton "lire entitées" de la page Édition ne lit pas tout les entitées, un peu normal, il faut autant de requêtes que de types, pour la démo je pourrais le faire (tout les appels)
 - [ ] bug : le retour de "execXHR_Request" elle-même n'est pas traité, c'est à dire que si la fonction retourne purement FALSE (le fureteur du client ne supporte pas XHR), cette erreur n'est traité (je crois) par aucun de mes "wrappers".
@@ -39,9 +39,9 @@ To Do:
 - [x] faire un trim (g/d) des espaces avant d'enregistrer une donnée (titre, texte, nom, etc); ajouter ceci (aussi) à la fonction real_escape_string ?
 
 MANQUE:
--[x] sauvegarder entitée
--[x] effacer entitée
--[] sauvegarder texte/notes générales
+-[x] incorporer nv CSS pour msg saved
+-[] msg saved réécrire le bout qui donne l'heure de saved
+-
 
 ============================================
 

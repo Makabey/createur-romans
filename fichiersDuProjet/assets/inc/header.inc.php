@@ -3,16 +3,16 @@ session_start();
 $sNomDeCettePage = substr($_SERVER["SCRIPT_NAME"], (strrpos($_SERVER["SCRIPT_NAME"],"/")+1));
 $sNomDeCettePage = substr($sNomDeCettePage, 0, (strpos($sNomDeCettePage,".")));
 
-if(($sNomDeCettePage != "index") && (!isset($_SESSION['pseudo']))){
-	header("Location:/fichiersDuProjet/index.php");
-	exit();
-}elseif(($sNomDeCettePage == "index") && (isset($_SESSION['pseudo']))){
-	header("Location:/fichiersDuProjet/pages/hub_client.php");
-	exit();
-}
-
 #$rootDomaine = ($sNomDeCettePage == "index")?"":"/fichiersDuProjet/";
 $rootDomaine = ($sNomDeCettePage == "index")?"":"http://localhost/GitHub/createur-romans/fichiersDuProjet/";
+
+if(($sNomDeCettePage != "index") && (!isset($_SESSION['pseudo']))){
+	header("Location:".$rootDomaine."index.php");
+	exit();
+}elseif(($sNomDeCettePage == "index") && (isset($_SESSION['pseudo']))){
+	header("Location:".$rootDomaine."pages/hub_client.php");
+	exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr" xmlns="http://www.w3.org/1999/xhtml">
