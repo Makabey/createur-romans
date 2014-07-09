@@ -13,7 +13,7 @@ require "../assets/inc/header.inc.php";
 				<li class="">Notes</li>-->
 			</ul>
 			<div class="wrap-composition">
-				<span id="msg_confirm_save">Modifications enregistrées 2014-07-09 10:24 ( date et heure )</span>
+				<span id="msg_confirm_save"></span>
 				<textarea id="main_write" class=""></textarea>
 				<p><img src="../assets/images/wait_circle2.png" class="waitCircle" alt="Attendez..." /><span>Chargement du texte</span></p>
 			</div>
@@ -38,7 +38,7 @@ require "../assets/inc/header.inc.php";
 				</li>
 			</ul>
 			<!--<span class="en-tete-aide-memoire">Vos personnages</span>-->
-			<div class="wrap-aide-memoire" id="contenantEntites1">
+			<div class="wrap-aide-memoire"><!-- id="contenantEntites1"> -->
 				<!-- Tout le code est retourné dans le fichier mode_edition.js ~ln 290 -->
 			</div>
 		</div>

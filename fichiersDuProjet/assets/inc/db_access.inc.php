@@ -19,6 +19,9 @@ function db_connect(){
 
 function real_escape_string($chaine, $db){
 	if(is_object($db) && (get_class($db) == "mysqli")){
+		$chaine = str_replace('>', '&gt;', $chaine);
+		$chaine = str_replace('<', '&lt;', $chaine);
+		$chaine = trim($chaine);
 		$chaine = $db->real_escape_string($chaine);
 		$chaine = str_replace('_', '\_', $chaine);
 		$chaine = str_replace('%', '\%', $chaine);
