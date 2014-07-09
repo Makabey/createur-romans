@@ -15,7 +15,7 @@ $(function(){
 	$("#"+gblParentDesBalises).on("click", "div", function(){
 		var nvID_roman = $(this).data("idroman");
 		var XHR_Query = "oper=charger&idRoman="+nvID_roman;
-		console.log(XHR_Query);
+		//console.log(XHR_Query);
 		if(nvID_roman === 0){
 			window.location.replace(baseURL+"pages/assistant_creation.php");
 		}else{
@@ -50,6 +50,8 @@ function genererUnBoutonCharger(donnees){
 	var bouton = "";
 	var synopsis;
 	var synopsis_court;
+	var synopsis_court_maxLng = 260;
+	var synopsis_court_diff = -1;
 	var titre = donnees['titre'];
 
 	if (titre.length > 22){
@@ -67,8 +69,8 @@ function genererUnBoutonCharger(donnees){
 	synopsis_court = synopsis_court.replace(/¯/g, "; ");
 	synopsis_court = synopsis_court.replace(/"/g, "&quot;");
 
-	if(synopsis_court.length > 260){
-		synopsis_court = synopsis_court.substring(0, 259) + "...";
+	if(synopsis_court.length > synopsis_court_maxLng){
+		synopsis_court = synopsis_court.substring(0, synopsis_court_maxLng + synopsis_court_diff) + "...";
 	}
 
 	bouton += "<div class=\"col-6 col-sm-6 col-lg-4 btn-roman genreLit"+donnees['ID_genre']+"\" data-idRoman="+donnees['ID_roman'];

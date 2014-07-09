@@ -125,7 +125,7 @@ function erreurAuthentification(msgErreur){
 		Voir appels à "execXHR_Request",
 		Sert à traiter l'erreur recue.
 	*/
-	console.log(msgErreur);
+	//console.log(msgErreur);
 	$("#form_login>div>span").text("Pseudo ou Mot de passe erroné.");
 	$("#form_login>div>span").css({color:"#f00"});
 	$("#form_login>div").css({"background-color":"#fcc", border:"3px inset #f00", padding:"10px", "margin-bottom":"10px"});
