@@ -2,7 +2,7 @@
 session_start();
 $sNomDeCettePage = substr($_SERVER["SCRIPT_NAME"], (strrpos($_SERVER["SCRIPT_NAME"],"/")+1));
 $sNomDeCettePage = substr($sNomDeCettePage, 0, (strpos($sNomDeCettePage,".")));
-/*
+
 if(($sNomDeCettePage != "index") && (!isset($_SESSION['pseudo']))){
 	header("Location:/fichiersDuProjet/index.php");
 	exit();
@@ -10,7 +10,7 @@ if(($sNomDeCettePage != "index") && (!isset($_SESSION['pseudo']))){
 	header("Location:/fichiersDuProjet/pages/hub_client.php");
 	exit();
 }
-*/
+
 #$rootDomaine = ($sNomDeCettePage == "index")?"":"/fichiersDuProjet/";
 $rootDomaine = ($sNomDeCettePage == "index")?"":"http://localhost/GitHub/createur-romans/fichiersDuProjet/";
 ?>

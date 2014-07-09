@@ -59,7 +59,7 @@ require_once "../inc/library01.inc.php";
 
 if(!isset($_POST['oper']) || !isset($_POST['idRoman'])){ // || !isset($_POST['typeEntite'])
 	// Pour JavaScript : 0/1 : false/true ¬ texte erreur
-	echo '0¬A required parameter (either "oper", "typeEntite" or "idRoman"), is missing';
+	echo '0¬A required parameter (either "oper" or "idRoman"), is missing'; #, "typeEntite"
 	exit();
 }
 
@@ -71,12 +71,6 @@ if($_POST['idRoman'] <= 0){
 
 
 $arrValidEntities = array('quoi', 'ou', 'comment', 'pourquoi', 'qui', 'quand', 'textePrincipal');
-if(!in_array($_POST['typeEntite'], $arrValidEntities)){
-	//if($_POST['typeEntite'] != "delit"){
-		echo "0¬Invalid value for 'typeEntite' ({$_POST['typeEntite']})";
-	//}
-	exit();
-}
 
 $db = db_connect();
 
@@ -103,36 +97,52 @@ switch($_POST['oper']){
 		break;
 
 	case 'ecrire':
-		if(isset($_POST['contenu']) &&
-			(($_POST['typeEntite'] != 'textePrincipal' && isset($_POST['idEntite']) && isset($_POST['titre']) && isset($_POST['note'])) xor
-			($_POST['typeEntite'] == 'textePrincipal'))# && isset($_POST['idRoman'])))
-			){
-			$resultat = miseAJourDonneesEntite($db);
+		if(!isset($_POST['typeEntite'])){
+			$resultat = "0¬typeEntite is required for oper = ecrire";
 		}else{
-			$resultat = "0¬Specify either contenu, titre, note, idEntite and typeEntite != 'textePrincipal' -or- contenu, idRoman and typeEntite = 'textePrincipal' but not both branches.";
+			if(!in_array($_POST['typeEntite'], $arrValidEntities)){
+				$resultat = "0¬Invalid value for 'typeEntite' ({$_POST['typeEntite']})";
+			}else{
+				if(isset($_POST['contenu']) &&
+					(($_POST['typeEntite'] != 'textePrincipal' && isset($_POST['idEntite']) && isset($_POST['titre']) && isset($_POST['note'])) xor
+					($_POST['typeEntite'] == 'textePrincipal'))# && isset($_POST['idRoman'])))
+					){
+					$resultat = miseAJourDonneesEntite($db);
+				}else{
+					$resultat = "0¬Specify either contenu, titre, note, idEntite and typeEntite != 'textePrincipal' -or- contenu, idRoman and typeEntite = 'textePrincipal' but not both branches.";
+				}
+			}
 		}
 		break;
 
 	case 'deplacer': // Sert à déplacer l'entitée parmis ses collègue et/ou d'un type à un autre (quoi -> quand)
-		if(isset($_POST['idEntite']) && isset($_POST['prev']) && isset($_POST['next']) && $_POST['typeEntite'] != 'textePrincipal'){
-			if(isset($_POST['nvTypeEntite'])){
-				if($_POST['nvTypeEntite'] == 'textePrincipal'){
-					$resultat = "0¬Illegal value 'textePrincipal' for parameter 'nvTypeEntite'.";
-				}else if($_POST['nvTypeEntite'] == $_POST['typeEntite']){
-					unset($_POST['nvTypeEntite']);
+		if(!isset($_POST['typeEntite'])){
+			$resultat = "0¬typeEntite is required for oper = ecrire";
+		}else{
+			if(!in_array($_POST['typeEntite'], $arrValidEntities)){
+				$resultat = "0¬Invalid value for 'typeEntite' ({$_POST['typeEntite']})";
+			}else{
+				if(isset($_POST['idEntite']) && isset($_POST['prev']) && isset($_POST['next']) && $_POST['typeEntite'] != 'textePrincipal'){
+					if(isset($_POST['nvTypeEntite'])){
+						if($_POST['nvTypeEntite'] == 'textePrincipal'){
+							$resultat = "0¬Illegal value 'textePrincipal' for parameter 'nvTypeEntite'.";
+						}else if($_POST['nvTypeEntite'] == $_POST['typeEntite']){
+							unset($_POST['nvTypeEntite']);
+						}
+					}
+
+					if(false === $resultat){
+						$resultat = miseAJourDonneesEntite($db);
+					}
+				}else{
+					$resultat = "0¬Missing either prev, next or idEntite -or- typeEntite = 'textePrincipal' when it shouldn't be.";
 				}
 			}
-
-			if(false === $resultat){
-				$resultat = miseAJourDonneesEntite($db);
-			}
-		}else{
-			$resultat = "0¬Missing either prev, next or idEntite -or- typeEntite = 'textePrincipal' when it shouldn't be.";
 		}
 		break;
 
 	case 'effacer': // Supporte à la fois marquer DELETED et restaurer l'entité, donc TRUE/FALSE
-		if(isset($_POST['idEntite']) && $_POST['typeEntite'] != 'textePrincipal'){
+		if(isset($_POST['idEntite'])){
 			if(!isset($_POST['etat'])) { $_POST['etat'] = 1; }
 			if(is_numeric($_POST['etat'])){
 				$_POST['etat']+=0;
@@ -141,17 +151,25 @@ switch($_POST['oper']){
 				$_POST['etat'] = strtolower($_POST['etat']);
 				$_POST['etat'] = ($_POST['etat'] == "true" || $_POST['etat'] == "vrai")?1:0;
 			}
-			$resultat = miseAJourDonneesEntite($db);
+			$resultat = miseAJourDonneesEntite_EtatDeleted($db);
 		}else{
-			$resultat = "0¬Missing either etat or idEntite -or- typeEntite = 'textePrincipal' when it shouldn't be.";
+			$resultat = "0¬Missing either etat or idEntite.";
 		}
 		break;
 
 	case 'inserer':
-		if(isset($_POST['titre']) && isset($_POST['contenu']) && isset($_POST['note']) && $_POST['typeEntite'] != 'textePrincipal'){
-			$resultat = insererEntite($db);
+		if(!isset($_POST['typeEntite'])){
+			$resultat = "0¬typeEntite is required for oper = ecrire";
 		}else{
-			$resultat = "0¬Missing either idRoman, typeEntite, titre, contenu or note -or- typeEntite = 'textePrincipal' when it shouldn't be.";
+			if(!in_array($_POST['typeEntite'], $arrValidEntities)){
+				$resultat = "0¬Invalid value for 'typeEntite' ({$_POST['typeEntite']})";
+			}else{
+				if(isset($_POST['titre']) && isset($_POST['contenu']) && isset($_POST['note']) && $_POST['typeEntite'] != 'textePrincipal'){
+					$resultat = insererEntite($db);
+				}else{
+					$resultat = "0¬Missing either idRoman, typeEntite, titre, contenu or note -or- typeEntite = 'textePrincipal' when it shouldn't be.";
+				}
+			}
 		}
 		break;
 
@@ -196,6 +214,9 @@ function lireDonneesEntite($db){
 				$ID_entite = array_shift($row);
 				if($resultat[0]['first'] === null){
 					$resultat[0]['first'] = $ID_entite;
+				}
+				if($row[1] == 0){ // ID_next
+					$resultat[0]['last'] = $ID_entite;
 				}
 				$resultat[$ID_entite] = array_combine($arrChamps_entites, $row);
 			}
@@ -244,7 +265,7 @@ function miseAJourDonneesEntite($db){
 		}// à moins d'erreur dans le code plus haut, je n'ai pas besoin d'un ELSE ultime
 
 		$query .= ' WHERE ID_entite = ' . $_POST['idEntite'];
-		$query .= ' AND typeEntite = "' . $_POST['typeEntite'] . '"'; // Juste pour être sur qu'on met la bonne entitée à jour
+		#$query .= ' AND typeEntite = "' . $_POST['typeEntite'] . '"'; // Juste pour être sur qu'on met la bonne entitée à jour
 		$query .= ';';
 	}
 
@@ -253,13 +274,80 @@ function miseAJourDonneesEntite($db){
 		if(false !== $result){
 			if($db->affected_rows){
 				$resultat = "1¬[" . __FUNCTION__ . "] UPDATE successful\n\n '$query'";
-			}else{
-				$resultat = "0¬[" . __FUNCTION__ . "] UPDATE didn't occur (most probably because there was nothing to change)\n\n $query";
+			#}else{
+			#	$resultat = "0¬[" . __FUNCTION__ . "] UPDATE didn't occur (most probably because there was nothing to change)\n\n $query";
 			}
 		}else{
 			$resultat = "0¬[" . __FUNCTION__ . "] An error occured during an UPDATE operation.\n\n" . $db->error . "\n\n $query";
 		}
 	}
+	return $resultat;
+}
+
+function miseAJourDonneesEntite_EtatDeleted($db){
+	global $arrValidEntities;
+	#$resultat = false;
+	$num_rows = 0;
+
+	if($_POST['etat'] == 1){ // DELETE
+		/*
+			etapes :
+			1. lire pour idEntite le prev/next
+			2. update du next avec le chiffre du prev si non 0
+			3. idem inverse next/prev
+			4. update deleted
+		*/
+		$query = 'SELECT `ID_prev`, `ID_next` FROM `entites` WHERE `ID_entite` = ' . $_POST['idEntite'] . ';';
+		$resultat = $db->query ($query);
+
+		if(false !== $resultat){
+			$num_rows = $resultat->num_rows;
+			if($num_rows){
+				$row_idEntite = $resultat->fetch_row();
+				if($row_idEntite[0]  > 0){
+					$query = 'UPDATE `entites` SET `ID_next` = ' . $row_idEntite[1] . ' WHERE `ID_entite` = ' . $row_idEntite[0] . ';';
+					$resultat = $db->query ($query);
+					if(!$db->affected_rows){ $resultat = false; }
+				}
+			}else{
+				$resultat = false;
+			}
+		}
+
+		if(false !== $resultat){
+			if($row_idEntite[1]  > 0){
+				//$row_idEntite = $resultat->fetch_row();
+				#if($row_idEntite[1]  > 0){
+					$query = 'UPDATE `entites` SET `ID_prev` = ' . $row_idEntite[0] . ' WHERE `ID_entite` = ' . $row_idEntite[1] . ';';
+					$resultat = $db->query ($query);
+					if(!$db->affected_rows){ $resultat = false; }
+				#}
+			}
+		}
+
+		if(false !== $resultat){
+			$query = 'UPDATE `entites` SET deleted = ' . $_POST['etat'] . ' WHERE ID_entite = ' . $_POST['idEntite'] . ';';
+			$resultat = $db->query ($query);
+		}
+	}else{ // UNDELETE
+		/*
+			Sur restauration on la replace à la toute fin; càd que son prev devient celui qui as next==0, corriger celui qui était next aussi
+		*/
+		$resultat = false; # pour le moment...
+	}
+
+	#if($resultat === false){
+		//$resultat = $db->query ($query);
+		if(false !== $resultat){
+			if($db->affected_rows){
+				$resultat = "1¬[" . __FUNCTION__ . "] UPDATE successful\n\n '$query'";
+			#}else{
+			#	$resultat = "0¬[" . __FUNCTION__ . "] UPDATE didn't occur (most probably because there was nothing to change)\n\n $query";
+			}
+		}else{
+			$resultat = "0¬[" . __FUNCTION__ . "] An error occured during an UPDATE operation.\n\nError = " . $db->error . "\nnum_rows = $num_rows \n\n $query";
+		}
+	#}
 	return $resultat;
 }
 
@@ -274,8 +362,12 @@ function insererEntite($db){ // pour le moment ne s'appliquerais qu'aux entitée
 	$resultat = $db->query ($query);
 	// Tenter d'insérer une nouvelle entitée
 	if(false !== $resultat){
-		$row = $resultat->fetch_row();
-		$ID_prev = $row[0]+0; // Le "+0" est pour les cas où le nouvel enregistrement est le premier pour un type d'entite, évite de faire un appel à $resultat->num_rows
+		if($resultat->num_rows > 0){
+			$row = $resultat->fetch_row();
+			$ID_prev = $row[0];
+		}else{
+			$ID_prev = 0;
+		}
 
 		$_POST['titre'] = real_escape_string($_POST['titre'], $db);
 		$_POST['contenu'] = real_escape_string($_POST['contenu'], $db);
@@ -287,22 +379,29 @@ function insererEntite($db){ // pour le moment ne s'appliquerais qu'aux entitée
 		$resultat = $db->query ($query);
 	}
 
-	// Mettre à jour l'entité qui avec auparavent ID_next=0 pour mettre le ID de la nouvelle entitée
+	// Mettre à jour l'entité qui avais auparavent ID_next=0 pour mettre le ID de la nouvelle entitée
 	if(false !== $resultat){
 		$ID_entite = $db->insert_id;
 
-		$query = 'UPDATE entites SET ID_next = ' . $ID_entite . ' WHERE ID_entite = ' . $ID_prev . ';';
-		$queryType = "n UPDATE";
+		if($ID_prev > 0){
+			$query = 'UPDATE entites SET ID_next = ' . $ID_entite . ' WHERE ID_entite = ' . $ID_prev . ';';
+			$queryType = "n UPDATE";
 
-		$resultat = $db->query ($query);
+			$resultat = $db->query ($query);
+		}
 	}
 
 	// Traitement des erreurs!
 	if(false !== $resultat){
-		if($db->affected_rows){
-			$resultat = "1¬[" . __FUNCTION__ . "] INSERT successful. New ID is " . $ID_entite;
+		if($ID_prev > 0){
+			if($db->affected_rows){
+				#$resultat = "1¬[" . __FUNCTION__ . "] INSERT successful. New ID is " . $ID_entite;
+				$resultat = "1¬" . $ID_entite;
+			}else{
+				$resultat = "0¬[" . __FUNCTION__ . "] UPDATE phase didn't occur\n\n $query";
+			}
 		}else{
-			$resultat = "0¬[" . __FUNCTION__ . "] UPDATE phase didn't occur\n\n $query";
+			$resultat = "1¬" . $ID_entite;
 		}
 	}else{
 		$resultat = "0¬[" . __FUNCTION__ . "] An error occured during a$queryType operation.\n\n" . $db->error . "\n\n $query";
