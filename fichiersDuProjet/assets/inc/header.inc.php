@@ -3,9 +3,9 @@ session_start();
 $sNomDeCettePage = substr($_SERVER["SCRIPT_NAME"], (strrpos($_SERVER["SCRIPT_NAME"],"/")+1));
 $sNomDeCettePage = substr($sNomDeCettePage, 0, (strpos($sNomDeCettePage,".")));
 
-#$rootDomaine = ($sNomDeCettePage == "index")?"":"/fichiersDuProjet/";
+$rootDomaine = ($sNomDeCettePage == "index")?"":"/fichiersDuProjet/"; // maison Eric
 #$rootDomaine = ($sNomDeCettePage == "index")?"":"http://localhost/GitHub/createur-romans/fichiersDuProjet/";
-$rootDomaine = "http://etscribimus.olirick-tp.site40.net/";
+#$rootDomaine = "http://etscribimus.olirick-tp.site40.net/";
 
 if(($sNomDeCettePage != "index") && (!isset($_SESSION['pseudo']))){
 	header("Location:".$rootDomaine."index.php");
@@ -61,6 +61,11 @@ if(($sNomDeCettePage != "index") && (!isset($_SESSION['pseudo']))){
 							<div class="bienvenue_user">
 								<span class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Bienvenue <?php echo $_SESSION[$_SESSION['pseudo']]['nom']; ?> <span class="caret"></span></a>
 									<ul class="dropdown-menu">
+										<?php
+											if($sNomDeCettePage == "mode_edition"){
+												echo '<li><a href="' . $rootDomaine . 'pages/hub_client.php">Retour au HUB</a></li>';
+											}
+										?>
 										<li><a href="<?php echo $rootDomaine; ?>pages/logout.php">Se déconnecter</a></li>
 									<ul>
 								</span>

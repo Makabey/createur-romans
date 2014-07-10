@@ -62,13 +62,19 @@ function insererEntiteRetour(donnees){
 	var typeEntite = gblEntites['temp']['typeEntite'];
 
 	gblEntites[typeEntite][donnees] = {'ID_prev':gblEntites[typeEntite][0]['last'], 'ID_next':'0','titre':gblEntites['temp']['titre'], 'contenu':gblEntites['temp']['contenu'], 'note':gblEntites['temp']['note']};
-	gblEntites[typeEntite][gblEntites[typeEntite][0]['last']]['ID_next'] = donnees;
+	if(gblEntites[typeEntite][0]['last'] > 0){
+		gblEntites[typeEntite][gblEntites[typeEntite][0]['last']]['ID_next'] = donnees;
+	}
 	gblEntites[typeEntite][0]['last'] = donnees;
+	if(gblEntites[typeEntite][0]['first'] == 0){
+		gblEntites[typeEntite][0]['first'] = donnees;
+	}
 
 	$("#"+balises_entites_base+">div>div:last-child").data("idself", donnees);
 	//console.log(gblEntites[typeEntite]);
 	//console.log(gblEntites['temp']);
 	$("#"+balises_entites_base+">div").find("span[contenteditable='true']").removeAttr("contenteditable");
+		$("#"+balises_entites_base+">div").find("div[data-idself='9999']").remove();
 	gblEntiteEnCoursEdition = -1;
 }
 
@@ -138,9 +144,11 @@ function afficherEntites(donnees){
 		//console.log(donnees);
 		//console.log(gblEntites);
 		contenu += '<div class="aide-memoire" ';
-		contenu += 'data-idself="0">';
+		contenu += 'data-idself="9999">';
 		contenu += '	<div class="aide-memoire-headings"><span>Aucune entitées pour ce type.</span></div>';
 		contenu += "</div>\n\n";
+		donnees[0]['first'] = 0;
+		donnees[0]['last'] = 0;
 	}
 	$("#"+balises_entites_base+">div").html(contenu);
 	$("#"+balises_entites_base+">div").find(".aide-memoire-boutons-edition").hide();
@@ -156,7 +164,7 @@ function afficherRoman(donnees){
 		$("#"+balise_MainText).text("[Cet usager n'as aucun Roman ou il y as eût une erreur de BD.]");
 	}
 	$("#"+balise_MainText).show();
-	$("#"+balise_MainText+"~p").hide();
+	$("#"+balise_MainText+"~p").remove();
 }
 
 function sauvegarderTextePrincipal(id_balise){
@@ -498,7 +506,7 @@ $(function () {
 		Bloc principal, si idRoman est bien initialisé alors charger le Roman correspondant avec ses entitées
 	*/
 	if(idRoman > 0){
-		$("#balise_MainText").hide();
+		$("#"+balise_MainText).hide();
 		chargerRoman(afficherRoman, traiterErreurs, idRoman);
 		lireEntites(afficherEntites, traiterErreurs, idRoman, "qui");
 	}else{
