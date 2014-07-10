@@ -36,7 +36,7 @@ function construireCodeEntite(curIndex){
 	contenu += '<div class="aide-memoire" data-idself="'+curIndex+'">';
 
 	// Contenu
-	contenu += '	<div class="aide-memoire-headings"><span'+editable+' placeholder="Taper un titre ici">'+donnees['titre']+'</span><img src="../assets/images/toolbars/contract2_pencil.png" alt="Éditer cette entitée" /><img src="../assets/images/toolbars/trash_can_add.png" alt="Effacer cette entitée" /></div>';
+	contenu += '	<div class="aide-memoire-headings"><span'+editable+' placeholder="Taper un titre ici">'+donnees['titre']+'</span><span class="glyphicon glyphicon-pencil"></span><span class="glyphicon glyphicon-trash"></span></div>';
 	contenu += '	<div class="aide-memoire-content">';
 	contenu += '		<span'+editable+' placeholder="Entrer la description ici">'+donnees['contenu']+'</span>';
 	contenu += '	</div>';
@@ -490,7 +490,7 @@ $(function () {
 		}
 	});
 
-	$("#"+balises_entites_base).on('click', '.aide-memoire-headings>img:first-of-type', function(){
+	$("#"+balises_entites_base).on('click', '.aide-memoire-headings>span:nth-of-type(2)', function(){
 		/*
 			Éditer l'entitée
 		*/
@@ -509,7 +509,7 @@ $(function () {
 		}
 	});
 
-	$("#"+balises_entites_base).on('click', '.aide-memoire-headings>img:nth-of-type(2)', function(){
+	$("#"+balises_entites_base).on('click', '.aide-memoire-headings>span:last-of-type', function(){
 		/*
 			Effacer l'entitée
 		*/
