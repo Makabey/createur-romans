@@ -5,6 +5,7 @@
 var baseURL = "http://localhost/GitHub/createur-romans/fichiersDuProjet/"; // ISI
 //var baseURL = "http://etscribimus.olirick-tp.site40.net/"; // en ligne
 
+
 /**********************
 	Fonctions communes à toutes les pages
 **********************/
