@@ -75,7 +75,7 @@ function genererUnBoutonCharger(donnees){
 	}
 
 	bouton += "<div class=\"col-6 col-sm-6 col-lg-4 btn-roman genreLit"+donnees['ID_genre']+"\" data-idRoman="+donnees['ID_roman'];
-	bouton += ">\n<h2 data-creation=\""+donnees['date_creation']+"\" data-dnrEdition=\""+donnees['date_dnrEdition']+"\" title=\""+donnees['titre']+"\">"+titre+"</h2>\n<p title=\""+synopsis+"\">"+synopsis_court+"</p>\n";
+	bouton += ">\n<span class=\"glyphicon glyphicon-remove suppr_roman\"></span><h2 data-creation=\""+donnees['date_creation']+"\" data-dnrEdition=\""+donnees['date_dnrEdition']+"\" title=\""+donnees['titre']+"\">"+titre+"</h2>\n<p title=\""+synopsis+"\">"+synopsis_court+"</p>\n";
 	bouton += "</div>";
 
 	return bouton;
