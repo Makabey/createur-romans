@@ -128,6 +128,8 @@ function lireListeRomans($db){
 		$arrChamps_Romans[] = 'synopsis';
 		while ($row = $result->fetch_row()){
 			$tmp[] = array_combine($arrChamps_Romans, $row);
+			$tmp[count($tmp)-1]['titre'] = decode($tmp[count($tmp)-1]['titre']);
+			$tmp[count($tmp)-1]['synopsis'] = decode($tmp[count($tmp)-1]['synopsis']);
 		}
 
 		$resultat = (!empty($tmp))?json_encode($tmp):'';

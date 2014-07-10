@@ -2,8 +2,8 @@
 	Variables globales
 **********************/
 //var baseURL = "http://createur-romans/fichiersDuProjet/"; // Maison Eric
-var baseURL = "http://localhost/GitHub/createur-romans/fichiersDuProjet/"; // ISI
-//var baseURL = "http://etscribimus.olirick-tp.site40.net/"; // en ligne
+//var baseURL = "http://localhost/GitHub/createur-romans/fichiersDuProjet/"; // ISI
+var baseURL = "http://etscribimus.olirick-tp.site40.net/"; // en ligne
 
 
 /**********************

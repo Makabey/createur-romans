@@ -124,6 +124,7 @@ function effacerEntiteRetour(donnees){
 
 	// Mettre une case "vide"
 	if(gblEntites[typeEntite][0]['first'] == 0){
+		contenu += '<div class="aide-memoire-toolbar"><span class="toolbar-title">'+entiteOnglet+'</span><span class="glyphicon glyphicon-plus"></span></div>';
 		contenu += '<div class="aide-memoire" ';
 		contenu += 'data-idself="9999">';
 		contenu += '	<div class="aide-memoire-headings"><span>Aucune entitées pour ce type.</span></div>';
@@ -342,7 +343,7 @@ function TraiterClickOnglets_Entites(ceci){
 			typeEntite = typeEntite.replace('é', 'e');
 			if(typeEntite === "delit") { return; }// Si c'est le bouton "Délit", ignorer l'évènement
 			if(gblEntites[typeEntite] !== undefined){
-				console.log("afficher entites seulement");
+				//console.log("afficher entites seulement");
 				afficherEntites(gblEntites[typeEntite], false);
 			}else{
 				//console.log(typeEntite + " est vide");
@@ -419,7 +420,7 @@ $(function () {
 				typeEntite = typeEntite.replace('é', 'e');
 
 				$(this).parents('.aide-memoire').find("span[contenteditable='true']").removeAttr("contenteditable");
-				spanChilds = $(this).parents('.aide-memoire').find("span");
+				spanChilds = $(this).parents('.aide-memoire').find("span[contenteditable='true']");
 				//console.log(spanChilds);
 				//console.log(gblEntites[typeEntite][idEntite]);
 				// Restaurer les valeurs selon la mémoire
@@ -433,8 +434,8 @@ $(function () {
 			}
 			gblEntiteEnCoursEdition = -1;
 		}else{ // BOUTON "SAUVEGARDER"
-			console.log($(this).data("btntype"));
-			console.log(idEntite);
+			//console.log($(this).data("btntype"));
+			//console.log(idEntite);
 			//return;
 
 			typeEntite = $("#"+balises_entites_base+">ul .active a").text();
@@ -469,7 +470,7 @@ $(function () {
 		console.log("click -- dragNdrop");
 	});
 
-	$("#"+balises_entites_base).on('click', '.aide-memoire-toolbar .glyphicon-pencil', function(){
+	$("#"+balises_entites_base).on('click', '.aide-memoire-toolbar .glyphicon-plus', function(){
 		/*
 			Ajout d'une entitée
 		*/
@@ -495,7 +496,7 @@ $(function () {
 			Éditer l'entitée
 		*/
 		//console.log("click -- editer");
-		console.log("gblEntiteEnCoursEdition  = " + gblEntiteEnCoursEdition + " // $(this).parents('.aide-memoire').data('idself') = " + $(this).parents('.aide-memoire').data('idself'));
+		//console.log("gblEntiteEnCoursEdition  = " + gblEntiteEnCoursEdition + " // $(this).parents('.aide-memoire').data('idself') = " + $(this).parents('.aide-memoire').data('idself'));
 		if(gblEntiteEnCoursEdition == $(this).parents('.aide-memoire').data('idself')){
 			//console.log("CET enfant est déjà en mode édition!");
 			alert("Erreur!\n\nCette entitée est déjà en mode édition!");
@@ -550,7 +551,7 @@ $(function () {
 		chargerRoman(afficherRoman, traiterErreurs, idRoman);
 		lireEntites(afficherEntites, traiterErreurs, idRoman, "qui");
 	}else{
-		console.log(baseURL+"index.php");
+		//console.log(baseURL+"index.php");
 		window.location.replace(baseURL+"index.php");
 	}
 });

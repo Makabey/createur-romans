@@ -206,10 +206,9 @@ function lireDonneesEntite($db){
 			/* On veux le texte ? Faire une simple lecture */
 			$resultat = array_combine($arrChamps_roman, $result->fetch_row());
 			// Corriger des transformation faites par la fonction real_escape_string
-			$resultat['contenu'] = str_replace('&gt;', '>', $resultat['contenu']);
-			$resultat['contenu'] = str_replace('&lt;', '<', $resultat['contenu']);
-			$resultat['notes_globales'] = str_replace('&gt;', '>', $resultat['notes_globales']);
-			$resultat['notes_globales'] = str_replace('&lt;', '<', $resultat['notes_globales']);
+			$resultat['contenu'] = decode($resultat['contenu']);
+			$resultat['synopsis'] = decode($resultat['synopsis']);
+			$resultat['notes_globales'] = decode($resultat['notes_globales']);
 		}elseif($mode == 2){
 			$resultat[0]['typeEntite'] = $_POST['typeEntite'];
 			#$resultat[0]['target'] = $_POST['target'];
@@ -224,6 +223,9 @@ function lireDonneesEntite($db){
 					$resultat[0]['last'] = $ID_entite;
 				}
 				$resultat[$ID_entite] = array_combine($arrChamps_entites, $row);
+				foreach($resultat[$ID_entite]  as $cle => $donnees){
+					$resultat[$ID_entite][$cle] = decode($donnees);
+				}
 			}
 		}
 
