@@ -2,23 +2,30 @@
 ####Contient tâches, idées, concepts, questions et "ToDo"
 
 ToDo:
--[] plus de tests avec les gars
--[] plus de tests dans IE, Chrome, FF, tablette
--[] case pour passer l'assistant??
+- [ ] plus de tests avec les gars
+- [ ] plus de tests dans IE, Chrome, FF, tablette
+- [ ] hub_client :: case pour passer l'assistant?? (je crois que c'est possible en moins de 20 minutes)
+- [ ] hub_client :: petit 'x' sur les cases de romans pour "effacer" un roman?
+- [ ] il y as des '\' pour les apostrophes et les guillemets dans les entitées, le synopsis et les textes
+- [ ] changer index.php pour reflèter le changement de nom et mettre le texte d'Olivier
+- [ ] mettre la (nouvelle) vidéo, si possible.
+- [ ] Ok, créer un nouvel usager ne fonctionne pas sur IE8 (oui sur XP, je teste et prend congé de code, je sais, je sais c'est pas trop le temps)... s'identifier non plus O_o HAHAHAHAHA!!!
+- [ ] hub_client :: la case 'ajouter' n'affiche pas son '+' :'(
+- [ ] BUG : si un type d'entitée est vide et qu'on tente d'en ajouter, l'enregistement ne se fait pas ou mal, l'application pense qu'on est toujours en édition et quand on recharge le type, la nouvelle entitée n'y est pas... en fait elle apparait dans la BD, le problème semble plus avec l'effacement lui-même, c'est lié à coup sûr ou alors il faut que je vois ce que j'ai fait pour le TP PHP et que je tente d'éliminer le foutu code de l'hébergeur, donc re-tester à l'école en premier!
 
 Idées et principes abandonnés:
-- [] autre idée : au lieu d'utiliser une variable "globale" pour retenir le texte et les notes (applicable aussi aux "entitées" dans un deuxième temps), utiliser le "web storage", si indisponible alors seulement là utiliser une var globale!
+- [ ] autre idée : au lieu d'utiliser une variable "globale" pour retenir le texte et les notes (applicable aussi aux "entitées" dans un deuxième temps), utiliser le "web storage", si indisponible alors seulement là utiliser une var globale!
 - [ ] bug : le retour de "execXHR_Request" elle-même n'est pas traité, c'est à dire que si la fonction retourne purement FALSE (le fureteur du client ne supporte pas XHR), cette erreur n'est traité (je crois) par aucun de mes "wrappers".
 - [ ] (lié au dragNdrop) pour editionProjet.xhr.php>>oper=deplacer, voir ce que j'ai fait avec assistant_creation.xhr.php>>creerLeRoman pour ce qui est de la multi-mise à jour en une seule requête
 -ne pas faire le truc d'inspiration!
 -ne pas oublier le drag'n'drop, voir où mettre le fameux icône
-- [] pour le probleme de note "deleted", sur restauration on la replace à la toute fin? càd que son prev devient celui qui as next==0 et elle hérite elle-même de next=0
-- [] entitées et romans deleted, comment proposer la liste? mettre une sorte de poubelle?
-- [] nouvelle page admin, affiche sur chaque ligne : nom roman, nom usager, genre littéraire, état DELETED, bouton DELETE (ou pour les deux derniers, bouton del/undel)
--[] page Édition : retirer le besoin pour 'typeEntite' partout où c'est possible, surtout considérant que, tant qu'on parle des entitées, on peux faire presque tout seulement avec leur ID_entite pour les identifier de façon unique.
+- [ ] pour le probleme de note "deleted", sur restauration on la replace à la toute fin? càd que son prev devient celui qui as next==0 et elle hérite elle-même de next=0
+- [ ] entitées et romans deleted, comment proposer la liste? mettre une sorte de poubelle?
+- [ ] nouvelle page admin, affiche sur chaque ligne : nom roman, nom usager, genre littéraire, état DELETED, bouton DELETE (ou pour les deux derniers, bouton del/undel)
+- [ ] page Édition : retirer le besoin pour 'typeEntite' partout où c'est possible, surtout considérant que, tant qu'on parle des entitées, on peux faire presque tout seulement avec leur ID_entite pour les identifier de façon unique.
 	-ecrire :: possible si je part avec le fait que si "titre"(et note) est spécifié, l'entité pointée n'est pas le textePrincipal
 	-déplacer :: possible aussi je crois
--[] page Édition : changer EFFACER comme suit : si on recoit un idEntite, c'est un quoi,etc... si on recoit un idRoman, c'est le textePrincipal/Roman table roman_details
+- [ ] page Édition : changer EFFACER comme suit : si on recoit un idEntite, c'est un quoi,etc... si on recoit un idRoman, c'est le textePrincipal/Roman table roman_details
 - [ ] Page index (au moins) : encryption des données usager?
 - [ ] Page index (au moins) : lire les APIs de G+ et F pour le login
 - [ ] Page index (au moins) : lire à propos de et implémenter mdp encryptés? voir http://glynrob.com/javascript/client-side-hashing-and-encryption/
@@ -97,23 +104,23 @@ Idées et principes abandonnés:
 - [x] menage code mort!!!
 - [x] tout re-commenter
 - [x] page de test pour formulaire + table pour le supporter
--[x]Onglets entités
-	-[x] phase 1: onclick aller prendre parent, du parent dire aux enfants de perdre classe "active", donne a enfant cliquer classe active
-	-[x] phase 2: tjrs onclick détecter si texte balise <a>== $(this)>a.text si oui on as cliquer celui qui est actif ou juste lire si as classe actif, si oui ne rien faire
-	-[x] phase 3: onclick si onglet différent tester si ds var globale on as les données pour le nouvel onglet sinon charger les données
--[x]scinder code pour récupérer les entitées entre fct qui lit les données et fct qui génère les balises
--[x]onglet fct qui lit, si pour un type il y as 0 entrées ds la BD alors "first" ==0 pour savoir que au moins as été lu... malgré que si l'entrée array existe, c'est qu'on as au moins essayé de lire...
--[x] copier ce qui est pertinent du code pour les onglets entités vers les onglet textePrincipal et Notes globales
--[x] changer création Roman ds BD pour enregistrer le synopsis aussi dans champs notes
+- [x] Onglets entités
+	- [x] phase 1: onclick aller prendre parent, du parent dire aux enfants de perdre classe "active", donne a enfant cliquer classe active
+	- [x] phase 2: tjrs onclick détecter si texte balise <a>== $(this)>a.text si oui on as cliquer celui qui est actif ou juste lire si as classe actif, si oui ne rien faire
+	- [x] phase 3: onclick si onglet différent tester si ds var globale on as les données pour le nouvel onglet sinon charger les données
+- [x] scinder code pour récupérer les entitées entre fct qui lit les données et fct qui génère les balises
+- [x] onglet fct qui lit, si pour un type il y as 0 entrées ds la BD alors "first" ==0 pour savoir que au moins as été lu... malgré que si l'entrée array existe, c'est qu'on as au moins essayé de lire...
+- [x] copier ce qui est pertinent du code pour les onglets entités vers les onglet textePrincipal et Notes globales
+- [x] changer création Roman ds BD pour enregistrer le synopsis aussi dans champs notes
 - ~~ [] créer fct qui ajoute des boutons pour modifier les entitées et fct onblur qui fait ESC/restaure le texte à partir de la mémoire. Btns poppent... non ~~
 - [x] btns pour modifier les entitées sont ajouté à la création, pê ajouter une couche de DIV (si overflow hidden pas suffisant ou que visuellement ça fct pas)? laisser les gars faire mieux
 	- [x] {entitées} faire la copie des span vers la mémoire quand l'usager clique le bouton [accepter] -et- vers la BD
 	- [x] {entitées} faire la copie de la mémoire vers les span quand l'usager clique le bouton [annuler]
--[x] ajouter mini-toolbar pour faire l'ajout d'entitées
--[x] ajouter mini-toolbar aux entitées pour edit (ou commence avec un dbl-click?) et delete
+- [x] ajouter mini-toolbar pour faire l'ajout d'entitées
+- [x] ajouter mini-toolbar aux entitées pour edit (ou commence avec un dbl-click?) et delete
 - [x] faire un trim (g/d) des espaces avant d'enregistrer une donnée (titre, texte, nom, etc); ajouter ceci (aussi) à la fonction real_escape_string ?
--[x] page Édition : BUG :: si on change l'état DELETED, les entitées pointées par PREV/NEXT de l'entitée retirée ne sont -pas- corrigées ni au retrait, ni à la récupération, à corriger dès que possible
--[x] page Édition : Tester plus pour savoir si j'ai un bug avec la fonction "miseAJourDonneesEntite" ou si c'est simplement que j'essaie de sauver une fraction avant l'ordi et donc que non seulement le flag "DirtyBit" dans le code JS est toujours vrai mais en plus qu'il n'y as rien à changer, aucune erreur et donc que je devrais changer le code pour NE PAS renvoyer d'erreur quand "rows_affected" == 0...
+- [x] page Édition : BUG :: si on change l'état DELETED, les entitées pointées par PREV/NEXT de l'entitée retirée ne sont -pas- corrigées ni au retrait, ni à la récupération, à corriger dès que possible
+- [x] page Édition : Tester plus pour savoir si j'ai un bug avec la fonction "miseAJourDonneesEntite" ou si c'est simplement que j'essaie de sauver une fraction avant l'ordi et donc que non seulement le flag "DirtyBit" dans le code JS est toujours vrai mais en plus qu'il n'y as rien à changer, aucune erreur et donc que je devrais changer le code pour NE PAS renvoyer d'erreur quand "rows_affected" == 0...
 
  =====
 
