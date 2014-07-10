@@ -338,7 +338,7 @@ function miseAJourDonneesEntite_EtatDeleted($db){
 		}
 
 		if(false !== $resultat){
-			$query = 'UPDATE `entites` SET deleted = ' . $_POST['etat'] . ' WHERE ID_entite = ' . $_POST['idEntite'] . ';';
+			$query = 'UPDATE `entites` SET deleted = 1 WHERE ID_entite = ' . $_POST['idEntite'] . ';';
 			$resultat = $db->query ($query);
 		}
 	}else{ // UNDELETE
@@ -369,7 +369,7 @@ function insererEntite($db){ // pour le moment ne s'appliquerais qu'aux entitée
 		Insérer une nouvelle entitée dans la BD
 	*/
 	// Commencer par relever le ID de l'entité qui as ID_next=0 pour le Roman et le type recheché
-	$query = 'SELECT ID_entite FROM entites WHERE ID_next = 0 AND ID_roman = ' . $_POST['idRoman'] . ' AND typeEntite = "' . $_POST['typeEntite'] . '";';
+	$query = 'SELECT ID_entite FROM entites WHERE ID_next = 0 AND ID_roman = ' . $_POST['idRoman'] . ' AND typeEntite = "' . $_POST['typeEntite'] . '" AND deleted = 0;';
 	$queryType = " SELECT";
 	$resultat = $db->query ($query);
 	// Tenter d'insérer une nouvelle entitée

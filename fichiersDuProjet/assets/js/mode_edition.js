@@ -31,9 +31,11 @@ function construireCodeEntite(curIndex){
 	}else{
 		donnees = arguments[1];
 	}
-	
+
+	// Toolbar
 	contenu += '<div class="aide-memoire" data-idself="'+curIndex+'">';
 	contenu += '	<div class="aide-memoire-headings"><span'+editable+'>'+donnees['titre']+'</span><img src="../assets/images/toolbars/contract2_pencil.png" alt="Éditer cette entitée" /><img src="../assets/images/toolbars/trash_can_add.png" alt="Effacer cette entitée" /></div>';
+	// Contenu
 	contenu += '	<div class="aide-memoire-content">';
 	contenu += '		<span'+editable+'>'+donnees['contenu']+'</span>';
 	contenu += '	</div>';
@@ -60,6 +62,7 @@ function construireCodeEntite(curIndex){
 **********************/
 function insererEntiteRetour(donnees){
 	var typeEntite = gblEntites['temp']['typeEntite'];
+	var contenu;
 
 	gblEntites[typeEntite][donnees] = {'ID_prev':gblEntites[typeEntite][0]['last'], 'ID_next':'0','titre':gblEntites['temp']['titre'], 'contenu':gblEntites['temp']['contenu'], 'note':gblEntites['temp']['note']};
 	if(gblEntites[typeEntite][0]['last'] > 0){
@@ -70,11 +73,17 @@ function insererEntiteRetour(donnees){
 		gblEntites[typeEntite][0]['first'] = donnees;
 	}
 
-	$("#"+balises_entites_base+">div>div:last-child").data("idself", donnees);
+	//$("#"+balises_entites_base+">div>div:last-child").data("idself", donnees);
+	$("#"+balises_entites_base+">div").find("div[data-idself='0']").remove();
+	//construireCodeEntite(donnees, false);
+	contenu = construireCodeEntite(donnees, gblEntites[typeEntite][donnees]);
+	$("#"+balises_entites_base+">div").append(contenu);
+	$("#"+balises_entites_base+">div").find(".aide-memoire-boutons-edition").hide();
+
 	//console.log(gblEntites[typeEntite]);
 	//console.log(gblEntites['temp']);
 	$("#"+balises_entites_base+">div").find("span[contenteditable='true']").removeAttr("contenteditable");
-		$("#"+balises_entites_base+">div").find("div[data-idself='9999']").remove();
+	$("#"+balises_entites_base+">div").find("div[data-idself='9999']").remove();
 	gblEntiteEnCoursEdition = -1;
 }
 
@@ -96,15 +105,34 @@ function effacerEntiteRetour(donnees){
 	var typeEntite = gblEntites['temp']['typeEntite'];
 	var ID_next;
 	var ID_prev;
+	var contenu = '';
 	//console.log("[effacerEntiteRetour] Retour = ' "+donnees+" '");
 
 	ID_next = gblEntites[typeEntite][gblEntiteEnCoursEdition]['ID_next'];
 	ID_prev = gblEntites[typeEntite][gblEntiteEnCoursEdition]['ID_prev'];
 
+	//console.log("typeEntite = "+typeEntite+" / ID_prev = " + ID_prev + " / ID_next = " + ID_next);
+
 	if(ID_prev > 0) { gblEntites[typeEntite][ID_prev]['ID_next'] = ID_next; }
 	if(ID_next > 0) { gblEntites[typeEntite][ID_next]['ID_prev'] = ID_prev; }
 
+	if(ID_prev == 0) { gblEntites[typeEntite][0]['first'] = ID_next; }
+	if(ID_next == 0) { gblEntites[typeEntite][0]['last'] = ID_prev; }
+
 	$("#"+balises_entites_base+">div").find("div[data-idself='"+gblEntiteEnCoursEdition+"']").remove();
+
+	// Mettre une case "vide"
+	if(gblEntites[typeEntite][0]['first'] == 0){
+		contenu += '<div class="aide-memoire" ';
+		contenu += 'data-idself="9999">';
+		contenu += '	<div class="aide-memoire-headings"><span>Aucune entitées pour ce type.</span></div>';
+		contenu += "</div>\n\n";
+		//donnees[0]['first'] = 0;
+		//donnees[0]['last'] = 0;
+		$("#"+balises_entites_base+">div").html(contenu);
+	}
+
+	delete gblEntites[typeEntite][gblEntiteEnCoursEdition];  // parce que c'est un objet !
 
 	gblEntiteEnCoursEdition = -1;
 }
@@ -118,21 +146,22 @@ function afficherEntites(donnees){
 		donnees : les donnees à traiter
 		s'il y as un second parametre : indique qu'il ne faut pas pré-traiter les données avec JSON
 	*/
+	//console.log(donnees);
+	var contenu='';
+	var curIndex; // = donnees[0]['first'];
+	var entiteOnglet = $("#"+balises_entites_base).find("ul .active").text();
+
 	//	Préparer les données
 	if(arguments[1] === undefined){
 		donnees = JSON.parse(donnees);
 		gblEntites[donnees[0]['typeEntite']] = donnees;
 		//console.log("[afficherEntites] j'ai chargé les entites");
 	}
-
-	//console.log(donnees);
-	var contenu='';
-	var curIndex = donnees[0]['first'];
-	var entiteOnglet = $("#"+balises_entites_base).find("ul .active").text();
-
+	
+	curIndex = donnees[0]['first'];
 	contenu += '<div class="aide-memoire-toolbar"><span class="toolbar-title">'+entiteOnglet+'</span><span class="glyphicon glyphicon-pencil"></span><span class="glyphicon glyphicon-minus"></span></div>';
 
-	if(curIndex !== null){
+	if((curIndex !== null) && (curIndex !== 0)){
 		// 	Créer l'interface dans le parent donnees[0]['target']
 		do{
 			contenu += construireCodeEntite(curIndex, donnees[curIndex]);
@@ -155,7 +184,7 @@ function afficherEntites(donnees){
 }
 
 function afficherRoman(donnees){
-	gblRoman = JSON.parse(donnees); 
+	gblRoman = JSON.parse(donnees);
 	//console.log(gblRoman);
 	if(gblRoman.length !== 0){
 		$("#"+balise_MainText).text(gblRoman['contenu']);
@@ -194,13 +223,13 @@ function lancerDelaiSauvegardeTextePrincipal(msgRetour){
 	var sMinutes = dDate.getMinutes() ;
 	var sSecondes = dDate.getSeconds();
 	var sDate;
-	
+
 	if(sJour < 10){ sJour = '0'+sJour; }
 	if(sMois < 10){ sMois = '0'+sMois; }
 	if(sHeures < 10){ sHeures = '0'+sHeures; }
 	if(sMinutes < 10){ sMinutes = '0'+sMinutes; }
 	if(sSecondes < 10){ sSecondes = '0'+sSecondes; }
-	
+
 	sDate = sHeures + ":" + sMinutes + ":" + sSecondes + " " + sJour + "/" + sMois + "/" + dDate.getFullYear();
 	$("#msg_confirm_save").text("Texte sauvegardé @ " + sDate).fadeIn('medium').delay(iDelaiOcculterMessageSauvegarde).fadeOut('slow');
 }
@@ -231,13 +260,13 @@ function traiterErreurs(msgErreur){
 **********************/
 function lireEntites(fctTraitementPositif, fctTraitementNegatif, idRoman, typeEntite){
 	var XHR_Query = "oper=lire&typeEntite="+typeEntite+"&idRoman="+idRoman;
-	
+
 	execXHR_Request("../assets/xhr/mode_edition.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
 
 function modifierEntite(fctTraitementPositif, fctTraitementNegatif, idRoman, typeEntite, titre, contenu, noteEntite, idEntite){
 	var XHR_Query;
-	
+
 	titre = encodeURIComponent (titre);
 	contenu = encodeURIComponent (contenu);
 	noteEntite = encodeURIComponent (noteEntite);
@@ -248,7 +277,7 @@ function modifierEntite(fctTraitementPositif, fctTraitementNegatif, idRoman, typ
 
 function insererEntite(fctTraitementPositif, fctTraitementNegatif, idRoman, typeEntite, titre, contenu, noteEntite){
 	var XHR_Query;
-	
+
 	titre = encodeURIComponent (titre);
 	contenu = encodeURIComponent (contenu);
 	noteEntite = encodeURIComponent (noteEntite);
@@ -270,7 +299,7 @@ function chargerRoman(fctTraitementPositif, fctTraitementNegatif, idRoman){
 
 function sauvegarderTexte(fctTraitementPositif, fctTraitementNegatif, idRoman, nouveauTexte, nouvelleNote){
 	var XHR_Query;
-	
+
 	nouveauTexte = encodeURIComponent (nouveauTexte);
 	nouvelleNote = encodeURIComponent (nouvelleNote);
 	XHR_Query = "oper=ecrire&typeEntite=textePrincipal&idRoman="+idRoman+"&contenu="+nouveauTexte+"&notes="+nouvelleNote;
@@ -312,6 +341,7 @@ function TraiterClickOnglets_Entites(ceci){
 			typeEntite = typeEntite.replace('é', 'e');
 			if(typeEntite === "delit") { return; }// Si c'est le bouton "Délit", ignorer l'évènement
 			if(gblEntites[typeEntite] !== undefined){
+				console.log("afficher entites seulement");
 				afficherEntites(gblEntites[typeEntite], false);
 			}else{
 				//console.log(typeEntite + " est vide");
@@ -372,6 +402,8 @@ $(function () {
 
 		//console.log($(this).data("btntype"));
 		//console.log(idEntite);
+		//return;
+
 		if($(this).data("btntype") == "cancel"){ // BOUTON "ANNULER"
 			if(idEntite == 0){
 				// Si le bouton appartient à une entité dont le idself = 0, donc c'est une nouvelle entitée non-enregistrée
@@ -400,6 +432,10 @@ $(function () {
 			}
 			gblEntiteEnCoursEdition = -1;
 		}else{ // BOUTON "SAUVEGARDER"
+			console.log($(this).data("btntype"));
+			console.log(idEntite);
+			//return;
+
 			typeEntite = $("#"+balises_entites_base+">ul .active a").text();
 			typeEntite = typeEntite.toLowerCase();
 			typeEntite = typeEntite.replace('ù', 'u');
@@ -458,6 +494,7 @@ $(function () {
 			Éditer l'entitée
 		*/
 		//console.log("click -- editer");
+		console.log("gblEntiteEnCoursEdition  = " + gblEntiteEnCoursEdition + " // $(this).parents('.aide-memoire').data('idself') = " + $(this).parents('.aide-memoire').data('idself'));
 		if(gblEntiteEnCoursEdition == $(this).parents('.aide-memoire').data('idself')){
 			//console.log("CET enfant est déjà en mode édition!");
 			alert("Erreur!\n\nCette entitée est déjà en mode édition!");
