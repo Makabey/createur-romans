@@ -25,7 +25,7 @@ function construireCodeEntite(curIndex){
 	var editable = '';
 
 	if(arguments[1] === undefined){
-		donnees = {'titre':"Tapez votre titre ici", 'contenu':"Entrez votre texte ici", 'note':"Laisser une note"};
+		donnees = {'titre':"", 'contenu':"", 'note':""};
 		curIndex = 0;
 		editable = ' contenteditable="true"';
 	}else{
@@ -33,12 +33,12 @@ function construireCodeEntite(curIndex){
 	}
 	
 	contenu += '<div class="aide-memoire" data-idself="'+curIndex+'">';
-	contenu += '	<div class="aide-memoire-headings"><span'+editable+'>'+donnees['titre']+'</span><img src="../assets/images/toolbars/contract2_pencil.png" alt="Éditer cette entitée" /><img src="../assets/images/toolbars/trash_can_add.png" alt="Effacer cette entitée" /></div>';
+	contenu += '	<div class="aide-memoire-headings"><span'+editable+' placeholder="Taper un titre ici">'+donnees['titre']+'</span><img src="../assets/images/toolbars/contract2_pencil.png" alt="Éditer cette entitée" /><img src="../assets/images/toolbars/trash_can_add.png" alt="Effacer cette entitée" /></div>';
 	contenu += '	<div class="aide-memoire-content">';
-	contenu += '		<span'+editable+'>'+donnees['contenu']+'</span>';
+	contenu += '		<span'+editable+' placeholder="Entrer la description ici">'+donnees['contenu']+'</span>';
 	contenu += '	</div>';
 	contenu += '	<div class="aide-memoire-notes">';
-	contenu += '		<span'+editable+'>';
+	contenu += '		<span'+editable+' placeholder="Laisser une note">';
 	if(donnees['note'] !== null){ contenu += donnees['note']; }
 	contenu += '</span>';
 	contenu += '	</div>';
@@ -124,7 +124,7 @@ function afficherEntites(donnees){
 	var curIndex = donnees[0]['first'];
 	var entiteOnglet = $("#"+balises_entites_base).find("ul .active").text();
 
-	contenu += '<div class="aide-memoire-toolbar"><span class="toolbar-title">'+entiteOnglet+'</span><span class="glyphicon glyphicon-pencil"></span><span class="glyphicon glyphicon-minus"></span></div>';
+	contenu += '<div class="aide-memoire-toolbar"><span class="toolbar-title">'+entiteOnglet+'</span><span class="glyphicon glyphicon-plus"></span></div>';
 
 	if(curIndex !== null){
 		// 	Créer l'interface dans le parent donnees[0]['target']
