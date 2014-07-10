@@ -7,7 +7,7 @@ ToDo:
 - [ ] plus de tests tablette
   - [ ] le menu en mode portrait ne s'ouvre pas, il clignote ouvert/fermé une fois quand on touche ==> pb mm sur ordi
 - [ ] hub_client :: case pour passer l'assistant?? (je crois que c'est possible en moins de 20 minutes)
-- [ ] hub_client :: petit 'x' sur les cases de romans pour "effacer" un roman?
+- [x] hub_client :: petit 'x' sur les cases de romans pour "effacer" un roman?
 - [x] hub_client :: sous-menu "retour a la selection roman / retour au hub" apparait?
 - [x] faute à 000webhost!! ==>> il y as des '\' pour les apostrophes et les guillemets dans les entitées, le synopsis et les textes
 - [x] changer index.php pour reflèter le changement de nom et mettre le texte d'Olivier
