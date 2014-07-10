@@ -9,13 +9,13 @@ ToDo:
 - [ ] hub_client :: case pour passer l'assistant?? (je crois que c'est possible en moins de 20 minutes)
 - [ ] hub_client :: petit 'x' sur les cases de romans pour "effacer" un roman?
 - [x] hub_client :: sous-menu "retour a la selection roman / retour au hub" apparait?
-- [ ] faute à 000webhost!! ==>> il y as des '\' pour les apostrophes et les guillemets dans les entitées, le synopsis et les textes
+- [x] faute à 000webhost!! ==>> il y as des '\' pour les apostrophes et les guillemets dans les entitées, le synopsis et les textes
 - [x] changer index.php pour reflèter le changement de nom et mettre le texte d'Olivier
 - [ ] mettre la (nouvelle) vidéo, si possible.
 - [ ] Ok, créer un nouvel usager ne fonctionne pas sur IE8 (oui sur XP, je teste et prend congé de code, je sais, je sais c'est pas trop le temps)... s'identifier non plus O_o HAHAHAHAHA!!!
-- [ ] hub_client :: la case 'ajouter' n'affiche pas son '+' :'(
+- [x] hub_client :: la case 'ajouter' n'affiche pas son '+' :'(
 - [x] BUG : si un type d'entitée est vide et qu'on tente d'en ajouter, l'enregistement ne se fait pas ou mal, l'application pense qu'on est toujours en édition et quand on recharge le type, la nouvelle entitée n'y est pas... en fait elle apparait dans la BD; le problème est  probablement causé par  "l'entité" bidon là pour dire que ce type est vide, devrais recevoir l'ID 9999 et être tué quand on ajoute une entitée, APRÈS qu'elle ais été sauvée, par contre aucune obligation de recréer ce "bidon"
-    - [ ] je pense règlé, faire plus de tests!
+    - [x] je pense règlé, faire plus de tests!
 	- [x] bug mémoire, reste là si effacé
 	- [x] bug BD si un item (son prev = 0), on ajoute 1 et on efface le premier, le nouveau pointe encore sur le premier qui avait prev=0 MAIS JS recoit correctement que son first/last est ce seul entitée
 - [ ] voir ce que j'ai fait pour le TP PHP et tenter d'éliminer le foutu code de l'hébergeur, s'il y as toujours des problèmes ONLINE

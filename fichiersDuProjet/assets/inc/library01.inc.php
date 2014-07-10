@@ -53,6 +53,22 @@ function encode($Chaine){
 	return htmlentities($Chaine, ENT_COMPAT, 'ISO-8859-1');
 }
 
+##############
+#
+# Decode la chaine
+#
+function decode($Chaine){
+	$Chaine = str_replace('&gt;', '>', $Chaine);
+	$Chaine = str_replace('&lt;', '<', $Chaine);
+	do{
+		$Chaine = str_replace(chr(92).chr(92), chr(92), $Chaine, $compteur);
+	}while($compteur > 0);
+	$Chaine = str_replace(chr(92).chr(34), chr(34), $Chaine);
+	$Chaine = str_replace(chr(92).chr(39), chr(39), $Chaine);
+
+	return $Chaine;
+}
+
 
 ##############
 #
