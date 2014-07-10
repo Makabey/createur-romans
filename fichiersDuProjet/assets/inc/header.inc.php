@@ -4,7 +4,8 @@ $sNomDeCettePage = substr($_SERVER["SCRIPT_NAME"], (strrpos($_SERVER["SCRIPT_NAM
 $sNomDeCettePage = substr($sNomDeCettePage, 0, (strpos($sNomDeCettePage,".")));
 
 #$rootDomaine = ($sNomDeCettePage == "index")?"":"/fichiersDuProjet/";
-$rootDomaine = ($sNomDeCettePage == "index")?"":"http://localhost/GitHub/createur-romans/fichiersDuProjet/";
+#$rootDomaine = ($sNomDeCettePage == "index")?"":"http://localhost/GitHub/createur-romans/fichiersDuProjet/";
+$rootDomaine = "http://etscribimus.olirick-tp.site40.net/";
 
 if(($sNomDeCettePage != "index") && (!isset($_SESSION['pseudo']))){
 	header("Location:".$rootDomaine."index.php");

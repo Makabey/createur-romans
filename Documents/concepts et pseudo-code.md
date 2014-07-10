@@ -1,60 +1,33 @@
 ###Fichier d'Eric
 ####Contient tâches, idées, concepts, questions et "ToDo"
 
-To Do:
-- [x] Une fois le CSS fini pour les toolbars de la page Edition, ne pas oublier de restaurer le code dana header.inc (~ln 5), mode_edition.js (~ln210 >> lireEntites) et enlever dans mode_edition.php le code direct en recopiant les changements dans mode_edition.js (~ln331 afficherEntite)
-- [x] autosave texte principal, solution 1: lancer intervalle, si var1 et var2 sont 0 alors ne rien faire; si on tape (keyup) var1++; si qd intervalle arrive var1 et var2 différents alors var2=var1; si var1==var2 et tous deux !== 0 alors sauvegarder et var1 et var2 === 0
-- [x] autosave texte principal, solution 2: pour la sauvegarde, il faudrait changer pour qu'il y ais ces variables (booleennes):
-	= mainText_DirtyBit_GUI si on as modifié le texte présentement à l'écran, remplace data-dirtybit
-	= mainText_DirtyBit_Disk_Texte si on as copié le texte en mémoire mais qu'il n'as pas été enregistré ds la BD
-	= mainText_DirtyBit_Disk_Notes si on as copié les notes en mémoire mais qu'elles n'ont pas été enregistrées ds la BD
-- [x] autosave texte principal, solution 3: autosave, autre idée : un timeinterval aux secondes, onKeyUp on enregistre la date en timestamp, une autre variable enregistre le timestamp de la dernière sauvegarde; si le temps au moment du timeInterval entre les deux timeStamps >= disons 7 secondes, alors on tue l'intervalle puis on copie ds la BD le texte et au retour de l'opération XHR, on copie le timestamp courant vers le "dernier timestamp"(de sauvegarde)
+ToDo:
+-[] plus de tests avec les gars
+-[] plus de tests dans IE, Chrome, FF, tablette
+-[] case pour passer l'assistant??
+
+Idées et principes abandonnés:
 - [] autre idée : au lieu d'utiliser une variable "globale" pour retenir le texte et les notes (applicable aussi aux "entitées" dans un deuxième temps), utiliser le "web storage", si indisponible alors seulement là utiliser une var globale!
-- [x] petit bug : le bouton "lire entitées" de la page Édition ne lit pas tout les entitées, un peu normal, il faut autant de requêtes que de types, pour la démo je pourrais le faire (tout les appels)
 - [ ] bug : le retour de "execXHR_Request" elle-même n'est pas traité, c'est à dire que si la fonction retourne purement FALSE (le fureteur du client ne supporte pas XHR), cette erreur n'est traité (je crois) par aucun de mes "wrappers".
 - [ ] (lié au dragNdrop) pour editionProjet.xhr.php>>oper=deplacer, voir ce que j'ai fait avec assistant_creation.xhr.php>>creerLeRoman pour ce qui est de la multi-mise à jour en une seule requête
-- [x] bug : encodage pas au point ou cest pcq jai pas updater page edition avec les ameliorations de creation... hum ... ??? O_o spécifiquement les guillemets
-- [x] menage code mort!!!
-- [x] tout re-commenter
-- [x] page de test pour formulaire + table pour le supporter
--[x]Onglets entités
-	-[x] phase 1: onclick aller prendre parent, du parent dire aux enfants de perdre classe "active", donne a enfant cliquer classe active
-	-[x] phase 2: tjrs onclick détecter si texte balise <a>== $(this)>a.text si oui on as cliquer celui qui est actif ou juste lire si as classe actif, si oui ne rien faire
-	-[x] phase 3: onclick si onglet différent tester si ds var globale on as les données pour le nouvel onglet sinon charger les données
--[x]scinder code pour récupérer les entitées entre fct qui lit les données et fct qui génère les balises
--[x]onglet fct qui lit, si pour un type il y as 0 entrées ds la BD alors "first" ==0 pour savoir que au moins as été lu... malgré que si l'entrée array existe, c'est qu'on as au moins essayé de lire...
--[x] copier ce qui est pertinent du code pour les onglets entités vers les onglet textePrincipal et Notes globales
--[x] changer création Roman ds BD pour enregistrer le synopsis aussi dans champs notes
-- ~~ [] créer fct qui ajoute des boutons pour modifier les entitées et fct onblur qui fait ESC/restaure le texte à partir de la mémoire. Btns poppent... non ~~
-- [x] btns pour modifier les entitées sont ajouté à la création, pê ajouter une couche de DIV (si overflow hidden pas suffisant ou que visuellement ça fct pas)? laisser les gars faire mieux
-	- [x] {entitées} faire la copie des span vers la mémoire quand l'usager clique le bouton [accepter] -et- vers la BD
-	- [x] {entitées} faire la copie de la mémoire vers les span quand l'usager clique le bouton [annuler]
--[x] ajouter mini-toolbar pour faire l'ajout d'entitées
--[x] ajouter mini-toolbar aux entitées pour edit (ou commence avec un dbl-click?) et delete
 -ne pas faire le truc d'inspiration!
 -ne pas oublier le drag'n'drop, voir où mettre le fameux icône
 - [] pour le probleme de note "deleted", sur restauration on la replace à la toute fin? càd que son prev devient celui qui as next==0 et elle hérite elle-même de next=0
 - [] entitées et romans deleted, comment proposer la liste? mettre une sorte de poubelle?
 - [] nouvelle page admin, affiche sur chaque ligne : nom roman, nom usager, genre littéraire, état DELETED, bouton DELETE (ou pour les deux derniers, bouton del/undel)
-- [x] faire un trim (g/d) des espaces avant d'enregistrer une donnée (titre, texte, nom, etc); ajouter ceci (aussi) à la fonction real_escape_string ?
-
-MANQUE:
--[x] incorporer nv CSS pour msg saved
--[] msg saved réécrire le bout qui donne l'heure de saved
--
+-[] page Édition : retirer le besoin pour 'typeEntite' partout où c'est possible, surtout considérant que, tant qu'on parle des entitées, on peux faire presque tout seulement avec leur ID_entite pour les identifier de façon unique.
+	-ecrire :: possible si je part avec le fait que si "titre"(et note) est spécifié, l'entité pointée n'est pas le textePrincipal
+	-déplacer :: possible aussi je crois
+-[] page Édition : changer EFFACER comme suit : si on recoit un idEntite, c'est un quoi,etc... si on recoit un idRoman, c'est le textePrincipal/Roman table roman_details
+- [ ] Page index (au moins) : encryption des données usager?
+- [ ] Page index (au moins) : lire les APIs de G+ et F pour le login
+- [ ] Page index (au moins) : lire à propos de et implémenter mdp encryptés? voir http://glynrob.com/javascript/client-side-hashing-and-encryption/
+- [ ] Page index (au moins) : si on encrypte les données ET qu'on n'enregistre pas le MdP sur le serveur, par sécurité, ça veux dire qu'on peux associer les données au nom d'usager et que seul le bon mot de passe décrypte correctement les données, donc pas de validation MdP, je dois lire plus pour voir si j'ai bien compris comment implémenter un MdP qui n'est pas sauvé (même encrypté) sur le serveur. Implémenter?
+- [ ] page Édition : voir http://www.fakenamegenerator.com/faq.php :: http://www.roguebasin.com/index.php?title=Random_name_generation :: http://www.godpatterns.com/2005/09/name-generators-for-npcs-to-populate.html
+- [ ] page Édition : Page admin avec stats, #auteurs, #romans, etc???
+- [ ] page Édition : lire plus sur le mécanisme de drag&drop pour savoir comment aborder le réordonnement des entitées --> http://www.html5rocks.com/en/tutorials/dnd/basics/ --> Modernizr --> pas compliqué juste 30-40 lignes de JS
 
 ============================================
-
-Pour "editionProjet.xhr.php" :
-TODO:
-	9. retirer le besoin pour 'typeEntite' partout où c'est possible, surtout considérant que, tant qu'on parle des entitées, on peux faire presque tout seulement avec leur ID_entite pour les identifier de façon unique.
-		-ecrire :: possible si je part avec le fait que si "titre"(et note) est spécifié, l'entité pointée n'est pas le textePrincipal
-		-déplacer :: possible aussi je crois
-	10. BUG :: si on change l'état DELETED, les entitées pointées par PREV/NEXT de l'entitée retirée ne sont -pas- corrigées ni au retrait, ni à la récupération, à corriger dès que possible
-	11. Tester plus pour savoir si j'ai un bug avec la fonction "miseAJourDonneesEntite" ou si c'est simplement que j'essaie de sauver une fraction avant l'ordi et donc que non seulement le flag "DirtyBit" dans le code JS est toujours vrai mais en plus qu'il n'y as rien à changer, aucune erreur et donc que je devrais changer le code pour NE PAS renvoyer d'erreur quand "rows_affected" == 0...
-	12. changer EFFACER comme suit : si on recoit un idEntite, c'est un quoi,etc... si on recoit un idRoman, c'est le textePrincipal/Roman table roman_details
-
-====
 
 ####Page index (au moins) ::
 - [x] rendre plus gracieux la manipulation des erreurs MySQL, surtout pour le bénéfice de XHR
@@ -63,18 +36,13 @@ TODO:
 - [x] créer les tables et exporter un .SQL vers GH
 - [x] lire à propos de et prévoir XSS
 - [x] lire à propos de et prévoir SQL injection
-- [ ] lire à propos de et implémenter mdp encryptés? voir http://glynrob.com/javascript/client-side-hashing-and-encryption/
-- [ ] encryption des données usager?
-- [ ] lire les APIs de G+ et F pour le login
 - [x] fichier XHR + code JS pour query de validité usager (usr+pwd)
 - [x] fichier XHR + code JS pour query de disponiblité nom usager, à moins de fusionner avec "validité" et d'utiliser les codes de retour ex:
  * 0=usager inexistant (usager libre ou nom mal tapé),
  * 1=usager existant (usager indisponible ou nom bien tapé),
  * 2=mot de passe invalide,
  * 3=mot de passe OK (-doit- sous-entendre usager existant) ; suppose que le champs PWD peux être vide et si c'est le cas la validation du PWD n'est pas faite donc pas de code 2 erroné
-- [ ] si on encrypte les données ET qu'on n'enregistre pas le MdP sur le serveur, par sécurité, ça veux dire qu'on peux associer les données au nom d'usager et que seul le bon mot de passe décrypte correctement les données, donc pas de validation MdP, je dois lire plus pour voir si j'ai bien compris comment implémenter un MdP qui n'est pas sauvé (même encrypté) sur le serveur. Implémenter?
 - [x] reprendre assets/inc/header.inc.php et corriger la description et les keywords, autant faire ça correctement pour le SEO ;)
-- [ ] voir http://www.fakenamegenerator.com/faq.php :: http://www.roguebasin.com/index.php?title=Random_name_generation :: http://www.godpatterns.com/2005/09/name-generators-for-npcs-to-populate.html
 
 
 ####Page selectionProjet ::
@@ -101,6 +69,7 @@ TODO:
 - [x] fonction sauvegardertexte pas finie, manque les params
 - [x] changer la fonction afficherAttente, elle doit maintenant : 1. occulter le FORM et le BUTTON de 'next'; 2. afficher un DIV ou P dédié et placé -avant- le FORM; 3. créer une fonction opposée? L'idée est de pouvoir cacher le FORM durant la recomposition de son contenu indépendamment; 4. lui donner aussi un param pour le message! si pas là, mettre un défaut :)
 
+
 ####Page editionProjet
 - [x] décider si mettre "roman.contenu" dans fichier texte séparé au lieu de MySQL? <-- pê exagéré pour la démo??
  * Dans la BD
@@ -109,15 +78,42 @@ TODO:
 - [x] charger les "notes" à la demande (XHR) s'il y en as pour plus que 2mo (total, pas chaque) <-- mécanisme inutile pour la démo ?
 - [x] gestion des balises (Liens entre les entitées sont des "A") à l'intérieur des "entitées" et du "document", c'est à dire trouver moyen simple de supporter et implémenter l'idée tout en évitant d'enregistrer les balises comme partie intégrante des blocs (de texte)
  * retiré
-- [ ] Page admin avec stats, #auteurs, #romans, etc???
 - [x] fonction XHR pour enregister les changements aux entitées (contenu, deleted, sticky)
 - [x] fonction XHR pour enregistrer le document
-- [ ] lire plus sur le mécanisme de drag&drop pour savoir comment aborder le réordonnement des entitées --> http://www.html5rocks.com/en/tutorials/dnd/basics/ --> Modernizr --> pas compliqué juste 30-40 lignes de JS
 - [x] permettre de dragger une "note" sur le document et ça fait copy-paste?
  * retiré
 - [x] permettre de dragger un personnage, un lieu ou un "autres" sur le document et ça copie le nom + lien?
  * retiré
  - [x] bug : s'il n'y as aucune entrée dans la table romans_details mais que celle correspondant dans romans_texte existe, agit comme s'il ne manquait rien, donc changer le code pour tout passer par romans_details, surtout que c'est elle qui décide si un roman est deleted ou non; en fait le bug persiste avec les entitées! oui bon, dans le cas des entitées, en principe une fois le code bien écrit il sera impossible de les charger ^_^'...
+ - [x] Une fois le CSS fini pour les toolbars de la page Edition, ne pas oublier de restaurer le code dans header.inc (~ln 5), mode_edition.js (~ln210 >> lireEntites) et enlever dans mode_edition.php le code direct en recopiant les changements dans mode_edition.js (~ln331 afficherEntite)
+- [x] autosave texte principal, solution 1: lancer intervalle, si var1 et var2 sont 0 alors ne rien faire; si on tape (keyup) var1++; si qd intervalle arrive var1 et var2 différents alors var2=var1; si var1==var2 et tous deux !== 0 alors sauvegarder et var1 et var2 === 0
+- [x] autosave texte principal, solution 2: pour la sauvegarde, il faudrait changer pour qu'il y ais ces variables (booleennes):
+	= mainText_DirtyBit_GUI si on as modifié le texte présentement à l'écran, remplace data-dirtybit
+	= mainText_DirtyBit_Disk_Texte si on as copié le texte en mémoire mais qu'il n'as pas été enregistré ds la BD
+	= mainText_DirtyBit_Disk_Notes si on as copié les notes en mémoire mais qu'elles n'ont pas été enregistrées ds la BD
+- [x] autosave texte principal, solution 3: autosave, autre idée : un timeinterval aux secondes, onKeyUp on enregistre la date en timestamp, une autre variable enregistre le timestamp de la dernière sauvegarde; si le temps au moment du timeInterval entre les deux timeStamps >= disons 7 secondes, alors on tue l'intervalle puis on copie ds la BD le texte et au retour de l'opération XHR, on copie le timestamp courant vers le "dernier timestamp"(de sauvegarde)
+- [x] petit bug : le bouton "lire entitées" de la page Édition ne lit pas tout les entitées, un peu normal, il faut autant de requêtes que de types, pour la démo je pourrais le faire (tout les appels)
+- [x] bug : encodage pas au point ou cest pcq jai pas updater page edition avec les ameliorations de creation... hum ... ??? O_o spécifiquement les guillemets
+- [x] menage code mort!!!
+- [x] tout re-commenter
+- [x] page de test pour formulaire + table pour le supporter
+-[x]Onglets entités
+	-[x] phase 1: onclick aller prendre parent, du parent dire aux enfants de perdre classe "active", donne a enfant cliquer classe active
+	-[x] phase 2: tjrs onclick détecter si texte balise <a>== $(this)>a.text si oui on as cliquer celui qui est actif ou juste lire si as classe actif, si oui ne rien faire
+	-[x] phase 3: onclick si onglet différent tester si ds var globale on as les données pour le nouvel onglet sinon charger les données
+-[x]scinder code pour récupérer les entitées entre fct qui lit les données et fct qui génère les balises
+-[x]onglet fct qui lit, si pour un type il y as 0 entrées ds la BD alors "first" ==0 pour savoir que au moins as été lu... malgré que si l'entrée array existe, c'est qu'on as au moins essayé de lire...
+-[x] copier ce qui est pertinent du code pour les onglets entités vers les onglet textePrincipal et Notes globales
+-[x] changer création Roman ds BD pour enregistrer le synopsis aussi dans champs notes
+- ~~ [] créer fct qui ajoute des boutons pour modifier les entitées et fct onblur qui fait ESC/restaure le texte à partir de la mémoire. Btns poppent... non ~~
+- [x] btns pour modifier les entitées sont ajouté à la création, pê ajouter une couche de DIV (si overflow hidden pas suffisant ou que visuellement ça fct pas)? laisser les gars faire mieux
+	- [x] {entitées} faire la copie des span vers la mémoire quand l'usager clique le bouton [accepter] -et- vers la BD
+	- [x] {entitées} faire la copie de la mémoire vers les span quand l'usager clique le bouton [annuler]
+-[x] ajouter mini-toolbar pour faire l'ajout d'entitées
+-[x] ajouter mini-toolbar aux entitées pour edit (ou commence avec un dbl-click?) et delete
+- [x] faire un trim (g/d) des espaces avant d'enregistrer une donnée (titre, texte, nom, etc); ajouter ceci (aussi) à la fonction real_escape_string ?
+-[x] page Édition : BUG :: si on change l'état DELETED, les entitées pointées par PREV/NEXT de l'entitée retirée ne sont -pas- corrigées ni au retrait, ni à la récupération, à corriger dès que possible
+-[x] page Édition : Tester plus pour savoir si j'ai un bug avec la fonction "miseAJourDonneesEntite" ou si c'est simplement que j'essaie de sauver une fraction avant l'ordi et donc que non seulement le flag "DirtyBit" dans le code JS est toujours vrai mais en plus qu'il n'y as rien à changer, aucune erreur et donc que je devrais changer le code pour NE PAS renvoyer d'erreur quand "rows_affected" == 0...
 
  =====
 

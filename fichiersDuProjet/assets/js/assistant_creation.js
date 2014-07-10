@@ -171,8 +171,9 @@ function felicitationSurCreation(donnees){
 		Ensuite, envoie à la page d'Édition
 	*/
 	donnees = donnees.split('¤');
-	alert(donnees[1]);
+	//alert(donnees[1]);
 	//document.location.href="mode_edition.php";
+	console.log(baseURL+"pages/mode_edition.php");
 	window.location.replace(baseURL+"pages/mode_edition.php");
 }
 

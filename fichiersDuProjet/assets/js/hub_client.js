@@ -17,6 +17,7 @@ $(function(){
 		var XHR_Query = "oper=charger&idRoman="+nvID_roman;
 		//console.log(XHR_Query);
 		if(nvID_roman === 0){
+			console.log(baseURL+"pages/assistant_creation.php");
 			window.location.replace(baseURL+"pages/assistant_creation.php");
 		}else{
 			execXHR_Request("../assets/xhr/hub_client.xhr.php", XHR_Query, chargerTexte, traiterErreurs);
@@ -106,6 +107,7 @@ function genererLesBoutons(donnees){
 }
 
 function chargerTexte(){
+	console.log(baseURL+"pages/mode_edition.php");
 	window.location.replace(baseURL+"pages/mode_edition.php");
 	//console.log(arguments[0]);
 }

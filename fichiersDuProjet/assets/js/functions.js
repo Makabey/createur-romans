@@ -2,7 +2,8 @@
 	Variables globales
 **********************/
 //var baseURL = "http://createur-romans/fichiersDuProjet/"; // à changer quand le site sera en ligne
-var baseURL = "http://localhost/GitHub/createur-romans/fichiersDuProjet/"; // à changer quand le site sera en ligne
+//var baseURL = "http://localhost/GitHub/createur-romans/fichiersDuProjet/"; // à changer quand le site sera en ligne
+var baseURL = "http://etscribimus.olirick-tp.site40.net/";
 
 /**********************
 	Fonctions communes à toutes les pages

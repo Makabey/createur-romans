@@ -229,11 +229,11 @@ function lireDonneesEntite($db){
 
 		/* Convertir en JSON */
 		$resultat = json_encode($resultat);
-		if(json_last_error() !== 0){
-			$resultat = "0¬" . decodeJSON_Error(json_last_error());
-		}else{
+		#if(json_last_error() !== 0){
+		#	$resultat = "0¬" . decodeJSON_Error(json_last_error());
+		#}else{
 			$resultat = "1¬" . $resultat;
-		}
+		#}
 	}else{
 		$resultat = "0¬[" . __FUNCTION__ . "] An error occured during a SELECT operation.\n\n" . $db->error . "\n\n $query";
 	}
