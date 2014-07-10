@@ -304,44 +304,49 @@ function miseAJourDonneesEntite_EtatDeleted($db){
 	$num_rows = 0;
 
 	if($_POST['etat'] == 1){ // DELETE
-		/*
-			etapes :
-			1. lire pour idEntite le prev/next
-			2. update du next avec le chiffre du prev si non 0
-			3. idem inverse next/prev
-			4. update deleted
-		*/
-		$query = 'SELECT `ID_prev`, `ID_next` FROM `entites` WHERE `ID_entite` = ' . $_POST['idEntite'] . ';';
-		$resultat = $db->query ($query);
-
-		if(false !== $resultat){
-			$num_rows = $resultat->num_rows;
-			if($num_rows){
-				$row_idEntite = $resultat->fetch_row();
-				if($row_idEntite[0]  > 0){
-					$query = 'UPDATE `entites` SET `ID_next` = ' . $row_idEntite[1] . ' WHERE `ID_entite` = ' . $row_idEntite[0] . ';';
-					$resultat = $db->query ($query);
-					if(!$db->affected_rows){ $resultat = false; }
-				}
-			}else{
-				$resultat = false;
-			}
-		}
-
-		if(false !== $resultat){
-			if($row_idEntite[1]  > 0){
-				//$row_idEntite = $resultat->fetch_row();
-				#if($row_idEntite[1]  > 0){
-					$query = 'UPDATE `entites` SET `ID_prev` = ' . $row_idEntite[0] . ' WHERE `ID_entite` = ' . $row_idEntite[1] . ';';
-					$resultat = $db->query ($query);
-					if(!$db->affected_rows){ $resultat = false; }
-				#}
-			}
-		}
-
-		if(false !== $resultat){
-			$query = 'UPDATE `entites` SET deleted = 1 WHERE ID_entite = ' . $_POST['idEntite'] . ';';
+		if($_POST['idEntite'] == -1){
+			$query = 'UPDATE `roman_details` SET `deleted` = 1 WHERE `ID_roman` = ' . $_POST['idRoman']  . ';';
 			$resultat = $db->query ($query);
+		}else{
+			/*
+				etapes :
+				1. lire pour idEntite le prev/next
+				2. update du next avec le chiffre du prev si non 0
+				3. idem inverse next/prev
+				4. update deleted
+			*/
+			$query = 'SELECT `ID_prev`, `ID_next` FROM `entites` WHERE `ID_entite` = ' . $_POST['idEntite'] . ';';
+			$resultat = $db->query ($query);
+
+			if(false !== $resultat){
+				$num_rows = $resultat->num_rows;
+				if($num_rows){
+					$row_idEntite = $resultat->fetch_row();
+					if($row_idEntite[0]  > 0){
+						$query = 'UPDATE `entites` SET `ID_next` = ' . $row_idEntite[1] . ' WHERE `ID_entite` = ' . $row_idEntite[0] . ';';
+						$resultat = $db->query ($query);
+						if(!$db->affected_rows){ $resultat = false; }
+					}
+				}else{
+					$resultat = false;
+				}
+			}
+
+			if(false !== $resultat){
+				if($row_idEntite[1]  > 0){
+					//$row_idEntite = $resultat->fetch_row();
+					#if($row_idEntite[1]  > 0){
+						$query = 'UPDATE `entites` SET `ID_prev` = ' . $row_idEntite[0] . ' WHERE `ID_entite` = ' . $row_idEntite[1] . ';';
+						$resultat = $db->query ($query);
+						if(!$db->affected_rows){ $resultat = false; }
+					#}
+				}
+			}
+
+			if(false !== $resultat){
+				$query = 'UPDATE `entites` SET deleted = 1 WHERE ID_entite = ' . $_POST['idEntite'] . ';';
+				$resultat = $db->query ($query);
+			}
 		}
 	}else{ // UNDELETE
 		/*
@@ -350,18 +355,16 @@ function miseAJourDonneesEntite_EtatDeleted($db){
 		$resultat = false; # pour le moment...
 	}
 
-	#if($resultat === false){
-		//$resultat = $db->query ($query);
-		if(false !== $resultat){
-			if($db->affected_rows){
-				$resultat = "1¬[" . __FUNCTION__ . "] UPDATE successful\n\n '$query'";
-			#}else{
-			#	$resultat = "0¬[" . __FUNCTION__ . "] UPDATE didn't occur (most probably because there was nothing to change)\n\n $query";
-			}
+	if(false !== $resultat){
+		if($db->affected_rows){
+			$resultat = "1¬[" . __FUNCTION__ . "] UPDATE successful\n\n '$query'";
 		}else{
-			$resultat = "0¬[" . __FUNCTION__ . "] An error occured during an UPDATE operation.\n\nError = " . $db->error . "\nnum_rows = $num_rows \n\n $query";
+			// Cette possibilité ne devrais jamais arriver SI le contenu de la page est correctement mise à jour
+			$resultat = "1¬[" . __FUNCTION__ . "] UPDATE didn't occur (most probably because there was nothing to change)\n\n $query";
 		}
-	#}
+	}else{
+		$resultat = "0¬[" . __FUNCTION__ . "] An error occured during an UPDATE operation.\n\nError = " . $db->error . "\nnum_rows = $num_rows \n\n $query";
+	}
 	return $resultat;
 }
 

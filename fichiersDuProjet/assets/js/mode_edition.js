@@ -287,12 +287,7 @@ function insererEntite(fctTraitementPositif, fctTraitementNegatif, idRoman, type
 	execXHR_Request("../assets/xhr/mode_edition.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
 
-function effacerEntite(fctTraitementPositif, fctTraitementNegatif, idRoman, idEntite){
-	var etatDeleted = (arguments[4] !== undefined)?arguments[4]:1; // argument optionel
-	var XHR_Query = "oper=effacer&idRoman="+idRoman+"&idEntite="+idEntite+"&etat="+etatDeleted;
-	//console.log(XHR_Query);
-	execXHR_Request("../assets/xhr/mode_edition.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
-}
+
 
 function chargerRoman(fctTraitementPositif, fctTraitementNegatif, idRoman){
 	var XHR_Query = "oper=lire&typeEntite=textePrincipal&idRoman="+idRoman;
