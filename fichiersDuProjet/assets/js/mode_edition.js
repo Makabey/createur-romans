@@ -441,7 +441,7 @@ $(function () {
 			typeEntite = typeEntite.toLowerCase();
 			typeEntite = typeEntite.replace('ù', 'u');
 			typeEntite = typeEntite.replace('é', 'e');
-			spanChilds = $(this).parents('.aide-memoire').find("span");
+			spanChilds = $(this).parents('.aide-memoire').find("span[contenteditable='true']");
 
 			gblEntites['temp'] = new Array();
 			gblEntites['temp']['titre'] = spanChilds[0].innerHTML;
@@ -503,7 +503,9 @@ $(function () {
 			//console.log("un enfant est déjà en mode édition!");
 			alert("Erreur!\n\nUne entitée est déjà en mode édition!");
 		}else{
-			$(this).parents(".aide-memoire").find("span").attr("contenteditable", "true");
+			$(this).parents(".aide-memoire").find(".aide-memoire-headings span:first-child").attr("contenteditable", "true");
+			$(this).parents(".aide-memoire").find(".aide-memoire-content span").attr("contenteditable", "true");
+			$(this).parents(".aide-memoire").find(".aide-memoire-notes span").attr("contenteditable", "true");
 			$(this).parents(".aide-memoire").find(".aide-memoire-boutons-edition").show();
 			gblEntiteEnCoursEdition = $(this).parents(".aide-memoire").data("idself");
 		}
