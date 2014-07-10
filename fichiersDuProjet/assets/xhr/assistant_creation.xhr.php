@@ -77,11 +77,11 @@ function lireGenreLitteraires($db, $encode_result=true){
 		}
 		if($encode_result){
 			$resultat = json_encode($resultat);
-			if(json_last_error() !== 0){
-				$resultat = "0¬" . decodeJSON_Error(json_last_error());
-			}else{
+			#if(json_last_error() !== 0){
+			#	$resultat = "0¬" . decodeJSON_Error(json_last_error());
+			#}else{
 				$resultat = "1¬" . $resultat;
-			}
+			#}
 		}
 	}else{
 		$resultat = "0¬[" . __FUNCTION__ . "] " . $db->error . " ($query)";
@@ -103,11 +103,11 @@ function lireQuestions($db){
 			$tmp[] = array_combine($arrChamps_genres_litteraires, $row);
 		}
 		$resultat = json_encode($tmp);
-		if(json_last_error() !== 0){
-			$resultat = "0¬" . decodeJSON_Error(json_last_error());
-		}else{
+		#if(json_last_error() !== 0){
+		#	$resultat = "0¬" . decodeJSON_Error(json_last_error());
+		#}else{
 			$resultat = "1¬" . $resultat;
-		}
+		#}
 	}else{
 		$resultat = "0¬[" . __FUNCTION__ . "] " . $db->error . " ($query)";
 	}
@@ -132,11 +132,11 @@ function lireListeRomans($db){
 
 		$resultat = (!empty($tmp))?json_encode($tmp):'';
 
-		if(json_last_error() !== 0){
-			$resultat = "0¬" . decodeJSON_Error(json_last_error());
-		}else{
+		#if(json_last_error() !== 0){
+		#	$resultat = "0¬" . decodeJSON_Error(json_last_error());
+		#}else{
 			$resultat = "1¬" . $resultat;
-		}
+		#}
 	}else{
 		$resultat = "0¬[" . __FUNCTION__ . "] " . $db->error . " ($query)";
 	}

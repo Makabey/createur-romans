@@ -94,6 +94,7 @@ function authentifierUsager(){ //donnees){
 	//donnees = donnees.split('¤');
 	//alert(donnees[1]);
 	//console.log(arguments[0]);
+	console.log(baseURL+"pages/hub_client.php");
 	window.location.replace(baseURL+"pages/hub_client.php"); // Je pourrais probablement, tant qu'à avoir PHP qui crée/écrit dans la $_SESSION, une redirection avant d'arriver ici mais j'ai décidé que ce n'était pas "propre". Dans le sens que les requêtes XHR devraient se borner à de l'échange d'information. Je sais, la manipulation de $_SESSION dans le fichier XHR contredit un peu cette règle mais comme ce n'est pas visuel, je laisse passer.
 }
 
