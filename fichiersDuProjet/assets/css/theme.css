@@ -131,9 +131,6 @@ code {
 .hub_client footer {
 	padding: 30px 0;
 }
-.hub_client .container > div > div{
-	width: 100%;
-}
 .hub_client .btn-roman{
 	border: 1px solid #ccc;
 	cursor: pointer;
@@ -151,7 +148,7 @@ code {
 	border: 1px solid #3276b1;
 	z-index: 1000;
 }
-.hub_client .last-cell:hover > span{
+.hub_client .last-cell:hover .nouveau_projet{
 	background: url("../images/plus_hover.png");
 }
 .hub_client .nouveau_projet{
@@ -162,10 +159,25 @@ code {
 	left: 50%;
 	margin-top: -35px;
 	margin-left: -35px;
-	background: url("../images/plus.png") 70px 70px;
+	background: url("../images/plus.png");
+	
+	-webkit-transition: background 0.1s ease-in-out;
+	-moz-transition: background 0.1s ease-in-out;
+	-o-transition: background 0.1s ease-in-out;
+	-ms-transition: background 0.1s ease-in-out;
+	transition: background 0.1s ease-in-out;
 }
 .hub_client .last-cell h2{
-	opacity: 0.5;
+	color: #ccc;
+	
+	-webkit-transition: color 0.1s ease-in-out;
+	-moz-transition: color 0.1s ease-in-out;
+	-o-transition: color 0.1s ease-in-out;
+	-ms-transition: color 0.1s ease-in-out;
+	transition: color 0.1s ease-in-out;
+}
+.hub_client .last-cell:hover h2{
+	color: #3276b1;
 }
 .hub_client .last-cell{
 	text-align: center;
@@ -399,6 +411,22 @@ code {
 	margin-top: -7px;
 	left: 50%;
 	margin-left: -7px;
+}
+.mode_edition .aide-memoire-content > span[contenteditable=true]:empty:before,
+.mode_edition .aide-memoire-notes > span[contenteditable=true]:empty:before,
+.mode_edition .aide-memoire-headings > span[contenteditable=true]:empty:before{
+  content: attr(placeholder);
+}
+.mode_edition .aide-memoire-notes > span[contenteditable=true],
+.mode_edition .aide-memoire-content > span[contenteditable=true],
+.mode_edition .aide-memoire-headings > span[contenteditable=true]{
+	border-radius: 3px;
+	border: 1px dashed #3276b1;
+}
+.mode_edition .aide-memoire-notes > span[contenteditable=true]:focus,
+.mode_edition .aide-memoire-content > span[contenteditable=true]:focus,
+.mode_edition .aide-memoire-headings > span[contenteditable=true]:focus{
+	outline:none;
 }
 /*
 // Ajouts Eric
