@@ -3,9 +3,9 @@ session_start();
 $sNomDeCettePage = substr($_SERVER["SCRIPT_NAME"], (strrpos($_SERVER["SCRIPT_NAME"],"/")+1));
 $sNomDeCettePage = substr($sNomDeCettePage, 0, (strpos($sNomDeCettePage,".")));
 
-#$rootDomaine = ($sNomDeCettePage == "index")?"":"/fichiersDuProjet/";
-$rootDomaine = ($sNomDeCettePage == "index")?"":"http://localhost/GitHub/createur-romans/fichiersDuProjet/";
-//$rootDomaine = "http://etscribimus.olirick-tp.site40.net/";
+#$rootDomaine = ($sNomDeCettePage == "index")?"":"/fichiersDuProjet/"; // maison Eric
+$rootDomaine = ($sNomDeCettePage == "index")?"":"http://localhost/GitHub/createur-romans/fichiersDuProjet/"; // ISI
+#$rootDomaine = "http://etscribimus.olirick-tp.site40.net/"; // en ligne
 
 if(($sNomDeCettePage != "index") && (!isset($_SESSION['pseudo']))){
 	header("Location:".$rootDomaine."index.php");
@@ -21,7 +21,7 @@ if(($sNomDeCettePage != "index") && (!isset($_SESSION['pseudo']))){
 		<meta charset="utf-8" />
 		<!--<meta http-equiv="X-UA-Compatible" content="IE=edge" />-->
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<title><?php echo $sPageTitle; ?>"Le créateur de Romans"</title>
+		<title><?php echo $sPageTitle; ?>Et Scribimus</title>
 		<meta name="author" content="Thomas A. Séguin, Olivier Berthier, Eric Robert</p>" />
 		<meta name="description" content="Effacez le syndrome de la page blanche avec notre assistant. Sélectionnez un genre, répondez à quelques questions et vous voilà avec un paragraphe suggèrant le fil de votre prochaine oeuvre." />
 		<meta name="keywords" content="roman, assistant, page blanche, aide à l'écriture, scrivener, evernote, gratuit, composer" />
@@ -44,7 +44,7 @@ if(($sNomDeCettePage != "index") && (!isset($_SESSION['pseudo']))){
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 						</button>
-						<a class="navbar-brand" href="#"><img src="<?php echo $rootDomaine; ?>assets/images/logo.png" alt="créateur roman, bienvenue" />Créateur Roman</a>
+						<a class="navbar-brand" href="#"><img src="<?php echo $rootDomaine; ?>assets/images/logo.png" alt="Et Scribimus, bienvenue" />Et Scribimus</a>
 					</div>
 					<div class="navbar-collapse collapse inner-header">
 						<?php if(!isset($_SESSION['pseudo'])){ ?>
@@ -61,6 +61,11 @@ if(($sNomDeCettePage != "index") && (!isset($_SESSION['pseudo']))){
 							<div class="bienvenue_user">
 								<span class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Bienvenue <?php echo $_SESSION[$_SESSION['pseudo']]['nom']; ?> <span class="caret"></span></a>
 									<ul class="dropdown-menu">
+										<?php
+											if($sNomDeCettePage == "mode_edition"){
+												echo '<li><a href="' . $rootDomaine . 'pages/hub_client.php">Retour au HUB</a></li>';
+											}
+										?>
 										<li><a href="<?php echo $rootDomaine; ?>pages/logout.php">Se déconnecter</a></li>
 									<ul>
 								</span>

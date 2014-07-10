@@ -4,8 +4,8 @@ $sPageTitle = "Accueil | ";
 require "assets/inc/header.inc.php";
 ?>
 		<div class="titre">
-			<h1>Créateur Roman</h1>
-			<p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+			<h1>Et Scribimus</h1>
+			<p class="lead">"Écrivez!" Tel as probablement été, au milieu du VIe siècle av. J.-C., les paroles du tyran Pisistrate lorsqu'il as introduit le culte de Dionysos et le concours littéraire que Thespis a remporté. Deux cents ans plus tard, Aristote lui attribue l'invention de la tragédie.</p>
 			<p><a href="#" class="btn btn-primary btn-lg" role="button">En savoir plus</a></p>
 			<div class="video">
 				<video width="100%" controls="controls">
