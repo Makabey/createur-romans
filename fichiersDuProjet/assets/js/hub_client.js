@@ -7,14 +7,17 @@ var gblParentDesBalises = "maincontent>div>div>div"; // Balise que l'on doit man
 //var idUsager = 1; // valeur forcée en attendant de la lire par PHP; (auquel cas cette variable ira dans "header.inc.php")
 //var etapeAssistant = 0; // À quelle étape de la création nous sommes
 //var iCmpt=0; // Compteur, global;
+var nvID_roman;
 
 /**********************
 	EVENT HANDLERS
 **********************/
 $(function(){
-	$("#"+gblParentDesBalises).on("click", "div", function(){
-		var nvID_roman = $(this).data("idroman");
-		var XHR_Query = "oper=charger&idRoman="+nvID_roman;
+	$("#"+gblParentDesBalises).on("click", "div>div", function(){
+		var XHR_Query;
+		
+		nvID_roman = $(this).parent().data("idroman");
+		XHR_Query = "oper=charger&idRoman="+nvID_roman;
 		//console.log(XHR_Query);
 		if(nvID_roman === 0){
 			//console.log(baseURL+"pages/assistant_creation.php");
@@ -24,6 +27,17 @@ $(function(){
 		}
 	});
 
+	$("#"+gblParentDesBalises).on("click", ".glyphicon-remove", function(){
+		var bProceder = confirm("Attention!\n\nVous êtes sur le point d'effacer ce Roman!\n\nContinuer?");
+
+		if(bProceder){
+			nvID_roman = $(this).parent().data("idroman");
+			console.log('effacer roman / ' + nvID_roman);
+			effacerEntite(effacerEntiteRetour, traiterErreurs, nvID_roman, -1, true);
+			//effacerEntiteRetour('o');
+		}
+	});
+	
 	lireListeRomansUsager(genererLesBoutons, traiterErreurs, idUsager)
 });
 
@@ -32,6 +46,7 @@ $(function(){
 	WRAPPERS
 **********************/
 // lireListeRomansUsager appartient à functions.js
+// effacerEntite appartient à functions.js
 
 /*********************
 	FONCTIONS GLOBALES
@@ -75,7 +90,7 @@ function genererUnBoutonCharger(donnees){
 	}
 
 	bouton += "<div class=\"col-6 col-sm-6 col-lg-4 btn-roman genreLit"+donnees['ID_genre']+"\" data-idRoman="+donnees['ID_roman'];
-	bouton += ">\n<span class=\"glyphicon glyphicon-remove suppr_roman\"></span><h2 data-creation=\""+donnees['date_creation']+"\" data-dnrEdition=\""+donnees['date_dnrEdition']+"\" title=\""+donnees['titre']+"\">"+titre+"</h2>\n<p title=\""+synopsis+"\">"+synopsis_court+"</p>\n";
+	bouton += ">\n<span class=\"glyphicon glyphicon-remove suppr_roman\"></span><div><h2 data-creation=\""+donnees['date_creation']+"\" data-dnrEdition=\""+donnees['date_dnrEdition']+"\" title=\""+donnees['titre']+"\">"+titre+"</h2>\n<p title=\""+synopsis+"\">"+synopsis_court+"</p></div>\n";
 	bouton += "</div>";
 
 	return bouton;
@@ -106,6 +121,12 @@ function genererLesBoutons(donnees){
 	$("#"+gblParentDesBalises).html(contenu);
 }
 
+function effacerEntiteRetour(donnees){
+	console.log("[effacerEntiteRetour] " + donnees);
+	// effacer gui...
+	$("#"+gblParentDesBalises).find("div[data-idroman='"+nvID_roman+"']").remove();
+}
+
 function chargerTexte(){
 	//console.log(baseURL+"pages/mode_edition.php");
 	window.location.replace(baseURL+"pages/mode_edition.php");
@@ -130,12 +151,5 @@ function traiterErreurs(msgErreur){
 	alert("L'erreur suivante est survenue : '"+msgErreur+"'");
 }
 
-
-/**********************
-	FONCTIONS NOMMÉES DANS LA BD
-	(ça c'est le contenu du champs `genres_litteraires_questions`.`bouton_fonction`
-	la section est vide parce que Thomas n'en as pas eût besoin dans ses questions.
-	Pour un exemple, chercher dans les contributions antérieur sur GitHub)
-**********************/
 
 /* == EOF == */
