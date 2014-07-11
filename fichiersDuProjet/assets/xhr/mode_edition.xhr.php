@@ -1,65 +1,10 @@
 <?php
-/*
----Pour oper = lire
-entrées::
--typeEntite doit être l'un de : quoi, ou, comment, pourquoi, qui, quand, textePrincipal
--ID_roman doit etre un chiffre
-
-sorties::
--pour textePrincipal, seulement le texte
--pour les autres, à l'index #0 on as le type de l'entite principalement pour différentier les ID des DIVs contenant la fiche de l'entite et "first" contenant le ID_entite de celle qui est la première parce que son ID_prev=0, le reste sont les données désirées et on peux donc partir de "first" pour suivre les fiches et les afficher dans l'ordre dicté.
-
-============================
----Pour oper = ecrire
-entrées::
--idEntite le ID de l'Entite
--typeEntite doit être l'un de : quoi, ou, comment, pourquoi, qui, quand, textePrincipal
--ID_roman doit etre un chiffre
--contenu, titre et note qui sont le contenu de la fiche
-=ou=
--contenu seul pour 'textePrincipal'
-
-sortie::
-résultat de l'opération
-
-============================
----Pour oper = deplacer
-entrées::
--prev/next qui sont les nouvelles valeurs pour les champs correspondant et utile lorsqu'on déplace les entitées visuellement dans l'interface
--idEntite le ID de l'Entite
--typeEntite ne peux pas être 'textePrincipal'
--nvTypeEntite si specifié, change le type de l'entité, ne peux pas etre 'textePrincipal', servirais si on permet de déplacer entre les types
-
-sortie::
-résultat de l'opération
-
-============================
----Pour oper = effacer
-entrées::
--etat si omis alors défaut à 1 sinon valeurs valides sont 1, 'true', 'vrai' pour effacer, toute autre valeur est considérée 'false'
--idEntite le ID de l'Entite
--typeEntite ne peux pas être 'textePrincipal' <== à changer
-
-sorties::
-résultat de l'opération
-
-============================
---Pour oper = inserer
-entrées::
--titre, contenu, note
--typeEntite tout sauf 'textePrincipal'
-
-sorties::
-résultat de l'opération
-
-*/
-
 require_once "../inc/db_access.inc.php";
 require_once "../inc/library01.inc.php";
 
-if(!isset($_POST['oper']) || !isset($_POST['idRoman'])){ // || !isset($_POST['typeEntite'])
+if(!isset($_POST['oper']) || !isset($_POST['idRoman'])){
 	// Pour JavaScript : 0/1 : false/true ¬ texte erreur
-	echo '0¬A required parameter (either "oper" or "idRoman"), is missing'; #, "typeEntite"
+	echo '0¬A required parameter (either "oper" or "idRoman"), is missing';
 	exit();
 }
 
@@ -68,7 +13,6 @@ if($_POST['idRoman'] <= 0){
 	echo '0¬Invalid value for "idRoman"';
 	exit();
 }
-
 
 $arrValidEntities = array('quoi', 'ou', 'comment', 'pourquoi', 'qui', 'quand', 'textePrincipal', 'notesGenerales');
 
@@ -208,7 +152,6 @@ function lireDonneesEntite($db){
 			$resultat['notes_globales'] = decode($resultat['notes_globales']);
 		}elseif($mode == 2){
 			$resultat[0]['typeEntite'] = $_POST['typeEntite'];
-			#$resultat[0]['target'] = $_POST['target'];
 			$resultat[0]['first'] = null;
 
 			while ($row = $result->fetch_row()){
@@ -220,7 +163,7 @@ function lireDonneesEntite($db){
 					$resultat[0]['last'] = $ID_entite;
 				}
 				$resultat[$ID_entite] = array_combine($arrChamps_entites, $row);
-				foreach($resultat[$ID_entite]  as $cle => $donnees){
+				foreach($resultat[$ID_entite] as $cle => $donnees){
 					$resultat[$ID_entite][$cle] = decode($donnees);
 				}
 			}
@@ -245,12 +188,6 @@ function miseAJourDonneesEntite($db){
 	global $arrValidEntities;
 	$resultat = false;
 
-	/*if($_POST['typeEntite'] == 'textePrincipal'){
-		$_POST['contenu'] = real_escape_string($_POST['contenu'], $db);
-		$query = 'UPDATE roman_texte SET contenu = "' . $_POST['contenu'] . '" WHERE ID_roman=' . $_POST['idRoman'] . ';';
-	}else if($_POST['typeEntite'] == 'notesGenerales'){
-		$_POST['contenu'] = real_escape_string($_POST['contenu'], $db);
-		$query = 'UPDATE roman_texte SET notes_globales = "' . $_POST['contenu'] . '" WHERE ID_roman=' . $_POST['idRoman'] . ';';*/
 	if($_POST['typeEntite'] == 'textePrincipal'){
 		$_POST['contenu'] = real_escape_string($_POST['contenu'], $db);
 		$_POST['notes'] = real_escape_string($_POST['notes'], $db);
@@ -297,12 +234,11 @@ function miseAJourDonneesEntite($db){
 
 function miseAJourDonneesEntite_EtatDeleted($db){
 	global $arrValidEntities;
-	#$resultat = false;
 	$num_rows = 0;
 
 	if($_POST['etat'] == 1){ // DELETE
 		if($_POST['idEntite'] == -1){
-			$query = 'UPDATE `roman_details` SET `deleted` = 1 WHERE `ID_roman` = ' . $_POST['idRoman']  . ';';
+			$query = 'UPDATE `roman_details` SET `deleted` = 1 WHERE `ID_roman` = ' . $_POST['idRoman'] . ';';
 			$resultat = $db->query ($query);
 		}else{
 			/*
@@ -319,7 +255,7 @@ function miseAJourDonneesEntite_EtatDeleted($db){
 				$num_rows = $resultat->num_rows;
 				if($num_rows){
 					$row_idEntite = $resultat->fetch_row();
-					if($row_idEntite[0]  > 0){
+					if($row_idEntite[0] > 0){
 						$query = 'UPDATE `entites` SET `ID_next` = ' . $row_idEntite[1] . ' WHERE `ID_entite` = ' . $row_idEntite[0] . ';';
 						$resultat = $db->query ($query);
 						if(!$db->affected_rows){ $resultat = false; }
@@ -330,13 +266,10 @@ function miseAJourDonneesEntite_EtatDeleted($db){
 			}
 
 			if(false !== $resultat){
-				if($row_idEntite[1]  > 0){
-					//$row_idEntite = $resultat->fetch_row();
-					#if($row_idEntite[1]  > 0){
-						$query = 'UPDATE `entites` SET `ID_prev` = ' . $row_idEntite[0] . ' WHERE `ID_entite` = ' . $row_idEntite[1] . ';';
-						$resultat = $db->query ($query);
-						if(!$db->affected_rows){ $resultat = false; }
-					#}
+				if($row_idEntite[1] > 0){
+					$query = 'UPDATE `entites` SET `ID_prev` = ' . $row_idEntite[0] . ' WHERE `ID_entite` = ' . $row_idEntite[1] . ';';
+					$resultat = $db->query ($query);
+					if(!$db->affected_rows){ $resultat = false; }
 				}
 			}
 
@@ -409,7 +342,6 @@ function insererEntite($db){ // pour le moment ne s'appliquerais qu'aux entitée
 	if(false !== $resultat){
 		if($ID_prev > 0){
 			if($db->affected_rows){
-				#$resultat = "1¬[" . __FUNCTION__ . "] INSERT successful. New ID is " . $ID_entite;
 				$resultat = "1¬" . $ID_entite;
 			}else{
 				$resultat = "0¬[" . __FUNCTION__ . "] UPDATE phase didn't occur\n\n $query";

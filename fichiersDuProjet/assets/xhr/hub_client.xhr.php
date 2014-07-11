@@ -1,7 +1,4 @@
 <?php
-#require_once "../inc/db_access.inc.php";
-#require_once "../inc/library01.inc.php";
-
 if(!isset($_POST['oper']) || !isset($_POST['idRoman'])){
 	// Pour JavaScript : 0/1 : false/true ¬ texte erreur
 	echo '0¬A required parameter (either "oper", "typeEntite" or "idRoman"), is missing';
@@ -13,14 +10,6 @@ if($_POST['idRoman'] <= 0){
 	echo '0¬Invalid value for "idRoman" (', $_POST['idRoman'], ')';
 	exit();
 }
-
-/*$db = db_connect();
-
-if(!is_object($db)){
-	// On suppose ici que $db contient une erreur texte et non un objet
-	echo $db;
-	exit();
-}*/
 
 /* =================================================== */
 
