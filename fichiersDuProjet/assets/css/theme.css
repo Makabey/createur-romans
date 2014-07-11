@@ -647,6 +647,124 @@ code {
 	to {transform:rotate(360deg);}
 } 
 
+.administration h1 {
+	text-align:center;
+}
+/* forme 1 */
+.administration #maincontent>div{
+	width:100%;
+	border:2px solid grey;
+	margin-bottom:15px;
+	padding:5px;
+	background-color:#ddd;
+}
+/*.administration #maincontent>div div{
+	width:100%;
+	background-color:#ddd;
+}*/
+.administration #maincontent>div>div>button{
+	float:right;
+}
+.administration #maincontent>div table{
+	/*border:1px dashed red;*/
+	/*border-collapse:collapse;*/
+	width:100%;
+	margin-top:10px;
+}
+.administration #maincontent>div table tr{
+	height:30px;
+}
+.administration #maincontent>div table tr:nth-child(odd){
+	background-color:#ffe;
+}
+.administration #maincontent>div table tr:nth-child(even){
+	background-color:#ffb;
+}
+.administration #maincontent>div table tr th{
+	background:black;
+	color:white;
+}
+.administration #maincontent>div table th:not(:first-child),
+.administration #maincontent>div table td:not(:first-child){
+	text-align:center;
+}
+.administration #maincontent>div table td:nth-child(2){
+	width:120px;
+}
+.administration #maincontent>div table td:nth-child(3){
+	width:190px;
+}
+.administration #maincontent>div table td:nth-child(4){
+	/*text-align:center;*/
+	width:80px;
+}
+.administration #maincontent>div table td:nth-child(5){
+	width:120px;
+}
+/* forme 2 */
+.administration #maincontent>table{
+	width:100%;
+	border:2px solid grey;
+	margin-bottom:15px;
+	padding:5px;
+	background-color:#ddd;
+}
+.administration #maincontent>table th button{
+	color:black;
+	width:350px;
+}
+.administration #maincontent>table th button.adminUser{
+	background-color:#cc0;
+}
+.administration #maincontent>table th button.active{
+	background-color:#faa;
+}
+.administration #maincontent>table th button.inactive{
+	background-color:#afa;
+}
+.administration #maincontent>table td button{
+	width:80px;
+}
+.administration #maincontent>table td button.active{
+	background-color:#faa;
+}
+.administration #maincontent>table td button.inactive{
+	background-color:#afa;
+}
+.administration #maincontent>table tr{
+	height:30px;
+}
+.administration #maincontent>table tr:nth-child(odd){
+	background-color:#ffe;
+}
+.administration #maincontent>table tr:nth-child(even){
+	background-color:#ffb;
+}
+.administration #maincontent>table tr th{
+	background:black;
+	color:white;
+	padding:0 5px;
+}
+.administration #maincontent>table th:not(:nth-child(2)),
+.administration #maincontent>table td:not(:nth-child(2)){
+	text-align:center;
+}
+.administration #maincontent>table td:nth-child(1){
+	width:350px;
+}/*
+.administration #maincontent>table td:nth-child(2){
+	width:500px;
+}*/
+.administration #maincontent>table td:nth-child(3){
+	width:90px;
+}
+.administration #maincontent>table td:nth-child(4){
+	/*text-align:center;*/
+	width:180px;
+}
+.administration #maincontent>table td:nth-child(5){
+	width:120px;
+}
 /*
  * General -- Eric / Fin
  */ 

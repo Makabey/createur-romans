@@ -18,7 +18,7 @@ $(function(){
 		
 		nvID_roman = $(this).parent().data("idroman");
 		XHR_Query = "oper=charger&idRoman="+nvID_roman;
-		//console.log(XHR_Query);
+		console.log(XHR_Query);
 		if(nvID_roman === 0){
 			//console.log(baseURL+"pages/assistant_creation.php");
 			window.location.replace(baseURL+"pages/assistant_creation.php");
@@ -55,8 +55,8 @@ function genererBoutonAjouter(){
 	var bouton = "";
 
 	bouton += "<div class=\"col-6 col-sm-6 col-lg-4 btn-roman last-cell\" data-idRoman=\"0\">\n";
-	bouton += "<h2>Nouveau</h2>\n";
-	bouton += "<span class=\"nouveau_projet\"></span>\n</div>\n";
+	bouton += "<div><h2>Nouveau</h2>\n";
+	bouton += "<span class=\"nouveau_projet\"></span></div>\n</div>\n";
 
 	//$("#"+gblParentDesBalises).append(bouton);
 	return bouton;

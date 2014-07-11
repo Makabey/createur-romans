@@ -89,11 +89,7 @@ switch($_POST['oper']){
 			On as besoin d'un ID pour la balise qui recevra tout le contenu, en principe, ne devrais
 			pas être passé mais bon, on peux corriger plus tard
 		*/
-		#if(('textePrincipal' != $_POST['typeEntite']) && !isset($_POST['target'])){
-		#	$resultat = '0¬Parameter "target" is required';
-		#}else{
-			$resultat = lireDonneesEntite($db);
-		#}
+		$resultat = lireDonneesEntite($db);
 		break;
 
 	case 'ecrire':
@@ -206,6 +202,7 @@ function lireDonneesEntite($db){
 			/* On veux le texte ? Faire une simple lecture */
 			$resultat = array_combine($arrChamps_roman, $result->fetch_row());
 			// Corriger des transformation faites par la fonction real_escape_string
+			$resultat['titre'] = decode($resultat['titre']);
 			$resultat['contenu'] = decode($resultat['contenu']);
 			$resultat['synopsis'] = decode($resultat['synopsis']);
 			$resultat['notes_globales'] = decode($resultat['notes_globales']);
