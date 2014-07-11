@@ -191,7 +191,13 @@ function miseAJourDonneesEntite($db){
 	if($_POST['typeEntite'] == 'textePrincipal'){
 		$_POST['contenu'] = real_escape_string($_POST['contenu'], $db);
 		$_POST['notes'] = real_escape_string($_POST['notes'], $db);
-		$query = 'UPDATE roman_texte SET contenu = "' . $_POST['contenu'] . '", notes_globales = "' . $_POST['notes'] . '" WHERE ID_roman=' . $_POST['idRoman'] . ';';
+		$query = 'UPDATE roman_texte SET contenu = "' . $_POST['contenu'] . '", notes_globales = "' . $_POST['notes'] . '" WHERE ID_roman = ' . $_POST['idRoman'] . ';';
+
+		$result = $db->query ($query);
+		if(false !== $result){
+			$query = "UPDATE `roman_details` SET `date_dnrEdition` = '" . date("Y-m-d H:i:s") . "' WHERE ID_roman = {$_POST['idRoman']};";
+			$result = $db->query ($query);
+		}
 	}else{
 		$query = 'UPDATE entites SET ';
 		if(isset($_POST['contenu'])){ // Mise à jour intégrale
@@ -217,7 +223,7 @@ function miseAJourDonneesEntite($db){
 		$query .= ';';
 	}
 
-	if($resultat === false){
+	if(false === $resultat){
 		$result = $db->query ($query);
 		if(false !== $result){
 			if($db->affected_rows){

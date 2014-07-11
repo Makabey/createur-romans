@@ -14,7 +14,7 @@ $(function(){
 
 		nvID_roman = $(this).parent().data("idroman");
 		XHR_Query = "oper=charger&idRoman="+nvID_roman;
-		console.log(XHR_Query);
+
 		if(nvID_roman === 0){
 			window.location.replace(baseURL+"pages/assistant_creation.php");
 		}else{
@@ -27,7 +27,6 @@ $(function(){
 
 		if(bProceder){
 			nvID_roman = $(this).parent().data("idroman");
-			console.log('effacer roman / ' + nvID_roman);
 			effacerEntite(effacerEntiteRetour, traiterErreurs, nvID_roman, -1, true);
 		}
 	});

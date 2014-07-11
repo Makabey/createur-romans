@@ -25,7 +25,7 @@ if(isset($_GET['oper'])){
 
 echo "<h1>Page d'Administration</h1>", PHP_EOL;
 
-$query = "SELECT `usagers`.`ID_usager`, `usagers`.`pseudo`, `usagers`.`deleted`, `roman_details`.`titre`, `roman_details`.`date_creation`, `roman_details`.`deleted`, `genres_litteraires_noms`.`nom`, `roman_details`.`ID_roman`, `usagers`.`est_admin` ";
+$query = "SELECT `usagers`.`ID_usager`, `usagers`.`pseudo`, `usagers`.`deleted`, `roman_details`.`titre`, `roman_details`.`date_dnrEdition`, `roman_details`.`deleted`, `genres_litteraires_noms`.`nom`, `roman_details`.`ID_roman`, `usagers`.`est_admin` ";
 $query .= "FROM `usagers`, `roman_details`, `genres_litteraires_noms` WHERE `genres_litteraires_noms`.`ID_genre` = `roman_details`.`ID_genre` ";
 $query .= "AND `usagers`.`ID_usager` = `roman_details`.`ID_usager` ";
 $query .= "ORDER BY `usagers`.`pseudo`;";
@@ -51,9 +51,11 @@ if(false !== $resultat){
 				echo "\" data-usrblacklisted=\"{$row[2]}\">";
 				echo ($row[2] == 0)?'Couper':'Restaurer';
 				echo " l'accès de {$row[1]}</button></th>";
-				echo "<th>Titre</th><th>Genre</th><th>Date de création</th><th>Changer l'état</th></tr>", PHP_EOL;
+				echo "<th>Titre</th><th>Genre</th><th>Dernière modification</th><th>Changer l'état</th></tr>", PHP_EOL;
 				$dnrUsager = $row[1];
 			}
+			
+			$row[3] = decode($row[3]);
 			echo "<tr><td>&nbsp;</td><td>{$row[3]}</td><td>{$row[6]}</td><td>{$row[4]}</td><td data-idroman=\"{$row[7]}\"><button type=\"button\" class=\"";
 			echo ($row[5] == 0)?'active':'inactive';
 			echo "\" data-noveldeleted=\"{$row[5]}\">";

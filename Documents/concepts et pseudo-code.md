@@ -2,6 +2,7 @@
 ####Contient tâches, idées, concepts, questions et "ToDo"
 
 ToDo:
+- [ ] bug : on peux accepter une nouvelle note vide, devrait valider que au moins le titre est remplis!
 - [ ] a cause de a différence entre les versions de MySQL (ou phpMyAdmin en fait) j'ai changé le type de certains champs ou le défaut, maintenant il manquerait de gèrer manuellement tous les champs dateTime comme ex: date de création d'un roman ou d'inscription d'un usager
 - [ ] plus de tests avec les gars
 - [ ] plus de tests dans IE, Chrome, FF, tablette

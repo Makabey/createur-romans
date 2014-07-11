@@ -127,7 +127,8 @@ function insererUsager($db){
 	if(1 === $motDePasseMatch){
 		$_POST['pwd'] = real_escape_string($_POST['pwd'], $db);
 
-		$query = "INSERT INTO `usagers` (`pseudo`, `motdepasse`%s) VALUES ('{$_POST['usager']}', '{$_POST['pwd']}'%s);";
+		$dateInscription = date("Y-m-d H:i:s");
+		$query = "INSERT INTO `usagers` (`pseudo`, `motdepasse`%s, `dateInscription`) VALUES ('{$_POST['usager']}', '{$_POST['pwd']}'%s, '$dateInscription');";
 
 		if(isset($_POST['nomUsager'])){
 			$nomUsagerMatch = preg_match("/[^\<\>]{1,40}/", $_POST['nomUsager']);
