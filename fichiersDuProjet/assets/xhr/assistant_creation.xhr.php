@@ -159,7 +159,8 @@ function creerLeRoman($db){
 
 	// Créer le roman
 	if(false !== $resultat){
-		$query = "INSERT INTO `roman_details` (`ID_usager`, `ID_genre`, `titre`) VALUES ({$_POST['idUsager']}, (SELECT ID_genre FROM genres_litteraires_noms WHERE nom = '{$_POST['genreLitteraire']}'), '{$_POST['titreRoman']}');";
+		$dateCreation = date("Y-m-d H:i:s");
+		$query = "INSERT INTO `roman_details` (`ID_usager`, `ID_genre`, `titre`, `date_creation`, `date_dnrEdition`) VALUES ({$_POST['idUsager']}, (SELECT ID_genre FROM genres_litteraires_noms WHERE nom = '{$_POST['genreLitteraire']}'), '{$_POST['titreRoman']}', '$dateCreation', '$dateCreation');";
 
 		$typeQuery = "n INSERT";
 		$resultat = $db->query ($query);

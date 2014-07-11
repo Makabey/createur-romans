@@ -390,30 +390,33 @@ $(function () {
 				}
 			}
 			gblEntiteEnCoursEdition = -1;
+			$(this).parents(".aide-memoire").find(".aide-memoire-boutons-edition").hide();
 		}else{ // BOUTON "SAUVEGARDER"
-			typeEntite = $("#"+balises_entites_base+">ul .active a").text();
-			typeEntite = typeEntite.toLowerCase();
-			typeEntite = typeEntite.replace('ù', 'u');
-			typeEntite = typeEntite.replace('é', 'e');
 			spanChilds = $(this).parents('.aide-memoire').find("span[contenteditable='true']");
-
-			gblEntites['temp'] = new Array();
-			gblEntites['temp']['titre'] = spanChilds[0].innerHTML;
-			gblEntites['temp']['contenu'] = spanChilds[1].innerHTML;
-			gblEntites['temp']['note'] = spanChilds[2].innerHTML;
-			gblEntites['temp']['typeEntite'] = typeEntite;
-
-			if(idEntite == 0){
-				insererEntite(insererEntiteRetour, traiterErreurs, idRoman, typeEntite, gblEntites['temp']['titre'], gblEntites['temp']['contenu'], gblEntites['temp']['note']);
+			if(spanChilds[0].innerHTML.length == 0){
+				alert("Erreur!\n\nL'enregistrement ne peux avoir lieu que s'il y as au moins un titre!");
 			}else{
-				modifierEntite(MaJ_EntiteRetour, traiterErreurs, idRoman, typeEntite, gblEntites['temp']['titre'], gblEntites['temp']['contenu'], gblEntites['temp']['note'], idEntite);
+				typeEntite = $("#"+balises_entites_base+">ul .active a").text();
+				typeEntite = typeEntite.toLowerCase();
+				typeEntite = typeEntite.replace('ù', 'u');
+				typeEntite = typeEntite.replace('é', 'e');
+
+
+				gblEntites['temp'] = new Array();
+				gblEntites['temp']['titre'] = spanChilds[0].innerHTML;
+				gblEntites['temp']['contenu'] = spanChilds[1].innerHTML;
+				gblEntites['temp']['note'] = spanChilds[2].innerHTML;
+				gblEntites['temp']['typeEntite'] = typeEntite;
+
+				if(idEntite == 0){
+					insererEntite(insererEntiteRetour, traiterErreurs, idRoman, typeEntite, gblEntites['temp']['titre'], gblEntites['temp']['contenu'], gblEntites['temp']['note']);
+				}else{
+					modifierEntite(MaJ_EntiteRetour, traiterErreurs, idRoman, typeEntite, gblEntites['temp']['titre'], gblEntites['temp']['contenu'], gblEntites['temp']['note'], idEntite);
+				}
+
+				$(this).parents(".aide-memoire").find(".aide-memoire-boutons-edition").hide();
 			}
 		}
-		$(this).parents(".aide-memoire").find(".aide-memoire-boutons-edition").hide();
-	});
-
-	$("#"+balises_entites_base).on('click', '.aide-memoire-toolbar .glyphicon-list', function(){
-		console.log("click -- dragNdrop");
 	});
 
 	$("#"+balises_entites_base).on('click', '.aide-memoire-toolbar .glyphicon-plus', function(){
