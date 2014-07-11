@@ -82,7 +82,7 @@ function lireUsager($db){
 		1 = mdp erroné
 		2 = usager inexistant
 	*/
-	$query = 'SELECT ID_usager, pseudo, motdepasse, nom FROM usagers WHERE pseudo = "' . $_POST['usager'] . '" AND deleted = 0;';
+	$query = 'SELECT ID_usager, pseudo, motdepasse, nom, est_admin FROM usagers WHERE pseudo = "' . $_POST['usager'] . '" AND deleted = 0;';
 
 	$db_result = $db->query ($query);
 	if(false !== $db_result){
@@ -105,11 +105,12 @@ function lireUsager($db){
 			$resultat = "0¬" . $resultat; // 1 = MdP erroné, 2 = usager erroné/pris, 3 = rien de bon
 		}else{
 			if(isset($_POST['pwd'])){ // Sans mot de passe, on log pas complètement l'usager
-				$resultat = "1¬" . $row[0]; // ID usager
+				$resultat = "1¬" . $row[0] . '¤' . $row[4]; // ID usager + est_admin
 				session_start();
 				$_SESSION['pseudo'] = $row[1];
 				$_SESSION[$row[1]]['idUsager'] = $row[0]; // ID usager
 				$_SESSION[$row[1]]['nom'] = ($row[3] !== null)?$row[3]:$row[1]; // Nom sinon Pseudo
+				$_SESSION[$row[1]]['est_admin'] = $row[4]+0;
 			}else{
 				$resultat = "1¬0"; // ID usager
 			}
@@ -169,19 +170,14 @@ function insererUsager($db){
 
 function miseAJourUsager($db){
 	$resultat = false;
-	$query = 'UPDATE usagers SET ';
-	if(isset($_POST['etat'])){ // ont veux "effacer" l'usager
-		$query .= 'deleted = ' . $_POST['etat'];
-	}
-
-	$query .= " WHERE pseudo = '{$_POST['usager']}';";
+	$query = 'UPDATE usagers SET deleted = ' . $_POST['etat'] . " WHERE pseudo = '{$_POST['usager']}';";
 
 	$result = $db->query ($query);
 	if(false !== $result){
 		if($db->affected_rows){
 			$resultat = "1¬[" . __FUNCTION__ . "] UPDATE successful\n\n '$query'";
 		}else{
-			$resultat = "0¬[" . __FUNCTION__ . "] UPDATE didn't occur (most probably because there was nothing to change)\n\n $query";
+			$resultat = "1¬[" . __FUNCTION__ . "] UPDATE didn't occur (most probably because there was nothing to change)\n\n $query";
 		}
 	}else{
 		$resultat = "0¬[" . __FUNCTION__ . "] An error occured during an UPDATE operation.\n\n" . $db->error . "\n\n $query";

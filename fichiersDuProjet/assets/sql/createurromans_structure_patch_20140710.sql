@@ -1,0 +1,4 @@
+-- patchs
+ALTER TABLE `entites` CHANGE `deleted` `deleted` TINYINT UNSIGNED NOT NULL DEFAULT '0';
+ALTER TABLE `roman_details` CHANGE `ID_genre` `ID_genre` TINYINT UNSIGNED NOT NULL DEFAULT '1', CHANGE `deleted` `deleted` TINYINT UNSIGNED NOT NULL DEFAULT '0';
+ALTER TABLE `usagers` CHANGE `deleted` `deleted` TINYINT UNSIGNED NOT NULL DEFAULT '0', ADD `est_admin` TINYINT UNSIGNED NOT NULL DEFAULT '0' AFTER `dateInscription`;

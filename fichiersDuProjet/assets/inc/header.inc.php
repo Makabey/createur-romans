@@ -4,15 +4,33 @@ $sNomDeCettePage = substr($_SERVER["SCRIPT_NAME"], (strrpos($_SERVER["SCRIPT_NAM
 $sNomDeCettePage = substr($sNomDeCettePage, 0, (strpos($sNomDeCettePage,".")));
 
 #$rootDomaine = ($sNomDeCettePage == "index")?"":"/fichiersDuProjet/"; // maison Eric
-$rootDomaine = ($sNomDeCettePage == "index")?"":"http://localhost/GitHub/createur-romans/fichiersDuProjet/"; // ISI
-#$rootDomaine = "http://etscribimus.olirick-tp.site40.net/"; // en ligne
+#$rootDomaine = ($sNomDeCettePage == "index")?"":"http://localhost/GitHub/createur-romans/fichiersDuProjet/"; // ISI
+$rootDomaine = "http://etscribimus.olirick-tp.site40.net/"; // en ligne
 
-if(($sNomDeCettePage != "index") && (!isset($_SESSION['pseudo']))){
+/*if(($sNomDeCettePage != "index") && (!isset($_SESSION['pseudo']))){
 	header("Location:".$rootDomaine."index.php");
 	exit();
 }elseif(($sNomDeCettePage == "index") && (isset($_SESSION['pseudo']))){
 	header("Location:".$rootDomaine."pages/hub_client.php");
 	exit();
+}elseif(($sNomDeCettePage == "administration") && (isset($_SESSION['pseudo']))){
+	header("Location:".$rootDomaine."pages/hub_client.php");
+	exit();
+}*/
+
+if(!isset($_SESSION['pseudo'])){
+	if($sNomDeCettePage != "index"){
+		header("Location:".$rootDomaine."index.php");
+		exit();
+	}
+}else{
+	if($sNomDeCettePage == "index"){
+		header("Location:".$rootDomaine."pages/hub_client.php");
+		exit();
+	}elseif(($sNomDeCettePage == "administration") && (!$_SESSION[$_SESSION['pseudo']]['est_admin'])){
+		header("Location:".$rootDomaine."pages/hub_client.php");
+		exit();
+	}
 }
 ?>
 <!DOCTYPE html>
@@ -62,12 +80,17 @@ if(($sNomDeCettePage != "index") && (!isset($_SESSION['pseudo']))){
 								<span class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Bienvenue <?php echo $_SESSION[$_SESSION['pseudo']]['nom']; ?> <span class="caret"></span></a>
 									<ul class="dropdown-menu">
 										<?php
-											if($sNomDeCettePage == "mode_edition"){
-												echo '<li><a href="' . $rootDomaine . 'pages/hub_client.php">Retour au HUB</a></li>';
+											if($sNomDeCettePage !== "hub_client"){
+												echo '<li><a href="', $rootDomaine, 'pages/hub_client.php">Retour au HUB</a></li>', PHP_EOL;
+											}
+											if(isset($_SESSION['pseudo'])){
+												if(($_SESSION[$_SESSION['pseudo']]['est_admin']) && ($sNomDeCettePage !== "administration")){
+													echo '<li><a href="', $rootDomaine, 'pages/administration.php">Administrer le site</a></li>', PHP_EOL;
+												}
 											}
 										?>
 										<li><a href="<?php echo $rootDomaine; ?>pages/logout.php">Se déconnecter</a></li>
-									<ul>
+									</ul>
 								</span>
 							</div>
 						<?php } ?>

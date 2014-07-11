@@ -107,14 +107,15 @@ function effacerEntiteRetour(donnees){
 	var ID_next;
 	var ID_prev;
 	var contenu = '';
+	var entiteOnglet = $("#"+balises_entites_base).find("ul .active").text();
 	//console.log("[effacerEntiteRetour] Retour = ' "+donnees+" '");
 
-	ID_next = gblEntites[typeEntite][gblEntiteEnCoursEdition]['ID_next'];
-	ID_prev = gblEntites[typeEntite][gblEntiteEnCoursEdition]['ID_prev'];
+	ID_next = gblEntites[typeEntite][gblEntiteEnCoursEdition]['ID_next'] * 1;
+	ID_prev = gblEntites[typeEntite][gblEntiteEnCoursEdition]['ID_prev'] * 1;
 
 	//console.log("typeEntite = "+typeEntite+" / ID_prev = " + ID_prev + " / ID_next = " + ID_next);
 
-	if(ID_prev > 0) { gblEntites[typeEntite][ID_prev]['ID_next'] = ID_next; }
+	if(ID_prev > 0) { gblEntites[typeEntite][ID_prev]['ID_next'] = ID_next; } // Type casting
 	if(ID_next > 0) { gblEntites[typeEntite][ID_next]['ID_prev'] = ID_prev; }
 
 	if(ID_prev == 0) { gblEntites[typeEntite][0]['first'] = ID_next; }
@@ -163,7 +164,7 @@ function afficherEntites(donnees){
 	curIndex = donnees[0]['first'];
 	contenu += '<div class="aide-memoire-toolbar"><span class="toolbar-title">'+entiteOnglet+'</span><span class="glyphicon glyphicon-plus"></span></div>';
 
-	if((curIndex !== null) && (curIndex !== 0)){
+	if((curIndex !== null) && (curIndex != 0)){
 		// 	Créer l'interface dans le parent donnees[0]['target']
 		do{
 			contenu += construireCodeEntite(curIndex, donnees[curIndex]);

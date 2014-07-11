@@ -22,6 +22,7 @@ $(function(){
 	$("#registerNick").keyup(function(){
 		verifierUsager(NomUsagerPris, NomUsagerLibre, $("#registerNick").val());
 	});
+	
 	$("#form_register").submit(function(){
 		/*
 			Validation par HTML5 : On doit attrapper l'évènement SUBMIT directement
