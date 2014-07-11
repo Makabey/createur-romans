@@ -4,7 +4,6 @@
 **********************/
 var gblChoixUsager = new Array(); // retenir les choix de l'usager et accessoirement quelques donnees
 var gblParentDesBalises = "form_question>fieldset"; // Balise que l'on doit manipuler pour changer l'interface
-//var idUsager = 1; // valeur forcée en attendant de la lire par PHP; (auquel cas cette variable ira dans "header.inc.php")
 var etapeAssistant = 0; // À quelle étape de la création nous sommes
 var iCmpt=0; // Compteur, global;
 
@@ -22,7 +21,7 @@ $(function(){
 			Si etapeAssistant == 0 :: La page vient d'être chargée, par conséquent on voit le choix de Genres Littéraire et l'étape suivante est le chargement des questions
 		*/
 		switch(etapeAssistant){
-			case 0: // Le choix de Genre est fait, on passe aux questions
+			case 0: // L'usager vient de faire le choix de Genre, on passe aux questions
 				// Mettre l'usager en attente
 				afficherAttente();
 
@@ -79,16 +78,6 @@ $(function(){
 			break;
 		}
 		return false;
-	});
-
-
-	$("#"+gblParentDesBalises).on("keyup", "#titreRoman", function(){
-		//console.log("ca marche!");
-		/*
-			Mon idée ici était d'avertir l'usager s'il entre le même nom pour ce roman que pour un
-			précédent lui-appartenant, juste avec des classes CSS mais je met de côté pour me
-			concentrer sur la sauvegarde
-		*/
 	});
 
 	// Au lancement de la page, tout de suite charger les genres littéraires...
@@ -171,9 +160,6 @@ function felicitationSurCreation(donnees){
 		Ensuite, envoie à la page d'Édition
 	*/
 	donnees = donnees.split('¤');
-	//alert(donnees[1]);
-	//document.location.href="mode_edition.php";
-	//console.log(baseURL+"pages/mode_edition.php");
 	window.location.replace(baseURL+"pages/mode_edition.php");
 }
 
@@ -204,15 +190,11 @@ function afficherSynopsisEtDemandeNomRoman(donnees){
 			gblChoixUsager['synopsis'] += '¤'+gblChoixUsager['questions'][iCmpt]['description'];
 		}
 
-		gblChoixUsager['synopsis'] += '¯'; //'\n\n';
+		gblChoixUsager['synopsis'] += '¯';
 	}
 	synopsis_afficher += '</dl></div>';
 	synopsis_afficher += '<div><label for="titreRoman">Quel est le titre de votre roman?</label>';
 	synopsis_afficher += '<input type="text" id="titreRoman" required="required" placeholder="Court titre évocateur"';
-
-	// variable "maintenant" et son utilisation sont optionnel et primairement pour tests
-	//var maintenant = new Date();
-	//synopsis_afficher += ' value = "test - \''+maintenant+'\'"';
 
 	// Analyse des données reçues et création du DATALIST si applicable
 	gblChoixUsager['romans'] = (donnees.length)?JSON.parse(donnees):'';
@@ -318,7 +300,7 @@ function afficherQuestions(donnees){
 			donnees[iCmpt_lignes]['bouton_fonction'] = donnees[iCmpt_lignes]['bouton_fonction'].split('¤');
 			contenu += '<button type="button" class="bouton_question" data-fonction="'+donnees[iCmpt_lignes]['bouton_fonction'][0]+'" data-question="'+iCmpt_lignes+'">'+donnees[iCmpt_lignes]['bouton_fonction'][1]+'</button>';
 		}
-		//contenu += "<span>"+(iCmpt_lignes+1)+"/"+donnees.length+"</span>"; // numéroter les questions
+
 		contenu += '<textarea id="description'+iCmpt_lignes+'" placeholder="Entrez une courte description si désiré."></textarea>';
 		contenu += "</div>";
 		$("#"+gblParentDesBalises).append(contenu);
@@ -337,20 +319,11 @@ function traiterErreurs(msgErreur){
 
 		Il n'y as que cette fonction parce que je n'ai pas eût un besoin de traitement autre
 	*/
-
 	if(msgErreur.substring(0,6) =="<br />"){ // Si commence par '<br />', on suppose que c'est une erreur PHP!
 		msgErreur = "[PHP] " + strStripHTML(msgErreur);
 	}
 
 	alert("L'erreur suivante est survenue : '"+msgErreur+"'");
 }
-
-
-/**********************
-	FONCTIONS NOMMÉES DANS LA BD
-	(ça c'est le contenu du champs `genres_litteraires_questions`.`bouton_fonction`
-	la section est vide parce que Thomas n'en as pas eût besoin dans ses questions.
-	Pour un exemple, chercher dans les contributions antérieur sur GitHub)
-**********************/
 
 /* == EOF == */

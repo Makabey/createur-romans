@@ -1,8 +1,4 @@
 "use strict";
-/**********************
-	Variables globales
-**********************/
-
 
 /**********************
 	EVENT HANDLERS
@@ -22,7 +18,7 @@ $(function(){
 	$("#registerNick").keyup(function(){
 		verifierUsager(NomUsagerPris, NomUsagerLibre, $("#registerNick").val());
 	});
-	
+
 	$("#form_register").submit(function(){
 		/*
 			Validation par HTML5 : On doit attrapper l'évènement SUBMIT directement
@@ -60,7 +56,7 @@ function verifierUsager(fctTraitementPositif, fctTraitementNegatif, pseudo){
 	if(arguments[3] != undefined){
 		XHR_Query += "&pwd="+arguments[3];
 	}
-	//console.log(XHR_Query);
+
 	execXHR_Request("assets/xhr/index.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
 
@@ -72,14 +68,9 @@ function insererUsager(fctTraitementPositif, fctTraitementNegatif, pseudo, motDe
 	if(nomUsager.length>0){
 		XHR_Query += "&nomUsager="+nomUsager;
 	}
-	//console.log(XHR_Query);
+
 	execXHR_Request("assets/xhr/index.xhr.php", XHR_Query, fctTraitementPositif, fctTraitementNegatif);
 }
-
-
-/*********************
-	FONCTIONS GLOBALES
-*********************/
 
 
 /*********************
@@ -88,15 +79,11 @@ function insererUsager(fctTraitementPositif, fctTraitementNegatif, pseudo, motDe
 	type de la requête, que ce soit par un message de confirmation ou la manipulation des
 	données de retour.)
 *********************/
-function authentifierUsager(){ //donnees){
+function authentifierUsager(){
 	/*
-
+		La vraie authentification est faite par PHP et le retour de la fonction dit à XHR d'appeller celle-ci pour conclure la procédure
 	*/
-	//donnees = donnees.split('¤');
-	//alert(donnees[1]);
-	//console.log(arguments[0]);
-	//console.log(baseURL+"pages/hub_client.php");
-	window.location.replace(baseURL+"pages/hub_client.php"); // Je pourrais probablement, tant qu'à avoir PHP qui crée/écrit dans la $_SESSION, une redirection avant d'arriver ici mais j'ai décidé que ce n'était pas "propre". Dans le sens que les requêtes XHR devraient se borner à de l'échange d'information. Je sais, la manipulation de $_SESSION dans le fichier XHR contredit un peu cette règle mais comme ce n'est pas visuel, je laisse passer.
+	window.location.replace(baseURL+"pages/hub_client.php");
 }
 
 function NomUsagerLibre(){
@@ -127,7 +114,6 @@ function erreurAuthentification(msgErreur){
 		Voir appels à "execXHR_Request",
 		Sert à traiter l'erreur recue.
 	*/
-	//console.log(msgErreur);
 	$("#form_login>div>span").text("Pseudo ou Mot de passe erroné.");
 	$("#form_login>div>span").css({color:"#f00"});
 	$("#form_login>div").css({"background-color":"#fcc", border:"3px inset #f00", padding:"10px", "margin-bottom":"10px"});

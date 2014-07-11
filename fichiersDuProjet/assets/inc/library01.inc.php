@@ -18,24 +18,12 @@ function tabs($nombre){
 function cleanUpString($chaine,$typeValidation='a1') {
 	if (strlen($chaine)) {
 		switch ($typeValidation) {
-			/*case 'list': # ex: "1;Nereide"
-				$chaine=preg_replace('/[^0-9a-zA-Z;]/','',$chaine);
-				break;*/
 			case 1:
 				$chaine=preg_replace('/[^0-9]/','',$chaine);
 				break;
 			case 'a':
 				$chaine=preg_replace('/[^a-zA-Z]/','',$chaine);
 				break;
-			/*case 'items': # ex: -1;0;0;0
-				$chaine=preg_replace('/[^0-9\-;]/','',$chaine);
-				break;*/
-			/*case 'desc' : #ex mots avec espaces
-				#$chaine=preg_replace('/[^0-9a-zA-Z,:;\' ]/','',$chaine);
-				$chaine=str_replace('<', '&lt;', $chaine);
-				$chaine=str_replace('>', '&gt;', $chaine);
-				$chaine=str_replace('/', '|', $chaine);
-				break;*/
 			default : # 'a1'
 				$chaine=preg_replace('/[^0-9a-zA-Z]/','',$chaine);
 		}

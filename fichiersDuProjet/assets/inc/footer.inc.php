@@ -22,16 +22,9 @@
 	<![endif]-->
 	<script>
 		"use strict";
-		/*window.addEventListener("load", function(){ // J'utilise un listener pour éviter de marcher sur les platebandes de jQuery
-			// mettre ici le code qui pourrait servir à plusieurs pages.
-		});*/
 		/* Variables nécessaires pour le fichier JS qui suit, si applicable */
 		<?php
 		// Variables générées par PHP pour JS
-		/*switch($sNomDeCettePage){
-			case 'index':
-				break;
-		}*/
 		if($sNomDeCettePage != 'index'){
 			if(isset($_SESSION['pseudo'])){
 				$pseudo = $_SESSION['pseudo'];
@@ -46,10 +39,7 @@
 	<!-- Fichier JS spécifique à la page -->
 	<?php
 		$cheminFichier = $rootDomaine . 'assets/js/'.$sNomDeCettePage.'.js';
-		#echo "var x='$cheminFichier';";
-		#if(file_exists("http://createur-romans".$cheminFichier)){
-			echo '<script src="', $cheminFichier, '"></script>', PHP_EOL;
-		#}
+		echo '<script src="', $cheminFichier, '"></script>', PHP_EOL;
 	?>
  </body>
 </html>

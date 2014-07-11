@@ -34,18 +34,13 @@ switch($_POST['oper']){
 		/*
 			Permet de vérifier la validité de la paire usager/pwd -et- savoir si un nom est pris.
 		*/
-		#if(isset($_POST['usager'])){
-			$resultat = lireUsager($db);
-		#}else{
-		#	$resultat = "0¬Missing parameter 'usager'";
-		#}
+		$resultat = lireUsager($db);
 		break;
 
 	case 'inserer': # INSERT
 		$resultat = insererUsager($db);
 		break;
 
-	#case 'actualiser': 	# UPDATE
 	case 'effacer':
 		if(!isset($_POST['etat'])) { $_POST['etat'] = 1; }
 		if(is_numeric($_POST['etat'])){

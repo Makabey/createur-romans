@@ -7,17 +7,6 @@ $sNomDeCettePage = substr($sNomDeCettePage, 0, (strpos($sNomDeCettePage,".")));
 #$rootDomaine = ($sNomDeCettePage == "index")?"":"http://localhost/GitHub/createur-romans/fichiersDuProjet/"; // ISI
 $rootDomaine = "http://etscribimus.olirick-tp.site40.net/"; // en ligne
 
-/*if(($sNomDeCettePage != "index") && (!isset($_SESSION['pseudo']))){
-	header("Location:".$rootDomaine."index.php");
-	exit();
-}elseif(($sNomDeCettePage == "index") && (isset($_SESSION['pseudo']))){
-	header("Location:".$rootDomaine."pages/hub_client.php");
-	exit();
-}elseif(($sNomDeCettePage == "administration") && (isset($_SESSION['pseudo']))){
-	header("Location:".$rootDomaine."pages/hub_client.php");
-	exit();
-}*/
-
 if(!isset($_SESSION['pseudo'])){
 	if($sNomDeCettePage != "index"){
 		header("Location:".$rootDomaine."index.php");
@@ -47,7 +36,6 @@ if(!isset($_SESSION['pseudo'])){
 		<!-- Bootstrap core CSS -->
 		<link href="<?php echo $rootDomaine; ?>assets/css/bootstrap.min.css" rel="stylesheet">
 		<!-- Custom css -->
-		<!-- <link rel="stylesheet" href="<?php #echo $rootDomaine; ?>assets/css/styles.css" media="only screen" /> -->
 		<link rel="stylesheet" href="<?php echo $rootDomaine; ?>assets/css/theme.css">
 		<link rel="stylesheet" href="<?php echo $rootDomaine; ?>assets/css/custom-style.css">
 	</head>

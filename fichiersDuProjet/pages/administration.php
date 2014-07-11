@@ -21,7 +21,6 @@ if(isset($_GET['oper'])){
 		$query = "UPDATE `roman_details` SET `deleted` = {$_GET['state']} WHERE `ID_roman` = {$_GET['id'] };";
 	}
 	$resultat = $db->query ($query);
-	//echo $query, PHP_EOL;
 }
 
 echo "<h1>Page d'Administration</h1>", PHP_EOL;
@@ -37,7 +36,7 @@ if(false !== $resultat){
 	$num_rows = $resultat->num_rows;
 	if($num_rows){
 		$dnrUsager = '';
-		
+
 		while ($row = $resultat->fetch_row()){
 			if($dnrUsager != $row[1]){
 				if($dnrUsager != ''){

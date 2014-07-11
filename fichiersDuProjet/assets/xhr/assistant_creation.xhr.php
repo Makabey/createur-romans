@@ -150,17 +150,12 @@ function creerLeRoman($db){
 		Pousser dans la BD tout les détails pour le nouveau Roman
 	*/
 	$_POST['titreRoman'] = real_escape_string($_POST['titreRoman'], $db);
-	#if(mb_substr($_POST['titreRoman'], 0, 2, "UTF-8") == "0¬") {
-	#	return $_POST['titreRoman']; // S'il y as erreur ici, c'est que $db n'est pas une BD ouverte
-	#}
 
-	#if(false !== $resultat){
-		// Démarrer une TRANSACTION pour pouvoir reculer avec un ROLLBACK si nécessaire et ne pas laisser d'orphelins
-		// Normalement je devrais regarder l'aide pour LOCK TABLE et l'appliquer, mais je vais garder ça pour un peu plus tard
-		$typeQuery = " TRANSACTION";
-		$query = "START TRANSACTION;";
-		$resultat = $db->query ($query);
-	#}
+	// Démarrer une TRANSACTION pour pouvoir reculer avec un ROLLBACK si nécessaire et ne pas laisser d'orphelins
+	// Normalement je devrais regarder l'aide pour LOCK TABLE et l'appliquer, mais je vais garder ça pour un peu plus tard
+	$typeQuery = " TRANSACTION";
+	$query = "START TRANSACTION;";
+	$resultat = $db->query ($query);
 
 	// Créer le roman
 	if(false !== $resultat){
@@ -219,10 +214,7 @@ function creerLeRoman($db){
 
 			if($_POST['question'.$key][1] !== ''){ // la note que l'usager as tapé, si quelque chose
 				$_POST['question'.$key][1] = real_escape_string($_POST['question'.$key][1], $db);
-			//	$query = sprintf($query, ", `note`", ", '{$_POST['question'.$key][1]}'");
 				$_POST['question'.$key][0] .= '; ' . $_POST['question'.$key][1];
-			//}else{
-			//	$query = sprintf($query, '', '');
 			}
 
 			$query = "INSERT INTO `entites` (`ID_roman`, `ID_prev`, `typeEntite`, `titre`, `contenu`) VALUES ($ID_roman, $PrevID, '$currEntite', '{$val[1]}', '{$_POST['question'.$key][0]}');";

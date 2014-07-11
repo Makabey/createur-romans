@@ -2,11 +2,7 @@
 /**********************
 	Variables globales
 **********************/
-//var gblChoixUsager = new Array(); // retenir les choix de l'usager et accessoirement quelques donnees
 var gblParentDesBalises = "maincontent>div>div>div"; // Balise que l'on doit manipuler pour changer l'interface
-//var idUsager = 1; // valeur forcée en attendant de la lire par PHP; (auquel cas cette variable ira dans "header.inc.php")
-//var etapeAssistant = 0; // À quelle étape de la création nous sommes
-//var iCmpt=0; // Compteur, global;
 var nvID_roman;
 
 /**********************
@@ -15,12 +11,11 @@ var nvID_roman;
 $(function(){
 	$("#"+gblParentDesBalises).on("click", "div>div", function(){
 		var XHR_Query;
-		
+
 		nvID_roman = $(this).parent().data("idroman");
 		XHR_Query = "oper=charger&idRoman="+nvID_roman;
 		console.log(XHR_Query);
 		if(nvID_roman === 0){
-			//console.log(baseURL+"pages/assistant_creation.php");
 			window.location.replace(baseURL+"pages/assistant_creation.php");
 		}else{
 			execXHR_Request("../assets/xhr/hub_client.xhr.php", XHR_Query, chargerTexte, traiterErreurs);
@@ -34,10 +29,9 @@ $(function(){
 			nvID_roman = $(this).parent().data("idroman");
 			console.log('effacer roman / ' + nvID_roman);
 			effacerEntite(effacerEntiteRetour, traiterErreurs, nvID_roman, -1, true);
-			//effacerEntiteRetour('o');
 		}
 	});
-	
+
 	lireListeRomansUsager(genererLesBoutons, traiterErreurs, idUsager)
 });
 
@@ -58,7 +52,6 @@ function genererBoutonAjouter(){
 	bouton += "<div><h2>Nouveau</h2>\n";
 	bouton += "<span class=\"nouveau_projet\"></span></div>\n</div>\n";
 
-	//$("#"+gblParentDesBalises).append(bouton);
 	return bouton;
 }
 
@@ -106,8 +99,7 @@ function genererUnBoutonCharger(donnees){
 function genererLesBoutons(donnees){
 	var iCmpt;
 	var contenu='';
-	//$("#"+gblParentDesBalises).html('');
-	//$("#"+gblParentDesBalises).append("");
+
 	if(donnees.length > 0){
 		donnees = JSON.parse(donnees);
 		if(donnees.length > 0){
@@ -122,15 +114,11 @@ function genererLesBoutons(donnees){
 }
 
 function effacerEntiteRetour(donnees){
-	console.log("[effacerEntiteRetour] " + donnees);
-	// effacer gui...
 	$("#"+gblParentDesBalises).find("div[data-idroman='"+nvID_roman+"']").remove();
 }
 
 function chargerTexte(){
-	//console.log(baseURL+"pages/mode_edition.php");
 	window.location.replace(baseURL+"pages/mode_edition.php");
-	//console.log(arguments[0]);
 }
 
 /**********************
