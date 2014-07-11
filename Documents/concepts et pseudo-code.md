@@ -2,18 +2,18 @@
 ####Contient tâches, idées, concepts, questions et "ToDo"
 
 ToDo:
-- [ ] bug : on peux accepter une nouvelle note vide, devrait valider que au moins le titre est remplis!
-- [ ] a cause de a différence entre les versions de MySQL (ou phpMyAdmin en fait) j'ai changé le type de certains champs ou le défaut, maintenant il manquerait de gèrer manuellement tous les champs dateTime comme ex: date de création d'un roman ou d'inscription d'un usager
-- [ ] plus de tests avec les gars
-- [ ] plus de tests dans IE, Chrome, FF, tablette
-- [ ] plus de tests tablette
-  - [ ] le menu en mode portrait ne s'ouvre pas, il clignote ouvert/fermé une fois quand on touche ==> pb mm sur ordi
+- [x] bug : on peux accepter une nouvelle note vide, devrait valider que au moins le titre est remplis!
+- [x] a cause de a différence entre les versions de MySQL (ou phpMyAdmin en fait) j'ai changé le type de certains champs ou le défaut, maintenant il manquerait de gèrer manuellement tous les champs dateTime comme ex: date de création d'un roman ou d'inscription d'un usager
+- [x] plus de tests avec les gars
+- [x] plus de tests dans IE, Chrome, FF, tablette
+- [x] plus de tests tablette
+  - [x] le menu en mode portrait ne s'ouvre pas, il clignote ouvert/fermé une fois quand on touche ==> pb mm sur ordi
 - [ ] hub_client :: case pour passer l'assistant?? (je crois que c'est possible en moins de 20 minutes)
 - [x] hub_client :: petit 'x' sur les cases de romans pour "effacer" un roman?
 - [x] hub_client :: sous-menu "retour a la selection roman / retour au hub" apparait?
 - [x] faute à 000webhost!! ==>> il y as des '\' pour les apostrophes et les guillemets dans les entitées, le synopsis et les textes
 - [x] changer index.php pour reflèter le changement de nom et mettre le texte d'Olivier
-- [ ] mettre la (nouvelle) vidéo, si possible.
+- [x] mettre la (nouvelle) vidéo, si possible.
 - [ ] Ok, créer un nouvel usager ne fonctionne pas sur IE8 (oui sur XP, je teste et prend congé de code, je sais, je sais c'est pas trop le temps)... s'identifier non plus O_o HAHAHAHAHA!!!
 - [x] hub_client :: la case 'ajouter' n'affiche pas son '+' :'(
 - [x] BUG : si un type d'entitée est vide et qu'on tente d'en ajouter, l'enregistement ne se fait pas ou mal, l'application pense qu'on est toujours en édition et quand on recharge le type, la nouvelle entitée n'y est pas... en fait elle apparait dans la BD; le problème est  probablement causé par  "l'entité" bidon là pour dire que ce type est vide, devrais recevoir l'ID 9999 et être tué quand on ajoute une entitée, APRÈS qu'elle ais été sauvée, par contre aucune obligation de recréer ce "bidon"
