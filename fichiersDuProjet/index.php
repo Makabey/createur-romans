@@ -10,7 +10,7 @@ require "assets/inc/header.inc.php";
 			<div class="video">
 				<video width="100%" controls="controls">
 					<source src="assets/videos/movie.webm" type="video/webm">
-					<source src="assets/videos/movie.ogg" type="video/ogg">
+					<source src="assets/videos/movie.ogv" type="video/ogg">
 					<source src="assets/videos/movie.mp4" type="video/mp4">
 					Votre fureteur ne supporte pas la balise video.
 				</video>
