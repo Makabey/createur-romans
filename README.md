@@ -3,7 +3,7 @@
 ## Qu'est-ce que c'est?
 Un assistant là pour vous aider à effacer le malaise de la page blanche! Il est à même de suggèrer une structure narrative à votre histoire; choisissez le genre, répondez aux questions et vous aurez un synopsis sur lequel bâtir votre histoire. Il offre aussi des outils de gestion des personnages, des lieux et des mémos que vous génèrerez assurément en cours d'écriture.
 
-## [Présentation Prezi (lien externe, nécessite Adobe Flash)] (http://prezi.com/dgath3ouob29/et-scribimus/?utm_campaign=share&utm_medium=copy)
+## [Présentation disponible en format Prezi (lien externe, nécessite Adobe Flash)](http://prezi.com/dgath3ouob29/et-scribimus/)
 
 ## Quelles en sont les fonctionnalitées?
 * Un assistant de création de synopsis basé sur les genres littéraires, pour vous inspirer;
@@ -42,8 +42,12 @@ Pas pour le futur proche.
 * Importez "createurromans.sql", la base de données est nommée 'createurromans';
 * Modifiez le fichier "/createur-romans/inc/db_access.inc.php" si nécessaire;
 * Il y as deux usagers 'démo' :
-** 'admin', mot de passe 'adminadmin';
-** 'usager1', mot de passe 'motdepasse';
+
+Usager | Mot de passe | Utilité
+------ | ------------ | -------
+admin | adminadmin | un administrateur pour démontrer le choix menu administratif
+usager1 | motdepasse | un usager ordinaire avec l'ébauche d'un roman
+
 
 ## Avertissement !
 * Le présent projet en était un collaboratif pour l'obtention d'un diplôme, par conséquent certains aspects n'ont pas été correctement implémenté, faute de connaissance, d'expérience et de temps;

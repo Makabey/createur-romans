@@ -9,8 +9,7 @@ if(!isset($_POST['oper']) || !isset($_POST['usager'])){ // oper DOIT être prés
 }
 
 /*
-	Vérifier tout de suite la validité de $_POST['usager'], inutile d'aller plus loin si transige le regexp,
-	parce que si 'usager' ne répond pas à la regexp utilisée par JS -donc- potentiellement injection!
+	Vérifier tout de suite la validité de $_POST['usager'], inutile d'aller plus loin si transige le regexp, parce que si 'usager' ne répond pas à la regexp utilisée par JS -donc- potentiellement injection!
 */
 $pseudoMatch = preg_match("/[0-9A-Za-z]{4,20}/", $_POST['usager']);
 if(1 !== $pseudoMatch){
@@ -30,14 +29,14 @@ if(!is_object($db)){
 
 $resultat = false;
 switch($_POST['oper']){
-	case 'lire' : # SELECT
+	case 'lire' : // SELECT
 		/*
 			Permet de vérifier la validité de la paire usager/pwd -et- savoir si un nom est pris.
 		*/
 		$resultat = lireUsager($db);
 		break;
 
-	case 'inserer': # INSERT
+	case 'inserer': // INSERT
 		$resultat = insererUsager($db);
 		break;
 
@@ -66,11 +65,9 @@ exit();
 */
 function lireUsager($db){
 	/*
-		Lire de la BD les données de l'usager et retourner leurs validité versus
-		ce qui est été reçu par $_POST
+		Lire de la BD les données de l'usager et retourner leurs validité versus ce qui est été reçu par $_POST
 
-		Si ne reçoit pas $_POST['pwd'], alors on ne veux que savoir si le nom est disponible,
-		si c'est le cas, l'usager n'est pas authentifié!
+		Si ne reçoit pas $_POST['pwd'], alors on ne veux que savoir si le nom est disponible, si c'est le cas, l'usager n'est pas authentifié!
 
 		retour :
 		0 = user+mdp OK

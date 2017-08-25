@@ -1,15 +1,10 @@
 <?php
 session_start();
-//var_dump($_SERVER);
 $sNomDeCettePage = strrpos($_SERVER["SCRIPT_NAME"],"/")+1;
-//var_dump($sNomDeCettePage);
-//$rootDomaine = ($sNomDeCettePage == "index")?"":"/";
 $rootDomaine = substr($_SERVER["SCRIPT_NAME"], 0, $sNomDeCettePage);
 $sNomDeCettePage = substr($_SERVER["SCRIPT_NAME"], $sNomDeCettePage);
 $sNomDeCettePage = explode('.', $sNomDeCettePage);
 $sNomDeCettePage = $sNomDeCettePage[0];
-
-//var_dump($_SERVER["SCRIPT_NAME"], $rootDomaine, $sNomDeCettePage);die();
 
 if(!isset($_SESSION['pseudo'])){
 	if($sNomDeCettePage != "index"){
@@ -17,12 +12,16 @@ if(!isset($_SESSION['pseudo'])){
 		exit();
 	}
 }else{
-	if($sNomDeCettePage == "index"){
-		header("Location:".$rootDomaine."hub_client.php");
-		exit();
-	}elseif(($sNomDeCettePage == "administration") && (!$_SESSION[$_SESSION['pseudo']]['est_admin'])){
-		header("Location:".$rootDomaine."hub_client.php");
-		exit();
+	if($_SESSION[$_SESSION['pseudo']]['est_admin']){
+		if($sNomDeCettePage !== 'administration'){
+			header("Location:" . $rootDomaine . 'administration');
+			exit();
+		}
+	}else{
+		if($sNomDeCettePage == 'index' || $sNomDeCettePage == 'administration'){
+			header("Location:" . $rootDomaine . 'hub_client.php');
+			exit();
+		}
 	}
 }
 ?>
@@ -32,18 +31,17 @@ if(!isset($_SESSION['pseudo'])){
 		<meta charset="utf-8" />
 		<!--<meta http-equiv="X-UA-Compatible" content="IE=edge" />-->
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<title><?php echo $sPageTitle; ?>Et Scribimus</title>
+		<title><?=$sPageTitle?>Et Scribimus</title>
 		<meta name="author" content="Thomas A. Séguin, Olivier Berthier, Eric Robert</p>" />
 		<meta name="description" content="Effacez le syndrome de la page blanche avec notre assistant. Sélectionnez un genre, répondez à quelques questions et vous voilà avec un paragraphe suggèrant le fil de votre prochaine oeuvre." />
 		<meta name="keywords" content="roman, assistant, page blanche, aide à l'écriture, scrivener, evernote, gratuit, composer" />
-		<!--<link rel="shortcut icon" href="<?php echo $rootDomaine; ?>ico/favicon.ico" /> -->
+		<!--<link rel="shortcut icon" href="<?=$rootDomaine?>ico/favicon.ico" /> -->
 		<!-- Bootstrap core CSS -->
-		<link href="<?php echo $rootDomaine; ?>css/bootstrap.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 		<!-- Custom css -->
-		<link rel="stylesheet" href="<?php echo $rootDomaine; ?>css/theme.css">
-		<link rel="stylesheet" href="<?php echo $rootDomaine; ?>css/custom-style.css">
+		<link rel="stylesheet" href="<?=$rootDomaine?>css/custom-style.css">
 	</head>
-	<body class="<?php echo $sNomDeCettePage; ?>">
+	<body class="<?=$sNomDeCettePage?>">
 		<header role="banner">
 			<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 				<div class="container">
@@ -54,7 +52,7 @@ if(!isset($_SESSION['pseudo'])){
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 						</button>
-						<a class="navbar-brand" href="#"><img src="<?php echo $rootDomaine; ?>images/logo.png" alt="Et Scribimus, bienvenue" />Et Scribimus</a>
+						<a class="navbar-brand" href="#"><img src="<?=$rootDomaine?>images/logo.png" alt="Et Scribimus, bienvenue" />Et Scribimus</a>
 					</div>
 					<div class="navbar-collapse collapse inner-header">
 						<?php if(!isset($_SESSION['pseudo'])){ ?>
@@ -69,19 +67,14 @@ if(!isset($_SESSION['pseudo'])){
 						</form>
 						<?php }else{ ?>
 							<div class="bienvenue_user">
-								<span class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Bienvenue <?php echo $_SESSION[$_SESSION['pseudo']]['nom']; ?> <span class="caret"></span></a>
+								<span class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Bienvenue <?=$_SESSION[$_SESSION['pseudo']]['nom']?> <span class="caret"></span></a>
 									<ul class="dropdown-menu">
 										<?php
-											if($sNomDeCettePage !== "hub_client"){
+											if(!$_SESSION[$_SESSION['pseudo']]['est_admin'] && $sNomDeCettePage !== "hub_client"){
 												echo '<li><a href="', $rootDomaine, 'hub_client.php">Retour au HUB</a></li>', PHP_EOL;
 											}
-											if(isset($_SESSION['pseudo'])){
-												if(isset($_SESSION[$_SESSION['pseudo']]['est_admin']) && ($sNomDeCettePage !== "administration")){
-													echo '<li><a href="', $rootDomaine, 'administration.php">Administrer le site</a></li>', PHP_EOL;
-												}
-											}
 										?>
-										<li><a href="<?php echo $rootDomaine; ?>logout.php">Se déconnecter</a></li>
+										<li><a href="<?=$rootDomaine?>logout.php">Se déconnecter</a></li>
 									</ul>
 								</span>
 							</div>

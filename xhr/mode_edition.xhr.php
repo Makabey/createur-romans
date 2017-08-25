@@ -171,11 +171,7 @@ function lireDonneesEntite($db){
 
 		/* Convertir en JSON */
 		$resultat = json_encode($resultat);
-		#if(json_last_error() !== 0){
-		#	$resultat = "0¬" . decodeJSON_Error(json_last_error());
-		#}else{
-			$resultat = "1¬" . $resultat;
-		#}
+		$resultat = "1¬" . $resultat;
 	}else{
 		$resultat = "0¬[" . __FUNCTION__ . "] An error occured during a SELECT operation.\n\n" . $db->error . "\n\n $query";
 	}
@@ -216,11 +212,10 @@ function miseAJourDonneesEntite($db){
 			}
 		}else if(isset($_POST['etat'])){ // ont veux "effacer" l'entitee, on prend "etat" pour permettre de changer TRUE/FALSE sans une 2eme fonction
 			$query .= 'deleted = ' . $_POST['etat'];
-		}// à moins d'erreur dans le code plus haut, je n'ai pas besoin d'un ELSE ultime
+		} // à moins d'erreur dans le code plus haut, je n'ai pas besoin d'un ELSE ultime
 
 		$query .= ' WHERE ID_entite = ' . $_POST['idEntite'];
-		#$query .= ' AND typeEntite = "' . $_POST['typeEntite'] . '"'; // Juste pour être sur qu'on met la bonne entitée à jour
-		$query .= ';';
+		//$query .= ';';
 	}
 
 	if(false === $resultat){
@@ -288,7 +283,7 @@ function miseAJourDonneesEntite_EtatDeleted($db){
 		/*
 			Sur restauration on la replace à la toute fin; càd que son prev devient celui qui as next==0, corriger celui qui était next aussi
 		*/
-		$resultat = false; # pour le moment...
+		$resultat = false; // pour le moment...
 	}
 
 	if(false !== $resultat){

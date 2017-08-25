@@ -54,7 +54,7 @@ if(false !== $resultat){
 				echo "<th>Titre</th><th>Genre</th><th>Dernière modification</th><th>Changer l'état</th></tr>", PHP_EOL;
 				$dnrUsager = $row[1];
 			}
-			
+
 			$row[3] = decode($row[3]);
 			echo "<tr><td>&nbsp;</td><td>{$row[3]}</td><td>{$row[6]}</td><td>{$row[4]}</td><td data-idroman=\"{$row[7]}\"><button type=\"button\" class=\"";
 			echo ($row[5] == 0)?'active':'inactive';

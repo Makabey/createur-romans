@@ -1,20 +1,18 @@
 <?php
 
-############
-#
-#	Retourne une chaine de $nombre tabulations
-#	en tant que tel un peu inutile mais bon, moins long à écrire que la commande elle-même
-#	écrite originalement pour "corriger" le code HTML généré par PHP afin qu'il soit plus lisible/indenté
-#
+/**
+ *	Retourne une chaine de $nombre tabulations
+ *	en tant que tel un peu inutile mais bon, moins long à écrire que la commande elle-même
+ *	écrite originalement pour "corriger" le code HTML généré par PHP afin qu'il soit plus lisible/indenté
+ */
 function tabs($nombre){
 	return str_repeat(chr(9),$nombre);
 }
 
 
-#############
-#
-#	Validation de chaines par Expression Régulière et autres mesures
-#
+/**
+ *	Validation de chaines par Expression Régulière et autres mesures
+ */
 function cleanUpString($chaine,$typeValidation='a1') {
 	if (strlen($chaine)) {
 		switch ($typeValidation) {
@@ -24,7 +22,7 @@ function cleanUpString($chaine,$typeValidation='a1') {
 			case 'a':
 				$chaine=preg_replace('/[^a-zA-Z]/','',$chaine);
 				break;
-			default : # 'a1'
+			default : // 'a1'
 				$chaine=preg_replace('/[^0-9a-zA-Z]/','',$chaine);
 		}
 	}
@@ -33,18 +31,16 @@ function cleanUpString($chaine,$typeValidation='a1') {
 }
 
 
-##############
-#
-# Encode la chaine
-#
+/**
+ *	Encode la chaine
+ */
 function encode($Chaine){
 	return htmlentities($Chaine, ENT_COMPAT, 'ISO-8859-1');
 }
 
-##############
-#
-# Decode la chaine
-#
+/**
+ *	Decode la chaine
+ */
 function decode($Chaine){
 	$Chaine = str_replace('&gt;', '>', $Chaine);
 	$Chaine = str_replace('&lt;', '<', $Chaine);
@@ -58,10 +54,9 @@ function decode($Chaine){
 }
 
 
-##############
-#
-# Retourne une chaine représentant l'erreur JSON passée
-#
+/**
+ *	Retourne une chaine représentant l'erreur JSON passée
+ */
 function decodeJSON_Error($error){
 	switch ($error) {
 		case JSON_ERROR_NONE:
@@ -90,19 +85,17 @@ function decodeJSON_Error($error){
 	 return $retour;
 }
 
-##############
-#
-#	Retourne un tableau avec les clés répondant à la sous-chaine désirée
-#
-#	Parametres:
-#		$arrHaystack : (array) le tableau à parcourir
-#		$keyString : (string) la chaine recherchée
-#		$anyWhere : (bool = false / optionnel) si TRUE, alors la sous-chaine peux être n'importe où dans la clé sondée
-#		$caseInsensitive : (bool = false /optionnel) si TRUE, alors ignore la casse
-#
-#	Retour :
-#		un tableau contenant les clés trouvées ou un tableau vide si erreur
-#
+/**
+ *	Retourne un tableau avec les clés répondant à la sous-chaine désirée
+ *	
+ *	Parametres:
+ *		$arrHaystack : (array) le tableau à parcourir
+ *		$keyString : (string) la chaine recherchée
+ *		$anyWhere : (bool = false / optionnel) si TRUE, alors la sous-chaine peux être n'importe où dans la clé sondée
+ *		$caseInsensitive : (bool = false /optionnel) si TRUE, alors ignore la casse 
+ *	Retour :
+ *		un tableau contenant les clés trouvées ou un tableau vide si erreur
+ */
 function array_keys_like($arrHaystack, $keyString, $anyWhere = false, $caseInsensitive = false){
 	// vérifier et forcer le type des paramètres
 	if(!is_array($arrHaystack) || empty($arrHaystack) || !is_string($keyString) || !is_bool($anyWhere) || !is_bool($caseInsensitive)){return NULL;}

@@ -6,10 +6,7 @@
 $(function(){
 	$("#form_login").submit(function(){
 		/*
-			Validation par HTML5 : On doit attrapper l'évènement SUBMIT directement
-			sur le FORM parce que si on agit sur le CLICK d'un bouton et que le FORM
-			n'est pas valide selon le BROWSER, la fonction du bouton est appellée
-			malgré tout.
+			Validation par HTML5 : On doit attrapper l'évènement SUBMIT directement sur le FORM parce que si on agit sur le CLICK d'un bouton et que le FORM n'est pas valide selon le BROWSER, la fonction du bouton est appellée malgré tout.
 		*/
 		verifierUsager(authentifierUsager, erreurAuthentification, $("#loginName").val(), $("#loginPwd").val());
 		return false;
@@ -75,9 +72,7 @@ function insererUsager(fctTraitementPositif, fctTraitementNegatif, pseudo, motDe
 
 /*********************
 	FONCTIONS DE TRAITEMENT DES RETOURS POSITIFS
-	(C'est à dire, quand la requête XHR s'est complètée correctement. Ici on réagit selon le
-	type de la requête, que ce soit par un message de confirmation ou la manipulation des
-	données de retour.)
+	(C'est à dire, quand la requête XHR s'est complètée correctement. Ici on réagit selon le type de la requête, que ce soit par un message de confirmation ou la manipulation des données de retour.)
 *********************/
 function authentifierUsager(){
 	/*

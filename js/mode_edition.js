@@ -162,7 +162,7 @@ function afficherEntites(donnees){
 		contenu += '	<div class="aide-memoire-headings"><span>Aucune entitées pour ce type.</span></div>';
 		contenu += "</div>\n\n";
 		gblEntites[donnees[0]['typeEntite']]['first'] = 0;
-		gblEntites[donnees[0]['typeEntite']]['last'] = 0; //***
+		gblEntites[donnees[0]['typeEntite']]['last'] = 0;
 	}
 	$("#"+balises_entites_base+">div").html(contenu);
 	$("#"+balises_entites_base+">div").find(".aide-memoire-boutons-edition").hide();
@@ -224,9 +224,7 @@ function traiterErreurs(msgErreur){
 	/*
 	Voir appels à "execXHR_Request",
 	Sert à traiter l'erreur recue.
-	Pour le moment l'erreur la plus commune devrais être "usager team_codeH inexistant"
-	ce qui veux dire que l'on doit créer l'usager pour accèder à la BD (ne pas mélanger avec la table "usagers"
-	parce que ce n'est pas du tout la même chose), voir le fichier db_access.inc.php pour le mot de passe
+	Pour le moment l'erreur la plus commune devrais être "usager team_codeH inexistant" ce qui veux dire que l'on doit créer l'usager pour accèder à la BD (ne pas mélanger avec la table "usagers" parce que ce n'est pas du tout la même chose), voir le fichier db_access.inc.php pour le mot de passe
 	*/
 
 	if(msgErreur.substring(0,6) === "<br />"){ // Si commence par '<br />', on suppose que c'est une erreur PHP!

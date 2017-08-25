@@ -13,11 +13,8 @@ var iCmpt=0; // Compteur, global;
 $(function(){
 	$("#form_question").submit(function(){
 		/*
-			Validation par HTML5 : On doit attrapper l'évènement SUBMIT directement sur le FORM
-			parce que si on agit sur le CLICK d'un bouton et que le FORM n'est pas valide selon le
-			BROWSER, la fonction du bouton est appellée malgré tout.
-		*/
-		/*
+			Validation par HTML5 : On doit attrapper l'évènement SUBMIT directement sur le FORM parce que si on agit sur le CLICK d'un bouton et que le FORM n'est pas valide selon le BROWSER, la fonction du bouton est appellée malgré tout.
+
 			Si etapeAssistant == 0 :: La page vient d'être chargée, par conséquent on voit le choix de Genres Littéraire et l'étape suivante est le chargement des questions
 		*/
 		switch(etapeAssistant){
@@ -49,7 +46,7 @@ $(function(){
 					gblChoixUsager['questions'][iCmpt]['description'] = $("#description"+iCmpt).val();
 				}
 
-				//	Lire les noms de Roman de l'usager courant, pour lui éviter de choisir un même nom.
+				// Lire les noms de Roman de l'usager courant, pour lui éviter de choisir un même nom.
 				lireListeRomansUsager(afficherSynopsisEtDemandeNomRoman, traiterErreurs, idUsager);
 
 				etapeAssistant++;
@@ -134,8 +131,7 @@ function afficherAttente(){
 
 function afficherFormulaire(){
 	/*
-		Occulter la balise d'attente et afficher le FORM qui permet
-		à l'usager de faire ses choix
+		Occulter la balise d'attente et afficher le FORM qui permet à l'usager de faire ses choix
 
 		C'est une fonction pour éviter de changer les 3-4 endroits où c'est utilisé
 	*/
@@ -153,9 +149,7 @@ function afficherFormulaire(){
 *********************/
 function felicitationSurCreation(donnees){
 	/*
-		Affiche un message d'état confirmant le nom du Roman et le nombre d'entitées
-		pré-créées en accord avec les types et le nombre de questions pour le genre
-		littéraire choisi.
+		Affiche un message d'état confirmant le nom du Roman et le nombre d'entitées pré-créées en accord avec les types et le nombre de questions pour le genre littéraire choisi.
 
 		Ensuite, envoie à la page d'Édition
 	*/
@@ -165,13 +159,9 @@ function felicitationSurCreation(donnees){
 
 function afficherSynopsisEtDemandeNomRoman(donnees){
 	/*
-		Construit en parrallèle le SYNOPSIS qui sera enregistré dans la BD (si l'usager
-		passe à l'étape suivate) et celui qui sera affiché. Puis ajoute un court FORM pour
-		demander à l'usager le nom de son oeuvre. Du même coup, l'usager confirme le
-		contenu du synopsis créé par les questions;
+		Construit en parrallèle le SYNOPSIS qui sera enregistré dans la BD (si l'usager passe à l'étape suivate) et celui qui sera affiché. Puis ajoute un court FORM pour demander à l'usager le nom de son oeuvre. Du même coup, l'usager confirme le contenu du synopsis créé par les questions;
 
-		le form doit vérifier realtime que le nom du nouveau Roman n'est pas déjà utilisé
-		pour CET usager ?
+		le form doit vérifier realtime que le nom du nouveau Roman n'est pas déjà utilisé pour CET usager ?
 	*/
 	var synopsis_afficher = '<div><p>Votre synopsis :</p><dl>';
 	var contenuDataList = '';
@@ -226,8 +216,7 @@ function afficherGenres(donnees){
 
 	if(donnees.length < 2){
 		/*
-			Si on as qu'un seul genre, passer la sélection manuelle par l'usager,
-			on "clique" le bouton à sa place.
+			Si on as qu'un seul genre, passer la sélection manuelle par l'usager, on "clique" le bouton à sa place.
 		*/
 		gblChoixUsager['genreLitteraire'] = donnees[0];
 		$("#form_question").submit();
@@ -245,11 +234,9 @@ function afficherGenres(donnees){
 
 function afficherQuestions(donnees){
 	/*
-		Afficher les questions lues de la base de données pour le genre littéraire
-		sélectionné plus tôt
+		Afficher les questions lues de la base de données pour le genre littéraire sélectionné plus tôt
 
-		Le champs "donnees[]['type_input']" déterminer s'il faut créer une balise de
-		type "input::text" ou "select"
+		Le champs "donnees[]['type_input']" déterminer s'il faut créer une balise de type "input::text" ou "select"
 
 		Fait principalement de la génération de balise et de la copie de contenu/propriétés à partir du tableau "donnees"
 	*/
