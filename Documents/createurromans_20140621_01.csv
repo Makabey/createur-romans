@@ -1,5 +1,0 @@
-"ID_ligne_genre","ID_genre","nom","nro_question","texte","type_input","valeurs_defaut","bouton_fonction"
-"1","1","Policier","1","Quel est le nom du Protagoniste A ?","text","Nom du protagoniste A¤Ti-Jos¤Max¤Sammy","generer_nom(4,6,2)¤Générer"
-"2","1","Policier","2","Quel est son sexe?","select","Femme¤Homme",NULL
-"3","2","Drame","1","Quel est l'intérêt amoureux B ?","text",NULL,NULL
-"4","1","Policier","3","Quel est le nom du Protagoniste B ?","text",NULL,"generer_nom(4,6,2)¤Générer"
